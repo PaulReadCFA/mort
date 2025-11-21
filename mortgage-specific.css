@@ -1,0 +1,197 @@
+/* ==========================================================================
+   Mortgage Calculator Specific Styles
+   Mortgage-specific colors, layouts, and component overrides
+   Requires: cfa-base.css
+   
+   NOTE: All table styles are now in cfa-base.css for consistency
+   ========================================================================== */
+
+/* ==========================================================================
+   1. MORTGAGE-SPECIFIC COLOR ASSIGNMENTS
+   ========================================================================== */
+:root {
+  /* Mortgage Calculator Specific Colors - Using brand palette */
+  --color-mortgage-payment: var(--color-blue-interactive);  /* #3c6ae5 - Monthly payment */
+  --color-mortgage-principal: var(--color-orange-deep);     /* #b95b1d - Principal */
+  --color-mortgage-interest: var(--color-purple-bold);      /* #7a46ff - Interest rate */
+  --color-mortgage-term: var(--color-green-data-alt);       /* #047857 - Loan term */
+}
+
+/* ==========================================================================
+   2. RESULT BOXES – Mortgage-Specific
+   ========================================================================== */
+.results-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.result-box-monthly {
+  background-color: var(--color-bg-blue);
+  border-color: var(--color-mortgage-payment);
+}
+
+.result-box-interest {
+  background-color: var(--color-bg-purple);
+  border-color: var(--color-mortgage-interest);
+}
+
+.result-box-interest .result-value {
+  color: var(--color-mortgage-interest);
+}
+
+.result-box-total {
+  background-color: var(--color-bg-purple);
+  border-color: var(--color-purple-bold);
+}
+
+.result-box-total .result-value {
+  color: var(--color-purple-bold);
+}
+
+/* ==========================================================================
+   3. INPUT LAYOUT – Bond-style Inline Layout
+   ========================================================================== */
+.input-group-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 2rem;
+}
+
+.input-inline {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  white-space: nowrap;
+}
+
+.input-label-inline {
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+  min-width: fit-content;
+}
+
+.input-with-suffix-inline {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 6rem;
+  position: relative;
+}
+
+.input-field-inline {
+  flex: 1;
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  padding-right: 1.5rem;
+  border: 1px solid var(--color-gray-300);
+  border-radius: 0.375rem;
+  font-size: 0.875rem;
+  text-align: right;
+  box-sizing: border-box;
+}
+
+.input-field-inline:hover {
+  border-color: var(--color-gray-500);
+}
+
+.input-field-inline:focus {
+  outline: none;
+  border-color: var(--color-blue-interactive);
+  box-shadow: 0 0 0 2px rgba(60, 106, 229, 0.1);
+}
+
+.input-suffix-inline {
+  position: absolute;
+  right: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-gray-500);
+  pointer-events: none;
+  width: 1.2rem;
+  text-align: right;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+  .input-group-inline {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 1rem;
+  }
+  
+  .input-inline {
+    width: 100%;
+  }
+  
+  .input-with-suffix-inline {
+    width: 100%;
+    max-width: 12rem;
+  }
+}
+
+/* ==========================================================================
+   4. EDUCATIONAL NOTE
+   ========================================================================== */
+.educational-note {
+  margin-top: 1rem;
+  padding: 0.75rem;
+  background: var(--color-gray-50);
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+}
+
+/* ==========================================================================
+   5. CHART LEGEND – Mortgage-specific
+   ========================================================================== */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+}
+
+.legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.legend-color {
+  width: 0.75rem;
+  height: 0.75rem;
+  border-radius: 0.125rem;
+  display: inline-block;
+}
+
+/* ==========================================================================
+   6. DYNAMIC EQUATION CONTAINER
+   ========================================================================== */
+#dynamic-equation-container {
+  margin-top: 0.5rem;
+}
+
+#dynamic-equation-container math {
+  font-size: 1rem;
+  color: var(--color-gray-700);
+}
+
+/* Center the generated equation the same way as the static one */
+#dynamic-mathml-equation { 
+  text-align: center; 
+}
+#dynamic-mathml-equation > math {
+  display: inline-block;
+  margin: 0.5em auto;
+}
+
+
+/* Match the bond page’s robust centering */
+.equation-container { text-align: center; }
+#mathml-equation { display: inline-block; width: auto; }
+math[display="block"] { margin: 0.5em auto; }
+

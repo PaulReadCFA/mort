@@ -1,0 +1,812 @@
+/* ==========================================================================
+   CFA Base Styles - Shared across all Equation Explorers
+   Base colors, typography, layouts, and reusable components
+   ========================================================================== */
+
+/* ==========================================================================
+   1. CSS VARIABLES - CFA BRAND PALETTE
+   ========================================================================== */
+:root {
+  /* Primary Data Colors - All meet WCAG AA (4.5:1 minimum) */
+  --color-primary-dark-blue: #06005a;    /* 18.18:1 - CFA Brand */
+  --color-blue-interactive: #3c6ae5;     /* 4.79:1 - Adjusted brand blue */
+  --color-secondary-dark-blue: #38337b;  /* 10.89:1 - CFA Brand */
+  --color-purple-bold: #7a46ff;          /* 5.06:1 - CFA Brand */
+  --color-eggplant-deep: #50037f;        /* 12.65:1 - CFA Brand */
+  --color-eggplant-medium: #733599;      /* 7.78:1 - CFA Brand */
+  --color-orange-deep: #b95b1d;          /* 4.59:1 - Adjusted brand orange */
+  --color-teal-data: #0079a6;            /* 4.90:1 - Adjusted brand cyan */
+  --color-green-data: #15803d;           /* 5.02:1 - Professional green */
+  --color-green-data-alt: #047857;       /* 5.48:1 - Alternative green */
+  
+  /* CFA Brand Colors (legacy) */
+  --color-primary: #3c6ae5;
+  --color-dark: #06005a;
+  --color-dark-alt: #38337b;
+  --color-positive: #3c6ae5;
+  --color-negative: #b95b1d;
+  --color-purple: #7a46ff;
+  --color-purple-alt: #50037f;
+  --color-light-blue: #3c6ae5;
+  --color-orange: #b95b1d;
+  --color-dark-text: #06005a;
+  --color-green: #047857;
+  
+  /* Gray scale */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-500: #6b7280;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+  
+  /* Validation colors */
+  --color-red-50: #fef2f2;
+  --color-red-200: #fecaca;
+  --color-red-800: #991b1c;
+  
+  /* Background Colors from Style Guide */
+  --color-bg-blue: #eff6ff;
+  --color-bg-purple: #faf5ff;
+  --color-bg-orange: #fff7ed;
+  --color-bg-green: #f0fdf4;
+  --color-bg-teal: #f0fdfa;
+}
+
+/* ==========================================================================
+   2. RESET & BASE STYLES
+   ========================================================================== */
+/* Make 'hidden' impossible to accidentally override */
+[hidden] { display: none !important; }
+
+
+
+   * { 
+  margin: 0; 
+  padding: 0; 
+  box-sizing: border-box; 
+}
+
+html { 
+  font-size: 16px; 
+  scroll-behavior: smooth; 
+}
+
+body { 
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; 
+  background: var(--color-gray-50); 
+  color: var(--color-gray-800); 
+  line-height: 1.5; 
+  padding: 0 1.5rem 1.5rem; 
+  min-height: 100vh; 
+}
+
+/* Reduce body padding at narrow widths */
+@media (max-width: 400px) {
+  body {
+    padding: 0 0.75rem 1.5rem;
+  }
+}
+
+@media (max-width: 340px) {
+  body {
+    padding: 0 0.5rem 1.5rem;
+  }
+}
+
+/* ==========================================================================
+   3. ACCESSIBILITY
+   ========================================================================== */
+/* Screen reader only content */
+.sr-only { 
+  position: absolute; 
+  width: 1px; 
+  height: 1px; 
+  overflow: hidden; 
+  clip: rect(0,0,0,0);
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+/* Skip links - WCAG 2.4.1 Bypass Blocks */
+nav[aria-label="Skip links"] { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1rem; 
+  margin: 1rem; 
+}
+
+@media (min-width: 640px) { 
+  nav[aria-label="Skip links"] { 
+    flex-direction: row; 
+    gap: 1.5rem; 
+  } 
+}
+
+.skip-link {
+  min-width: 44px; 
+  min-height: 44px; 
+  padding: 0.75rem 1rem;
+  background: var(--color-primary); 
+  color: white; 
+  border-radius: 0.5rem;
+  text-decoration: none; 
+  font-weight: 600; 
+  text-align: center;
+  display: inline-flex; 
+  align-items: center; 
+  justify-content: center;
+  position: absolute; 
+  top: -60px; 
+  left: 1rem; 
+  z-index: 100;
+  clip: rect(1px,1px,1px,1px); 
+  clip-path: inset(50%); 
+  overflow: hidden; 
+  width: 1px; 
+  height: 1px;
+}
+
+.skip-link:focus { 
+  clip: auto; 
+  clip-path: none; 
+  width: auto; 
+  height: auto; 
+  top: 1rem; 
+  outline: 3px solid white; 
+  outline-offset: 2px;
+}
+
+/* Focus rings for all tabindex values */
+section[tabindex]:focus,
+table[tabindex]:focus,
+canvas[tabindex]:focus { 
+  outline: 2px solid var(--color-primary); 
+  outline-offset: 4px;
+  border-radius: 0.25rem;
+}
+
+/* Reduced motion - WCAG 2.3.3 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ==========================================================================
+   4. UTILITY CLASSES
+   ========================================================================== */
+.text-red-800 { color: var(--color-red-800); }
+.text-gray-700 { color: var(--color-gray-700); }
+.text-sm { font-size: 0.875rem; }
+.ml-1 { margin-left: 0.25rem; }
+.mb-3 { margin-bottom: 0.75rem; }
+
+/* ==========================================================================
+   5. LAYOUT
+   ========================================================================== */
+.container { 
+  max-width: 1200px; 
+  margin: 0 auto; 
+  padding: 1rem 0; 
+}
+
+.content { 
+  display: flex; 
+  flex-direction: column; 
+  gap: 1.5rem; 
+}
+
+.middle-row { 
+  display: grid; 
+  grid-template-columns: 1fr; 
+  gap: 1.5rem; 
+}
+
+@media (min-width: 900px) { 
+  .middle-row { 
+    grid-template-columns: 1fr 2fr; 
+  } 
+}
+
+/* ==========================================================================
+   6. CARDS
+   ========================================================================== */
+.card { 
+  background: white; 
+  padding: 1.25rem; 
+  border-radius: 0.75rem; 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); 
+}
+
+@media (min-width: 640px) { 
+  .card { 
+    padding: 1.5rem; 
+  } 
+}
+
+/* Reduce card padding at narrow widths */
+@media (max-width: 768px) {
+  .card {
+    padding: 1rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .card {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .card {
+    padding: 0.5rem;
+  }
+}
+
+.card-title { 
+  font-family: Georgia, 'Times New Roman', serif; 
+  font-size: 1.25rem; 
+  color: var(--color-gray-800); 
+  margin-bottom: 0.75rem; 
+  font-weight: 500; 
+}
+
+/* ==========================================================================
+   7. RESULT BOXES (Base styling - can be extended in specific calculators)
+   ========================================================================== */
+.result-box {
+  padding: 1rem;
+  border-radius: 0.5rem;
+  border: 2px solid;
+  margin-bottom: 1rem;
+}
+
+.result-box:last-child {
+  margin-bottom: 0;
+}
+
+.result-title {
+  font-size: 0.875rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.result-value {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.875rem;
+  font-weight: 400;
+}
+
+.result-value-small {
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  font-weight: 400;
+}
+
+/* ==========================================================================
+   8. EQUATION DISPLAY - Clean centered approach
+   ========================================================================== */
+.equation-container {
+  padding: 1rem;
+  margin: 0.75rem 0;
+  background: white;
+  border: 1px solid var(--color-gray-200);
+  border-radius: 0.5rem;
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  -webkit-overflow-scrolling: touch;
+  text-align: center;
+}
+
+.equation-container:focus { 
+  outline: 2px solid var(--color-primary); 
+  outline-offset: 2px; 
+}
+
+/* Responsive equation scaling */
+@media (max-width: 768px) {
+  .equation-container math {
+    font-size: 0.95em;
+  }
+  .equation-container {
+    padding: 0.75rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .equation-container math {
+    font-size: 0.85em;
+  }
+  .equation-container {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .equation-container math {
+    font-size: 0.75em;
+  }
+  .equation-container {
+    padding: 0.25rem;
+  }
+}
+
+/* MathML Support */
+#mathml-equation {
+  text-align: center;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+math {
+  display: inline-block;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--color-gray-800);
+  margin: 0.5rem auto;
+}
+
+math[display="block"] {
+  display: block;
+  text-align: center;
+  margin: 0.5em auto;
+}
+
+/* Dynamic equation - slightly smaller */
+#dynamic-equation-container math {
+  font-size: 1rem;
+  color: var(--color-gray-700);
+}
+
+/* Dynamic equation responsive scaling */
+@media (max-width: 900px) {
+  #dynamic-equation-container math {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 768px) {
+  #dynamic-equation-container math {
+    font-size: 0.8em;
+  }
+}
+
+@media (max-width: 640px) {
+  #dynamic-equation-container math {
+    font-size: 0.7em;
+  }
+}
+
+@media (max-width: 480px) {
+  #dynamic-equation-container math {
+    font-size: 0.6em;
+  }
+}
+
+/* HTML fallback */
+#html-equation {
+  display: block;
+  text-align: center;
+  font-size: 1.125rem;
+  line-height: 2;
+  width: 100%;
+}
+
+/* Only polyfill if browser doesn't support MathML natively */
+@supports not (math-style: normal) {
+  /* Force fraction layout for browsers without MathML */
+  mfrac {
+    display: inline-table;
+    vertical-align: middle;
+    text-align: center;
+    border-collapse: collapse;
+  }
+
+  mfrac > * {
+    display: table-row;
+    text-align: center;
+  }
+
+  mfrac > :first-child {
+    border-bottom: 1px solid currentColor;
+    padding: 0.2em 0.5em;
+  }
+
+  mfrac > :last-child {
+    padding: 0.2em 0.5em;
+  }
+
+  /* Superscripts and subscripts */
+  msup > :last-child {
+    font-size: 0.7em;
+    vertical-align: super;
+  }
+
+  msub > :last-child {
+    font-size: 0.7em;
+    vertical-align: sub;
+  }
+}
+
+/* ==========================================================================
+   9. VIEW CONTROLS (Chart/Table Toggle)
+   ========================================================================== */
+.view-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.toggle-btn {
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  border-radius: 0.375rem;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  background-color: var(--color-gray-200);
+  color: var(--color-gray-700);
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.toggle-btn:hover {
+  background-color: var(--color-gray-300);
+}
+
+.toggle-btn:focus {
+  outline: 2px solid var(--color-blue-interactive);
+  outline-offset: 2px;
+}
+
+.toggle-btn.active {
+  background-color: var(--color-blue-interactive);
+  color: white;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   10. CHART WRAPPER
+   ========================================================================== */
+.chart-wrapper {
+  height: 24rem;
+  position: relative;
+  border-radius: 0.5rem;
+}
+
+.chart-wrapper:focus {
+  outline: 2px solid var(--color-blue-interactive);
+  outline-offset: 2px;
+}
+
+/* Narrow-screen force-table - Switch earlier at 768px */
+@media (max-width: 768px) {
+  .force-table #view-chart-btn { 
+    opacity: 0.5; 
+    pointer-events: none; 
+    cursor: not-allowed; 
+  }
+  .force-table #view-table-btn { 
+    opacity: 1; 
+    pointer-events: auto; 
+  }
+  
+  .chart-wrapper {
+    height: 20rem;
+  }
+}
+
+.chart-bar-button {
+  position: absolute;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 20;
+}
+
+.chart-bar-button:focus {
+  outline: 3px solid var(--color-blue-interactive);
+  outline-offset: -3px;
+  background: rgba(60, 106, 229, 0.1);
+}
+
+.chart-bar-button:hover { 
+  background: rgba(60, 106, 229, 0.05); 
+}
+
+/* ==========================================================================
+   11. TABLE BASE STYLES
+   ========================================================================== */
+#table-container {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+  width: 100%;
+  position: relative;
+}
+
+#data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+  min-width: 600px;
+}
+
+/* Remove min-width at mobile for card layout */
+@media (max-width: 768px) {
+  #data-table {
+    min-width: 0;
+  }
+}
+
+#data-table caption {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+#data-table th,
+#data-table td {
+  border: 1px solid var(--color-gray-300);
+  padding: 0.625rem 0.75rem;
+  text-align: right;
+}
+
+#data-table th:first-child,
+#data-table td:first-child {
+  text-align: left;
+}
+
+#data-table th {
+  background: var(--color-gray-100);
+  font-weight: 600;
+  color: var(--color-gray-700);
+}
+
+#data-table tbody tr:hover {
+  background: var(--color-gray-50);
+}
+
+#data-table tbody tr:nth-child(even) {
+  background: #fafbfc;
+}
+
+#data-table tbody tr:nth-child(even):hover {
+  background: var(--color-gray-50);
+}
+
+#data-table:focus {
+  outline: 2px solid var(--color-blue-interactive);
+  outline-offset: 2px;
+}
+
+/* ==========================================================================
+   12. RESPONSIVE TABLE - CARD/BLOCK LAYOUT
+   Mobile-friendly card layout at narrow widths
+   ========================================================================== */
+@media (max-width: 768px) {
+  /* Remove any container constraints */
+  #table-container {
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+
+  #data-table,
+  #data-table thead,
+  #data-table tbody,
+  #data-table th,
+  #data-table td,
+  #data-table tr { 
+    display: block; 
+  }
+
+  #data-table thead tr {
+    position: absolute;
+    top: -9999px;
+    left: -9999px;
+  }
+
+  #data-table tr {
+    border: 1px solid var(--color-gray-300);
+    border-radius: 0.75rem;
+    margin: 0 auto 1rem;
+    max-width: 100%;
+    width: calc(100% - 1rem); /* Reduced from 2rem for tighter layout */
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    overflow: hidden;
+    box-sizing: border-box;
+  }
+
+  /* First cell becomes the card header */
+  #data-table td[data-label="Year"] {
+    padding: 0.625rem 0.875rem;
+    background: var(--color-gray-50);
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--color-primary-dark-blue);
+    border-bottom: 1px solid var(--color-gray-300);
+    border-radius: 0.75rem 0.75rem 0 0;
+  }
+
+  #data-table td[data-label="Year"]::before { 
+    display: none; 
+  }
+
+  /* All other cells become label: value rows */
+  #data-table td:not([data-label="Year"]) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.5rem 0.875rem;
+    border-bottom: 1px solid var(--color-gray-200);
+    gap: 0.375rem;
+    flex-wrap: nowrap;
+  }
+
+  #data-table td:not([data-label="Year"]):last-child { 
+    border-bottom: none; 
+  }
+
+  /* Show data-label as the field name */
+  #data-table td:not([data-label="Year"])::before {
+    content: attr(data-label);
+    font-weight: 600;
+    color: var(--color-gray-700);
+    font-size: 0.8125rem;
+    flex: 0 0 auto;
+    min-width: 0;
+    max-width: 40%;
+    line-height: 1.3;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+  }
+
+  #data-table td:not([data-label="Year"]) span {
+    font-weight: 600;
+    color: var(--color-gray-900);
+    white-space: normal;
+    flex-shrink: 0;
+    flex-grow: 1;
+    text-align: right;
+    font-size: 0.875rem;
+    word-break: break-word;
+    min-width: 0;
+  }
+
+  /* Graceful handling for narrow screens */
+  @media (max-width: 400px) {
+    #data-table tr {
+      width: 100%; /* Use full available width */
+      padding: 0;
+    }
+    
+    #data-table td[data-label="Year"] {
+      font-size: 0.9375rem;
+      padding: 0.5rem 0.625rem; /* Reduced horizontal padding */
+    }
+    
+    #data-table td:not([data-label="Year"]) {
+      padding: 0.375rem 0.625rem; /* Reduced horizontal padding */
+      gap: 0.25rem;
+      font-size: 0.8125rem;
+    }
+    
+    #data-table td:not([data-label="Year"])::before {
+      font-size: 0.75rem;
+      max-width: 40%;
+    }
+    
+    #data-table td:not([data-label="Year"]) span {
+      font-size: 0.8125rem;
+    }
+  }
+
+  /* Ultimate fallback for very narrow phones */
+  @media (max-width: 340px) {
+    #data-table tr {
+      width: 100%; /* Full width at narrowest */
+    }
+    
+    #data-table td[data-label="Year"] {
+      font-size: 0.875rem;
+      padding: 0.375rem 0.5rem;
+    }
+    
+    #data-table td:not([data-label="Year"]) {
+      padding: 0.25rem 0.5rem;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+    }
+    
+    /* Abbreviate long labels at ultra-narrow widths */
+    #data-table td[data-label="Remaining Balance"]::before {
+      content: "Remaining";
+    }
+    
+    #data-table td[data-label="Total Payment"]::before {
+      content: "Total Pmt";
+    }
+    
+    #data-table td:not([data-label="Year"])::before {
+      font-size: 0.6875rem;
+      max-width: 38%;
+      line-height: 1.2;
+    }
+    
+    #data-table td:not([data-label="Year"]) span {
+      font-size: 0.75rem;
+      letter-spacing: -0.02em;
+    }
+  }
+}
+
+/* ==========================================================================
+   13. VALIDATION
+   ========================================================================== */
+.validation-summary {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  background: var(--color-red-50);
+  border: 2px solid var(--color-red-800);
+  border-radius: 0.5rem;
+}
+
+.validation-title {
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--color-red-800);
+}
+
+.validation-summary ul {
+  list-style: disc;
+  margin-left: 1.5rem;
+  color: var(--color-red-800);
+}
+
+/* ==========================================================================
+   14. PRINT STYLES
+   ========================================================================== */
+@media print {
+  .skip-link,
+  .view-controls {
+    display: none;
+  }
+  
+  .card {
+    break-inside: avoid;
+    box-shadow: none;
+    border: 1px solid var(--color-gray-800);
+  }
+  
+  #chart-container {
+    display: none;
+  }
+  
+  #table-container {
+    display: block !important;
+  }
+}

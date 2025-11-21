@@ -1,0 +1,47 @@
+/* ==========================================================================
+   DIAGNOSTIC CSS - Add this temporarily to help identify the "yea%" artifact
+   ========================================================================== */
+
+/* Highlight all input-suffix elements with a bright background */
+.input-suffix {
+  background-color: yellow !important;
+  outline: 3px solid red !important;
+  z-index: 9999 !important;
+}
+
+/* Highlight all sr-only elements to see if they're rendering */
+.sr-only {
+  position: static !important;
+  width: auto !important;
+  height: auto !important;
+  background-color: lime !important;
+  outline: 2px solid blue !important;
+}
+
+/* Show all hidden elements */
+[style*="display:none"], 
+[style*="display: none"] {
+  display: block !important;
+  background-color: pink !important;
+  outline: 2px dashed orange !important;
+}
+
+/* Highlight chart container */
+#chart-container {
+  outline: 5px solid purple !important;
+}
+
+/* Highlight visualization card */
+#visualization-card {
+  outline: 5px solid green !important;
+}
+
+/* Highlight data entry card */
+#data-entry {
+  outline: 5px solid blue !important;
+}
+
+/* Show all text content */
+* {
+  outline: 1px dotted rgba(255, 0, 0, 0.2);
+}

@@ -1,12 +1,12 @@
 /**
- * Mortgage Calculation Logic - Annual Payment Schedule
- * Calculates monthly payment and generates yearly amortization data
+ * Mortgage Calculation Logic - Monthly & Annual Payment Schedules
+ * Calculates monthly payment and generates both monthly (360) and annual (30) amortization data
  */
 
 /**
- * Calculate mortgage payment and annual amortization schedule
+ * Calculate mortgage payment and schedules
  * @param {Object} inputs - { principal, rate, years }
- * @returns {Object} { monthlyPayment, annualPayment, totalInterest, totalPaid, schedule }
+ * @returns {Object} { monthlyPayment, annualPayment, totalInterest, totalPaid, monthlySchedule, annualSchedule }
  */
 export function calculate({ principal = 0, rate = 0, years = 0 }) {
   // Validate inputs
@@ -16,7 +16,8 @@ export function calculate({ principal = 0, rate = 0, years = 0 }) {
       annualPayment: 0,
       totalInterest: 0,
       totalPaid: 0,
-      schedule: []
+      monthlySchedule: [],
+      annualSchedule: []
     };
   }
 
@@ -32,33 +33,58 @@ export function calculate({ principal = 0, rate = 0, years = 0 }) {
 
   const annualPayment = monthlyPayment * 12;
 
-  // Generate annual amortization schedule
-  const schedule = [];
+  // Generate MONTHLY amortization schedule (360 rows for 30-year mortgage)
+  const monthlySchedule = [];
   let remainingBalance = principal;
   let totalInterestPaid = 0;
+
+  for (let month = 1; month <= totalMonths; month++) {
+    const interestPayment = remainingBalance * monthlyRate;
+    const principalPayment = monthlyPayment - interestPayment;
+
+    totalInterestPaid += interestPayment;
+    remainingBalance -= principalPayment;
+
+    // Handle rounding errors on final payment
+    if (remainingBalance < 0.01) {
+      remainingBalance = 0;
+    }
+
+    monthlySchedule.push({
+      month: month,
+      year: Math.ceil(month / 12),
+      monthInYear: ((month - 1) % 12) + 1,
+      principal: principalPayment,
+      interest: interestPayment,
+      totalPayment: monthlyPayment,
+      remainingBalance: remainingBalance
+    });
+  }
+
+  // Generate ANNUAL amortization schedule (30 rows for 30-year mortgage)
+  const annualSchedule = [];
+  remainingBalance = principal;
 
   for (let year = 1; year <= years; year++) {
     let yearlyInterest = 0;
     let yearlyPrincipal = 0;
 
-    // Calculate 12 months of payments for this year
-    for (let month = 1; month <= 12; month++) {
-      const interestPayment = remainingBalance * monthlyRate;
-      const principalPayment = monthlyPayment - interestPayment;
-
-      yearlyInterest += interestPayment;
-      yearlyPrincipal += principalPayment;
-      remainingBalance -= principalPayment;
-
-      // Handle rounding errors on final payment
-      if (remainingBalance < 0.01) {
-        remainingBalance = 0;
+    // Sum up 12 months for this year
+    const startMonth = (year - 1) * 12;
+    const endMonth = year * 12;
+    
+    for (let i = startMonth; i < endMonth; i++) {
+      if (i < monthlySchedule.length) {
+        yearlyInterest += monthlySchedule[i].interest;
+        yearlyPrincipal += monthlySchedule[i].principal;
       }
     }
 
-    totalInterestPaid += yearlyInterest;
+    // Get remaining balance at end of year
+    const lastMonthOfYear = monthlySchedule[endMonth - 1];
+    remainingBalance = lastMonthOfYear ? lastMonthOfYear.remainingBalance : 0;
 
-    schedule.push({
+    annualSchedule.push({
       year,
       principal: yearlyPrincipal,
       interest: yearlyInterest,
@@ -72,7 +98,8 @@ export function calculate({ principal = 0, rate = 0, years = 0 }) {
     annualPayment,
     totalInterest: totalInterestPaid,
     totalPaid: principal + totalInterestPaid,
-    schedule
+    monthlySchedule,  // 360 rows
+    annualSchedule    // 30 rows
   };
 }
 

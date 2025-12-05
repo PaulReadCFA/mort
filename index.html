@@ -13,7 +13,7 @@
   <!-- SKIP LINKS -->
   <nav aria-label="Skip links">
     <a href="#data-entry" class="skip-link">Skip to data entry</a>
-    <a href="#data-table" class="skip-link">Skip to data table</a>
+    <a href="#data-table" class="skip-link">Skip to data table (recommended for screen readers)</a>
   </nav>
 
   <!-- NOSCRIPT FALLBACK -->
@@ -28,64 +28,43 @@
   <div class="container">
     <main class="content">
 
-      <!-- CARD 1 - Title and Formula -->
-      <section class="card" id="title-card">
-        <h4 class="card-title">Mortgage Payment Formula</h4>
-        <p class="text-sm text-gray-700 mb-3">Using Equation 8, we can calculate the period annuity cash flow PMT that occurs at the end of each respective period.</p>
-        
-        <div class="equation-container" tabindex="0" role="region" aria-label="Mortgage payment formula">
-          <!-- MathML -->
-          <div id="mathml-equation">
-            <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
-              <mrow>
-                <mi mathcolor="#3c6ae5" mathvariant="bold">PMT</mi>
-                <mo>=</mo>
-                <mfrac>
-                  <mrow>
-                    <mi mathcolor="#7a46ff" mathvariant="bold">r</mi>
-                    <mo>×</mo>
-                    <msub>
-                      <mi mathcolor="#b95b1d" mathvariant="bold">PV</mi>
-                      <mn>0</mn>
-                    </msub>
-                  </mrow>
-                  <mrow>
-                    <mn>1</mn>
-                    <mo>−</mo>
-                    <msup>
-                      <mrow>
-                        <mo>(</mo>
-                        <mn>1</mn>
-                        <mo>+</mo>
-                        <mi mathcolor="#7a46ff">r</mi>
-                        <mo>)</mo>
-                      </mrow>
-                      <mrow>
-                        <mo>−</mo>
-                        <mi mathcolor="#047857">t</mi>
-                      </mrow>
-                    </msup>
-                  </mrow>
-                </mfrac>
-              </mrow>
-            </math>
+      <!-- CARD 1 - Equation -->
+      <section class="card" id="equation-card">
+        <h4 class="card-title">Mortgage Cash Flow Equations</h4>
+        <p class="equation-intro">These dynamic equations display the monthly payment and how it splits between interest and principal based on your inputs.</p>
+
+        <div class="model-equations-grid">
+          <!-- Monthly Payment (PMT) -->
+          <div class="formula-box pmt">
+            <div class="formula-box-title">Monthly Payment (PMT)</div>
+            <div class="equation-container" tabindex="0" role="math"
+                 aria-label="Monthly payment equation">
+              <div id="pmt-equation">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
           </div>
 
-          <!-- HTML fallback -->
-          <div id="html-equation" hidden>
-            <strong style="color:#3c6ae5;">PMT</strong> =
-            (<span style="color:#7a46ff;">r</span> × <span style="color:#b95b1d;">PV</span><sub>0</sub>) /
-            [1 - (1 + <span style="color:#7a46ff;">r</span>)<sup>-<span style="color:#047857;">t</span></sup>]
+          <!-- Interest Payment (INT_t) -->
+          <div class="formula-box int">
+            <div class="formula-box-title">Interest Payment (INT<sub>t</sub>)</div>
+            <div class="equation-container" tabindex="0" role="math"
+                 aria-label="Interest payment equation">
+              <div id="int-equation">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
           </div>
-        </div>
-        
-        <!-- Dynamic equation with actual values -->
-        <p style="margin-top: 1.5rem; font-style: italic; color: var(--color-gray-600); font-size: 0.875rem;">
-          With your inputs:
-        </p>
-        <div class="equation-container" role="region" aria-label="Mortgage calculation with your values" aria-live="polite" tabindex="0" id="dynamic-equation-container">
-          <div id="dynamic-mathml-equation">
-            <!-- Populated by JavaScript -->
+
+          <!-- Principal Payment (PRN_t) -->
+          <div class="formula-box prn">
+            <div class="formula-box-title">Principal Payment (PRN<sub>t</sub>)</div>
+            <div class="equation-container" tabindex="0" role="math"
+                 aria-label="Principal payment equation">
+              <div id="prn-equation">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -94,7 +73,7 @@
       <div class="middle-row">
         <!-- CARD 2 - Results -->
         <section class="card" id="results-card" tabindex="-1" aria-labelledby="results-title">
-          <h4 class="card-title" id="results-title">Results</h4>
+          <h4 class="card-title" id="results-title">Results and Analysis</h4>
           <div id="results-content" aria-live="polite"></div>
           <div id="result-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
         </section>
@@ -102,13 +81,14 @@
         <!-- CARD 3 - Visualization -->
         <section class="card" id="visualization-card" tabindex="-1" aria-labelledby="visualization-title">
           <h4 class="card-title" id="visualization-title">Mortgage Cash Flows</h4>
+          <p class="sr-only" id="chart-keyboard-help">Chart keyboard navigation: Arrow keys move between periods, Page Up/Down jump by year, T key focuses table, Home/End go to first/last period</p>
           <div class="view-controls">
             <button id="view-chart-btn" class="toggle-btn active" aria-pressed="true">Chart</button>
             <button id="view-table-btn" class="toggle-btn" aria-pressed="false">Table</button>
           </div>
 
           <div id="chart-container" class="chart-wrapper">
-            <canvas id="chart" role="img" aria-label="Stacked bar chart showing annual principal and interest payments"></canvas>
+            <canvas id="chart" role="img" aria-label="Stacked bar chart showing principal and interest payments" aria-describedby="chart-keyboard-help"></canvas>
             <div id="chart-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
           </div>
 
@@ -132,12 +112,12 @@
 
       <!-- CARD 4 - Data Entry -->
       <section class="card" id="data-entry" tabindex="-1" role="region" aria-labelledby="inputs-title">
-        <h4 class="card-title" id="inputs-title">Loan Parameters</h4>
+        <h4 class="card-title" id="inputs-title">Mortgage Payment Calculator</h4>
 
         <div class="input-group-inline">
           <div class="input-inline">
             <label for="principal" class="input-label-inline">
-              Loan Amount (<strong style="color:var(--color-mortgage-principal);">PV<sub>0</sub></strong>):
+              Mortgage Amount (<strong style="color:var(--color-mortgage-principal);">PV<sub>0</sub></strong>):
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="principal" class="input-field-inline"
@@ -149,7 +129,7 @@
 
           <div class="input-inline">
             <label for="rate" class="input-label-inline">
-              Annual Rate (<strong style="color:var(--color-mortgage-interest);">12r</strong>):
+              Mortgage interest rate (<strong style="color:var(--color-mortgage-interest);">r</strong>):
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="rate" class="input-field-inline"
@@ -161,7 +141,7 @@
 
           <div class="input-inline">
             <label for="years" class="input-label-inline">
-              Loan Term (<strong style="color:var(--color-mortgage-term);">t</strong>):
+              Mortgage term (<strong style="color:var(--color-mortgage-term);">t</strong>):
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="years" class="input-field-inline"
@@ -183,20 +163,6 @@
   </div>
 
   <script type="module" src="./calculator.js"></script>
-<script>
-  // Use the same simple, robust feature test as the bond page
-  const supports = CSS.supports('math-style: normal');
-  const mathml = document.getElementById('mathml-equation');
-  const fallback = document.getElementById('html-equation');
-
-  if (!supports) {
-    if (mathml) mathml.hidden = true;
-    if (fallback) { fallback.hidden = false; fallback.removeAttribute('aria-hidden'); }
-  } else {
-    // Belt-and-braces: keep fallback inert in MathML-capable browsers
-    if (fallback) { fallback.hidden = true; fallback.setAttribute('aria-hidden','true'); }
-  }
-</script>
 
 </body>
 </html>

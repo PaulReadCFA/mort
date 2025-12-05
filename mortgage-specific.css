@@ -18,7 +18,144 @@
 }
 
 /* ==========================================================================
-   2. RESULT BOXES – Mortgage-Specific
+   1.5 MODEL EQUATIONS GRID - Three Formula Boxes
+   ========================================================================== */
+.model-equations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .model-equations-grid {
+    grid-template-columns: 1fr 1fr 1fr;  /* Equal thirds */
+  }
+}
+
+@media (max-width: 767px) {
+  .model-equations-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .formula-box {
+    min-height: auto;
+  }
+}
+
+/* ==========================================================================
+   1.5 FORMULA BOXES - Override cfa-base.css completely
+   ========================================================================== */
+.formula-box {
+  /* Remove ALL borders first */
+  border: none !important;
+  border-top: none !important;
+  border-right: none !important;
+  border-bottom: none !important;
+  /* Only left border */
+  border-left: 4px solid var(--color-gray-400) !important;
+  /* Styling */
+  padding: 0.75rem 1rem !important;
+  background: white !important;
+  border-radius: 0 0.5rem 0.5rem 0 !important;
+  margin-top: 0 !important;
+  min-height: 160px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  overflow: hidden;
+}
+
+.formula-box.pmt {
+  border-left-color: #3c6ae5 !important;  /* Blue */
+}
+
+.formula-box.int {
+  border-left-color: #7a46ff !important;  /* Purple */
+}
+
+.formula-box.prn {
+  border-left-color: #15803d !important;  /* Green */
+}
+
+.formula-box-title {
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: var(--color-gray-700) !important;
+  margin-top: 0 !important;
+  margin-bottom: 0.5rem !important;  /* Match dividend: 0.5rem not 0.75rem */
+  text-align: center !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.025em !important;
+  padding: 0 !important;
+}
+  letter-spacing: 0.025em;
+}
+
+.equation-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Equation result styling */
+.equation-result-main {
+  font-size: 1.1rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  text-align: center;
+}
+
+.equation-result-main.pmt {
+  color: var(--color-mortgage-payment);
+  background: rgba(60, 106, 229, 0.08);
+}
+
+.equation-result-main.int {
+  color: var(--color-mortgage-interest);
+  background: rgba(122, 70, 255, 0.08);
+}
+
+.equation-result-main.prn {
+  color: var(--color-green-data);
+  background: rgba(21, 128, 61, 0.08);
+}
+
+.equation-note {
+  font-size: 0.8125rem;
+  color: var(--color-gray-600);
+  font-style: italic;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.equation-intro {
+  font-size: 0.875rem;
+  color: var(--color-gray-600);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+/* ==========================================================================
+   1.5 MIDDLE ROW LAYOUT - 1:3 RATIO
+   ========================================================================== */
+.middle-row {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  gap: 1.5rem;
+}
+
+/* Stack on mobile */
+@media (max-width: 768px) {
+  .middle-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ==========================================================================
+/* ==========================================================================
+   2. RESULT BOXES - Mortgage-Specific (3-box layout)
    ========================================================================== */
 .results-grid {
   display: flex;
@@ -26,31 +163,97 @@
   gap: 1.5rem;
 }
 
+/* Principal Amount Box - Orange theme */
+.result-box-principal {
+  background-color: #fff7ed;  /* Light Orange BG */
+  border: 2px solid #b95b1d;  /* Orange Deep border */
+  border-radius: 0.5rem;
+  padding: 1.25rem;
+}
+
+.result-box-principal .result-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #b95b1d;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.result-box-principal .result-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #b95b1d;
+  line-height: 1.2;
+}
+
+/* Monthly Payment Box - Blue theme */
 .result-box-monthly {
-  background-color: var(--color-bg-blue);
-  border-color: var(--color-mortgage-payment);
+  background-color: #eff6ff;  /* Light Blue BG */
+  border: 2px solid #3c6ae5;  /* Blue Interactive border */
+  border-radius: 0.5rem;
+  padding: 1.25rem;
 }
 
+.result-box-monthly .result-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #3c6ae5;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.result-box-monthly .result-value {
+  font-size: 1.875rem;
+  font-weight: 700;
+  color: #3c6ae5;
+  line-height: 1.2;
+  margin-bottom: 0.5rem;
+}
+
+.result-box-monthly .result-subtitle {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-gray-600);
+}
+
+/* Interest Box - Purple theme */
 .result-box-interest {
-  background-color: var(--color-bg-purple);
-  border-color: var(--color-mortgage-interest);
+  background-color: #faf5ff;  /* Light Purple BG */
+  border: 2px solid #7a46ff;  /* Purple Bold border */
+  border-radius: 0.5rem;
+  padding: 1.25rem;
 }
 
-.result-box-interest .result-value {
-  color: var(--color-mortgage-interest);
+.result-box-interest .result-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #7a46ff;
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
 }
 
-.result-box-total {
-  background-color: var(--color-bg-purple);
-  border-color: var(--color-purple-bold);
+.result-box-interest .result-detail {
+  font-size: 0.8125rem;
+  font-weight: 500;
+  color: var(--color-gray-700);
+  margin-bottom: 0.5rem;
+  line-height: 1.6;
 }
 
-.result-box-total .result-value {
-  color: var(--color-purple-bold);
+.result-box-interest .result-detail strong {
+  color: #7a46ff;
+  font-weight: 600;
+}
+
+.result-box-interest .result-detail:last-child {
+  margin-bottom: 0;
 }
 
 /* ==========================================================================
-   3. INPUT LAYOUT – Bond-style Inline Layout
+   3. INPUT LAYOUT â€“ Bond-style Inline Layout
    ========================================================================== */
 .input-group-inline {
   display: flex;
@@ -144,7 +347,7 @@
 }
 
 /* ==========================================================================
-   5. CHART LEGEND – Mortgage-specific
+   5. CHART LEGEND â€“ Mortgage-specific
    ========================================================================== */
 .chart-legend {
   display: flex;
@@ -190,8 +393,31 @@
 }
 
 
-/* Match the bond page’s robust centering */
+/* Match the bond pageâ€™s robust centering */
 .equation-container { text-align: center; }
 #mathml-equation { display: inline-block; width: auto; }
 math[display="block"] { margin: 0.5em auto; }
 
+/* Force equation boxes to match dividend - nuclear option */
+.model-equations-grid .formula-box,
+.card .formula-box,
+#equation-card .formula-box {
+  border: 0 !important;
+  border-width: 0 !important;
+  border-style: none !important;
+  border-left: 4px solid #999 !important;
+  border-left-width: 4px !important;
+  border-left-style: solid !important;
+}
+
+#equation-card .formula-box.pmt {
+  border-left-color: #3c6ae5 !important;
+}
+
+#equation-card .formula-box.int {
+  border-left-color: #7a46ff !important;
+}
+
+#equation-card .formula-box.prn {
+  border-left-color: #15803d !important;
+}

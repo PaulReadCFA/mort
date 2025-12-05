@@ -1,23 +1,24 @@
 /**
  * Table Rendering - Annual amortization schedule
  * Semantic, accessible alternative to chart
+ * Shows 30 annual rows (not 360 monthly - that's for the chart)
  */
 
 import { $ } from './utils.js';
 
 /**
  * Render annual amortization table
- * @param {Object} result - Calculation results with schedule
+ * @param {Object} result - Calculation results with annualSchedule
  */
-export function renderTable({ schedule }) {
+export function renderTable({ annualSchedule }) {
   const tbody = $('#table-body');
   
-  if (!schedule || schedule.length === 0) {
+  if (!annualSchedule || annualSchedule.length === 0) {
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:1rem;">No data available</td></tr>';
     return;
   }
 
-  tbody.innerHTML = schedule.map(row => `
+  tbody.innerHTML = annualSchedule.map(row => `
     <tr>
       <td data-label="Year">Year ${row.year}</td>
       <td data-label="Principal"><span>$${formatCurrency(row.principal)}</span></td>

@@ -1,8 +1,7 @@
 /**
  * calculator.js -- Main Entry Point
- * Mortgage Calculator with Annual Payment Schedule
+ * Mortgage Calculator with Monthly Chart and Annual Table
  * Follows accessibility best practices and modular architecture
- * IMPROVED: Updated breakpoint to 768px for better responsiveness
  */
 
 import { state, setState, subscribe } from './modules/state.js';
@@ -10,7 +9,7 @@ import { calculate } from './modules/calculations.js';
 import { renderResults } from './modules/results.js';
 import { renderChart, destroyChart } from './modules/chart.js';
 import { renderTable } from './modules/table.js';
-import { renderDynamicEquation } from './modules/equation.js';
+import { renderEquations } from './modules/equations.js';
 import { $, listen, debounce } from './modules/utils.js';
 import { validateAll, setupFieldValidation } from './modules/validation.js';
 
@@ -50,8 +49,6 @@ function setupSkipLink() {
 
 /* ---------- INPUT HANDLERS ---------- */
 let lastAnnounced = { principal: 800000, rate: 6, years: 30 };
-
-
 
 const announceChange = debounce((field, value) => {
   const labels = {
@@ -152,7 +149,6 @@ function updateButtonStates() {
 }
 
 /* ---------- RESPONSIVE BEHAVIOR ---------- */
-/* IMPROVED: Updated breakpoint from 480px to 768px for better tablet/mobile handling */
 function detectNarrowScreen() {
   const narrow = window.innerWidth <= 768;
   
@@ -178,8 +174,8 @@ function updateAll(currentState) {
       annualPayment: 0,
       totalInterest: 0,
       totalPaid: 0
-    });
-    renderTable({ schedule: [] });
+    }, currentState.inputs);
+    renderTable({ annualSchedule: [] });
     return;
   }
 
@@ -187,11 +183,11 @@ function updateAll(currentState) {
   const result = calculate(currentState.inputs);
   
   // Update results
-  renderResults(result);
+  renderResults(result, currentState.inputs);
   renderTable(result);
   
-  // Update dynamic equation
-  renderDynamicEquation(result, currentState.inputs);
+  // Update dynamic equations
+  renderEquations(result, currentState.inputs);
 
   // Update visualization based on view
   const isTableView = currentState.view === 'table' || 

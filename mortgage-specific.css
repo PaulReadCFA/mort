@@ -181,7 +181,7 @@
 }
 
 .result-box-principal .result-value {
-  font-size: 1.875rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #b95b1d;
   line-height: 1.2;
@@ -205,7 +205,7 @@
 }
 
 .result-box-monthly .result-value {
-  font-size: 1.875rem;
+  font-size: 1.5rem;
   font-weight: 700;
   color: #3c6ae5;
   line-height: 1.2;
@@ -246,6 +246,7 @@
 .result-box-interest .result-detail strong {
   color: #7a46ff;
   font-weight: 600;
+  font-size: 0.875rem;
 }
 
 .result-box-interest .result-detail:last-child {

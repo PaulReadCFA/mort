@@ -23,7 +23,11 @@ export function renderChart({ monthlySchedule }, inputs) {
   barButtons.forEach(b => b.remove());
   barButtons = [];
   currentIndex = 0;
-  canvas.tabIndex = -1;
+  
+  // Make canvas keyboard focusable
+  canvas.tabIndex = 0;
+  canvas.setAttribute('role', 'application');
+  canvas.setAttribute('aria-label', 'Mortgage amortization chart. Use arrow keys to navigate months, Page Up/Down to jump by year, T to focus table, Home/End for first/last month.');
 
  // Get interest rate from inputs
   const annualRate = inputs?.rate || 6;
@@ -39,14 +43,18 @@ export function renderChart({ monthlySchedule }, inputs) {
   legend.innerHTML = `
     <span class="legend-item">
       <span class="legend-color" style="background-color: #3c6ae5;"></span>
-      Interest Payment (INT)
+      Interest Cash Flows (INT)
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background-color: #047857;"></span>
       Principal Amortization (PRN)
     </span>
     <span class="legend-item">
-      <span class="legend-color" style="background-color: #7a46ff; box-shadow: 0 0 0 2px white, 0 0 0 3px #7a46ff; border-radius: 2px;"></span>
+      <span class="legend-color" style="background-color: #60a5fa; height: 3px; width: 20px;"></span>
+      Total Mortgage Cash Flows (PMT)
+    </span>
+    <span class="legend-item">
+      <span class="legend-color" style="background: repeating-linear-gradient(90deg, #7a46ff 0px, #7a46ff 5px, transparent 5px, transparent 10px); height: 3px; width: 20px;"></span>
       Interest Rate (<strong style="color: #7a46ff;">${annualRate}%</strong>)
     </span>
   `;
@@ -75,42 +83,46 @@ export function renderChart({ monthlySchedule }, inputs) {
       labels: labels,
       datasets: [
         {
-          label: 'Interest Payment',
+          label: 'Interest Cash Flows (INT)',
           data: interestData,
-          backgroundColor: '#3c6ae5',
+          backgroundColor: 'rgba(60, 106, 229, 0.3)',  // Semi-transparent blue
           borderWidth: 0,
-          order: 2  // Draw behind the line
+          yAxisID: 'y',
+          order: 2  // Draw first (behind)
         },
         {
-          label: 'Principal Amortization',
+          label: 'Principal Amortization (PRN)',
           data: principalData,
-          backgroundColor: '#047857',
+          backgroundColor: '#047857',  // Solid green
           borderWidth: 0,
-          order: 2  // Draw behind the line
+          yAxisID: 'y',
+          order: 1  // Draw second (on top of INT)
         },
-        // Interest rate line - White border (background)
+        // Monthly Payment (PMT) constant line - shows total payment stays constant
         {
-          label: '',  // Hidden from legend
-          data: labels.map(() => annualRate),
+          label: 'Monthly Payment (PMT)',
+          data: labels.map(() => monthlySchedule[0].totalPayment),
           type: 'line',
-          borderColor: 'rgba(255, 255, 255, 1)',  // Fully opaque white
-          borderWidth: 7,  // Thicker for border effect
+          borderColor: '#60a5fa',  // Light blue
+          backgroundColor: 'rgba(96, 165, 250, 0.1)',
+          borderWidth: 2,
           pointRadius: 0,
           fill: false,
-          yAxisID: 'y2',
-          order: 1  // Draw first (behind purple)
+          yAxisID: 'y',
+          order: 0  // Draw on top
         },
-        // Interest rate line - Purple foreground
+        // Interest rate horizontal line
         {
           label: 'Interest Rate (r)',
           data: labels.map(() => annualRate),
           type: 'line',
           borderColor: '#7a46ff',
-          borderWidth: 4,  // Visible purple line
+          borderWidth: 3,
+          borderDash: [5, 5],
           pointRadius: 0,
           fill: false,
           yAxisID: 'y2',
-          order: 0  // Draw last (on top)
+          order: 0  // Draw on top
         }
       ]
     },
@@ -142,7 +154,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           }
         },
         y: {
-          stacked: true,
+          stacked: false,  // NOT stacked - overlay mode
           beginAtZero: true,
           position: 'left',
           title: {
@@ -161,7 +173,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           min: 0,
           max: Math.max(12, annualRate * 1.5),
           title: {
-            display: false  // We draw this manually at top
+            display: false
           },
           ticks: {
             maxRotation: 0,
@@ -174,6 +186,14 @@ export function renderChart({ monthlySchedule }, inputs) {
           grid: {
             display: false
           }
+        }
+      },
+      layout: {
+        padding: {
+          top: 30,  // Space for Y-axis titles
+          right: 10,
+          bottom: 10,
+          left: 10
         }
       },
       plugins: {
@@ -191,17 +211,33 @@ export function renderChart({ monthlySchedule }, inputs) {
           },
           callbacks: {
             title: function(context) {
+              const index = context[0].dataIndex;
+              if (monthlySchedule[index]) {
+                return `Year ${monthlySchedule[index].year}, Month ${monthlySchedule[index].monthInYear}`;
+              }
               return context[0].label;
             },
             label: function(context) {
               const label = context.dataset.label || '';
               const value = context.parsed.y;
-              return `${label}: $${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+              
+              // Rename for clarity
+              let displayLabel = label;
+              if (label === 'Interest Payment') {
+                displayLabel = 'Interest (INT)';
+              } else if (label === 'Principal Amortization') {
+                displayLabel = 'Principal (PRN)';
+              }
+              
+              return `${displayLabel}: $${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             },
             afterBody: function(context) {
               const index = context[0].dataIndex;
-              const total = schedule[index].totalPayment;
-              return `Total: $${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+              if (monthlySchedule[index]) {
+                const total = monthlySchedule[index].totalPayment;
+                return `Total (PMT): $${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+              }
+              return '';
             }
           }
         }
@@ -225,20 +261,20 @@ export function renderChart({ monthlySchedule }, inputs) {
     },
     plugins: [
       {
-        // Custom plugin to draw horizontal Y-axis titles at top (like bond chart)
-        id: 'horizontalYTitles',
+        // Custom plugin to draw horizontal Y-axis title at top
+        id: 'horizontalYTitle',
         afterDraw: (chart) => {
           const ctx = chart.ctx;
           const chartArea = chart.chartArea;
           
           ctx.save();
           
-          // Left Y-axis title (Payment Amount)
+          // Left Y-axis title (Cash Flows)
           ctx.fillStyle = '#374151';
           ctx.font = 'bold 12px sans-serif';
           ctx.textAlign = 'left';
           ctx.textBaseline = 'top';
-          ctx.fillText('Payment Amount ($)', chartArea.left, chartArea.top - 25);
+          ctx.fillText('Cash Flows ($)', chartArea.left, chartArea.top - 25);
           
           // Right Y-axis title (Rate %)
           ctx.fillStyle = '#7a46ff';
@@ -251,20 +287,66 @@ export function renderChart({ monthlySchedule }, inputs) {
     ]
   });
 
-  // Add keyboard-accessible button overlays after chart renders
-  requestAnimationFrame(() => {
-    requestAnimationFrame(() => {
-      createBarButtons(monthlySchedule, container);
-      
-      // Add educational note if not already present
-      const parentCard = container.closest('.card');
-      if (parentCard && !parentCard.querySelector('.educational-note')) {
-        const note = document.createElement('div');
-        note.className = 'educational-note';
-        note.innerHTML = '<strong>Mortgage Amortization:</strong> Early payments are mostly interest; principal portion increases over time as balance decreases. Chart shows monthly cash flows.';
-        parentCard.appendChild(note);
-      }
-    });
+  // Setup keyboard navigation for canvas
+  setupKeyboardNavigation(canvas, monthlySchedule);
+}
+
+/**
+ * Setup keyboard navigation for canvas
+ */
+function setupKeyboardNavigation(canvas, monthlySchedule) {
+  canvas.addEventListener('keydown', (e) => {
+    const maxIndex = monthlySchedule.length - 1;
+    let newIndex = currentIndex;
+    
+    switch(e.key) {
+      case 'ArrowRight':
+        e.preventDefault();
+        newIndex = Math.min(currentIndex + 1, maxIndex);
+        break;
+      case 'ArrowLeft':
+        e.preventDefault();
+        newIndex = Math.max(currentIndex - 1, 0);
+        break;
+      case 'PageDown':
+        e.preventDefault();
+        newIndex = Math.min(currentIndex + 12, maxIndex);
+        break;
+      case 'PageUp':
+        e.preventDefault();
+        newIndex = Math.max(currentIndex - 12, 0);
+        break;
+      case 'Home':
+        e.preventDefault();
+        newIndex = 0;
+        break;
+      case 'End':
+        e.preventDefault();
+        newIndex = maxIndex;
+        break;
+      case 't':
+      case 'T':
+        e.preventDefault();
+        const table = document.getElementById('data-table');
+        if (table) {
+          table.focus();
+          announceBar(monthlySchedule[currentIndex], currentIndex, true);
+        }
+        return;
+    }
+    
+    if (newIndex !== currentIndex) {
+      currentIndex = newIndex;
+      highlightBar(currentIndex);
+      showTooltip(currentIndex);
+      announceBar(monthlySchedule[currentIndex], currentIndex, false);
+    }
+  });
+  
+  // On focus, show tooltip for current bar
+  canvas.addEventListener('focus', () => {
+    highlightBar(currentIndex);
+    showTooltip(currentIndex);
   });
 }
 
@@ -402,6 +484,10 @@ function highlightBar(index) {
  */
 function showTooltip(index) {
   const meta = chart.getDatasetMeta(0);
+  
+  // Skip if bar not rendered (can happen with 360 bars)
+  if (!meta.data[index]) return;
+  
   chart.tooltip.setActiveElements([
     { datasetIndex: 0, index: index },
     { datasetIndex: 1, index: index }
@@ -417,10 +503,17 @@ function showTooltip(index) {
  * Throttled to avoid overwhelming users during rapid navigation
  * @param {Object} row - Schedule row data (monthly)
  * @param {number} index - Row index
+ * @param {boolean} isTableFocus - If true, announce table focus instead
  */
 let announceTimeout = null;
-function announceBar(row, index) {
+function announceBar(row, index, isTableFocus = false) {
   const region = $('#chart-announcement');
+  
+  if (isTableFocus) {
+    region.textContent = 'Focused on data table';
+    setTimeout(() => region.textContent = '', 2000);
+    return;
+  }
   
   // Clear any pending announcement
   if (announceTimeout) {

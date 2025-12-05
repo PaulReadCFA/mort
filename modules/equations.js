@@ -37,10 +37,7 @@ function renderPMTEquation(result, inputs) {
   const totalMonths = years * 12;
   const rPercent = (monthlyRate * 100).toFixed(4);
 
-  container.setAttribute(
-    'aria-label',
-    `Monthly payment equals ${formatCurrency(monthlyPayment)}`
-  );
+  // Don't add aria-label to generic div - parent has role=region with label
 
   const mathML = `
     <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:center;">
@@ -97,10 +94,7 @@ function renderINTEquation(result, inputs) {
   const rPercent = (monthlyRate * 100).toFixed(4);
   const int1 = (principal * monthlyRate).toFixed(2);
 
-  container.setAttribute(
-    'aria-label',
-    `Interest payment for month 1 equals ${formatCurrency(int1)}`
-  );
+  // Don't add aria-label to generic div - parent has role=region with label
 
   const mathML = `
     <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:center;">
@@ -150,10 +144,7 @@ function renderPRNEquation(result, inputs) {
   const int1 = principal * monthlyRate;
   const prn1 = monthlyPayment - int1;
 
-  container.setAttribute(
-    'aria-label',
-    `Principal payment for month 1 equals ${formatCurrency(prn1)}`
-  );
+  // Don't add aria-label to generic div - parent has role=region with label
 
   const mathML = `
     <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:center;">

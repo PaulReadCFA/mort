@@ -299,8 +299,7 @@ canvas[tabindex]:focus {
   padding: 1rem;
   margin: 0.75rem 0;
   background: white;
-  border: 1px solid var(--color-gray-200);
-  border-radius: 0.5rem;
+  
   overflow-x: auto;
   overflow-y: hidden;
   max-width: 100%;

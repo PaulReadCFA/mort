@@ -82,13 +82,11 @@
   font-weight: 600 !important;
   color: var(--color-gray-700) !important;
   margin-top: 0 !important;
-  margin-bottom: 0.5rem !important;  /* Match dividend: 0.5rem not 0.75rem */
+  margin-bottom: 0.5rem !important;
   text-align: center !important;
   text-transform: uppercase !important;
   letter-spacing: 0.025em !important;
   padding: 0 !important;
-}
-  letter-spacing: 0.025em;
 }
 
 .equation-container {
@@ -96,6 +94,12 @@
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
+  /* Override cfa-base.css box styling */
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  padding: 0.5rem !important;
+  margin: 0 !important;
 }
 
 /* Equation result styling */
@@ -108,18 +112,21 @@
 }
 
 .equation-result-main.pmt {
-  color: var(--color-mortgage-payment);
+  color: #1e40af;  /* Darker blue for contrast */
   background: rgba(60, 106, 229, 0.08);
+  font-weight: 700;  /* Bolder for better readability */
 }
 
 .equation-result-main.int {
-  color: var(--color-mortgage-interest);
+  color: #5b21b6;  /* Darker purple for contrast */
   background: rgba(122, 70, 255, 0.08);
+  font-weight: 700;
 }
 
 .equation-result-main.prn {
-  color: var(--color-green-data);
+  color: #047857;  /* Use existing darker green */
   background: rgba(21, 128, 61, 0.08);
+  font-weight: 700;
 }
 
 .equation-note {
@@ -174,7 +181,7 @@
 .result-box-principal .result-title {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #b95b1d;
+  color: #8b4513;  /* Match darker orange */
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -182,8 +189,8 @@
 
 .result-box-principal .result-value {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #b95b1d;
+  font-weight: 800;
+  color: #8b4513;  /* Darker orange/brown for better contrast */
   line-height: 1.2;
 }
 
@@ -198,7 +205,7 @@
 .result-box-monthly .result-title {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #3c6ae5;
+  color: #1e40af;  /* Match darker blue */
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -206,8 +213,8 @@
 
 .result-box-monthly .result-value {
   font-size: 1.5rem;
-  font-weight: 700;
-  color: #3c6ae5;
+  font-weight: 800;
+  color: #1e40af;  /* Darker blue for better contrast */
   line-height: 1.2;
   margin-bottom: 0.5rem;
 }

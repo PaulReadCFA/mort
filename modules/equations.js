@@ -5,11 +5,11 @@
 
 const COLORS = {
   PMT: '#3c6ae5',      // Blue - Monthly payment
-  INT: '#7a46ff',      // Purple - Interest
-  PRN: '#15803d',      // Green - Principal
-  PV: '#b95b1d',       // Orange - Principal amount
+  INT: '#0079a6',      // Teal - Interest payment
+  PRN: '#b82937',      // Red - Principal payment
+  PV: '#b82937',       // Red - Principal amount (matches PRN)
   r: '#7a46ff',        // Purple - Interest rate
-  t: '#15803d'         // Green - Term
+  t: '#047857'         // Green - Term
 };
 
 /**
@@ -155,12 +155,9 @@ function renderPRNEquation(result, inputs) {
             <mn>1</mn>
           </msub>
           <mo>=</mo>
-          <mi mathcolor="${COLORS.PMT}">PMT</mi>
+          <mtext mathcolor="${COLORS.PMT}" mathvariant="bold">${formatCurrency(monthlyPayment)}</mtext>
           <mo>−</mo>
-          <msub>
-            <mi mathcolor="${COLORS.INT}">INT</mi>
-            <mn>1</mn>
-          </msub>
+          <mtext mathcolor="${COLORS.INT}" mathvariant="bold">${formatCurrency(int1)}</mtext>
         </mrow>
       </math>
       <div class="equation-result-main prn">

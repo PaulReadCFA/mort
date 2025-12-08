@@ -18,10 +18,21 @@
 
   <!-- NOSCRIPT FALLBACK -->
   <noscript>
-    <div class="card" style="margin:2rem auto;max-width:600px;">
-      <h4 style="font-family:Georgia,serif;color:var(--color-primary-dark-blue);">Mortgage Calculator</h4>
-      <p><strong>JavaScript is required</strong> for the interactive version.</p>
-      <p>This calculator helps you estimate your annual mortgage payments based on loan amount, interest rate, and loan term.</p>
+    <div style="padding: 2rem; text-align: center; background: #fef2f2; border: 2px solid #b91c1c; border-radius: 0.5rem; margin: 2rem auto; max-width: 600px;">
+      <h5 style="color: #991b1c; margin-bottom: 1rem; font-size: 1.125rem;">JavaScript Required</h5>
+      <p style="color: #374151; line-height: 1.6; margin-bottom: 0.75rem;">
+        This mortgage calculator is an interactive tool that requires JavaScript to function.
+      </p>
+      <p style="color: #374151; line-height: 1.6; font-size: 0.875rem;">
+        Please enable JavaScript in your browser settings to:
+      </p>
+      <ul style="text-align: left; margin: 1rem auto; max-width: 20rem; color: #374151; font-size: 0.875rem; line-height: 1.6;">
+        <li>Calculate monthly mortgage payments</li>
+        <li>View interactive amortization charts</li>
+        <li>Explore monthly payment breakdowns</li>
+        <li>See dynamic cash flow equations</li>
+        <li>Adjust loan parameters in real-time</li>
+      </ul>
     </div>
   </noscript>
 
@@ -98,10 +109,10 @@
               <thead>
                 <tr>
                   <th scope="col">Year</th>
-                  <th scope="col">Principal</th>
-                  <th scope="col">Interest</th>
-                  <th scope="col">Total Payment</th>
-                  <th scope="col">Remaining Balance</th>
+                  <th scope="col">Principal amortization (<strong style="color: #b82937;">PRN</strong>)</th>
+                  <th scope="col">Interest cash flows (<strong style="color: #0079a6;">INT</strong>)</th>
+                  <th scope="col">Total mortgage cash flows (<strong style="color: #3c6ae5;">PMT</strong>)</th>
+                  <th scope="col">Remaining balance</th>
                 </tr>
               </thead>
               <tbody id="table-body"></tbody>
@@ -117,19 +128,19 @@
         <div class="input-group-inline">
           <div class="input-inline">
             <label for="principal" class="input-label-inline">
-              Mortgage Amount (<strong style="color:var(--color-mortgage-principal);">PV<sub>0</sub></strong>):
+              Mortgage amount (<strong style="color:#b82937;">PV<sub>0</sub></strong>):
             </label>
             <div class="input-with-suffix-inline">
-              <input type="number" id="principal" class="input-field-inline"
+              <span class="input-prefix-inline">$</span>
+              <input type="number" id="principal" class="input-field-inline input-with-prefix"
                      min="1000" max="10000000" step="1000" value="800000"
                      aria-required="true">
-              <span class="input-suffix-inline">$</span>
             </div>
           </div>
 
           <div class="input-inline">
             <label for="rate" class="input-label-inline">
-              Mortgage interest rate (<strong style="color:var(--color-mortgage-interest);">r</strong>):
+              Mortgage interest rate (<strong style="color:#7a46ff;">r</strong>):
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="rate" class="input-field-inline"

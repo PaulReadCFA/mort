@@ -21,10 +21,10 @@ export function renderTable({ annualSchedule }) {
   tbody.innerHTML = annualSchedule.map(row => `
     <tr>
       <td data-label="Year">Year ${row.year}</td>
-      <td data-label="Principal"><span>$${formatCurrency(row.principal)}</span></td>
-      <td data-label="Interest"><span>$${formatCurrency(row.interest)}</span></td>
-      <td data-label="Total Payment"><span>$${formatCurrency(row.totalPayment)}</span></td>
-      <td data-label="Remaining Balance"><span>$${formatCurrency(row.remainingBalance)}</span></td>
+      <td data-label="Principal amortization (PRN)"><span style="color: #b82937; font-weight: 600;">$${formatCurrency(row.principal)}</span></td>
+      <td data-label="Interest cash flows (INT)"><span style="color: #0079a6; font-weight: 600;">$${formatCurrency(row.interest)}</span></td>
+      <td data-label="Total mortgage cash flows (PMT)"><span style="color: #3c6ae5; font-weight: 600;">$${formatCurrency(row.totalPayment)}</span></td>
+      <td data-label="Remaining balance"><span>$${formatCurrency(row.remainingBalance)}</span></td>
     </tr>
   `).join('');
 }

@@ -42,20 +42,20 @@ export function renderChart({ monthlySchedule }, inputs) {
   
   legend.innerHTML = `
     <span class="legend-item">
-      <span class="legend-color" style="background-color: #3c6ae5;"></span>
-      Interest Cash Flows (INT)
+      <span class="legend-color" style="background-color: #0079a6;"></span>
+      Interest cash flows (<strong style="color: #0079a6;">INT</strong>)
     </span>
     <span class="legend-item">
-      <span class="legend-color" style="background-color: #047857;"></span>
-      Principal Amortization (PRN)
+      <span class="legend-color" style="background-color: #b82937;"></span>
+      Principal amortization (<strong style="color: #b82937;">PRN</strong>)
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background-color: #60a5fa; height: 3px; width: 20px;"></span>
-      Total Mortgage Cash Flows (PMT)
+      Total mortgage cash flows (<strong style="color: #3c6ae5;">PMT</strong>)
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background: repeating-linear-gradient(90deg, #7a46ff 0px, #7a46ff 5px, transparent 5px, transparent 10px); height: 3px; width: 20px;"></span>
-      Interest Rate (<strong style="color: #7a46ff;">${annualRate}%</strong>)
+      Interest rate (<strong style="color: #7a46ff;">r</strong>) <strong style="color: #7a46ff;">${annualRate}%</strong>
     </span>
   `;
 
@@ -83,24 +83,24 @@ export function renderChart({ monthlySchedule }, inputs) {
       labels: labels,
       datasets: [
         {
-          label: 'Interest Cash Flows (INT)',
+          label: 'Interest cash flows (INT)',
           data: interestData,
-          backgroundColor: 'rgba(60, 106, 229, 0.3)',  // Semi-transparent blue
+          backgroundColor: 'rgba(0, 121, 166, 0.3)',  /* Teal semi-transparent */
           borderWidth: 0,
           yAxisID: 'y',
           order: 2  // Draw first (behind)
         },
         {
-          label: 'Principal Amortization (PRN)',
+          label: 'Principal amortization (PRN)',
           data: principalData,
-          backgroundColor: '#047857',  // Solid green
+          backgroundColor: '#b82937',  /* Red solid */
           borderWidth: 0,
           yAxisID: 'y',
           order: 1  // Draw second (on top of INT)
         },
-        // Monthly Payment (PMT) constant line - shows total payment stays constant
+        // Monthly payment (PMT) constant line - shows total payment stays constant
         {
-          label: 'Monthly Payment (PMT)',
+          label: 'Total mortgage cash flows (PMT)',
           data: labels.map(() => monthlySchedule[0].totalPayment),
           type: 'line',
           borderColor: '#60a5fa',  // Light blue
@@ -113,7 +113,7 @@ export function renderChart({ monthlySchedule }, inputs) {
         },
         // Interest rate horizontal line
         {
-          label: 'Interest Rate (r)',
+          label: 'Interest rate (r)',
           data: labels.map(() => annualRate),
           type: 'line',
           borderColor: '#7a46ff',
@@ -213,7 +213,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             title: function(context) {
               const index = context[0].dataIndex;
               if (monthlySchedule[index]) {
-                return `Year ${monthlySchedule[index].year}, Month ${monthlySchedule[index].monthInYear}`;
+                return `Year ${monthlySchedule[index].year}, month ${monthlySchedule[index].monthInYear}`;
               }
               return context[0].label;
             },
@@ -221,22 +221,13 @@ export function renderChart({ monthlySchedule }, inputs) {
               const label = context.dataset.label || '';
               const value = context.parsed.y;
               
-              // Rename for clarity
+              // Use sentence case labels from legend
               let displayLabel = label;
-              if (label === 'Interest Payment') {
-                displayLabel = 'Interest (INT)';
-              } else if (label === 'Principal Amortization') {
-                displayLabel = 'Principal (PRN)';
-              }
               
               return `${displayLabel}: $${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             },
             afterBody: function(context) {
-              const index = context[0].dataIndex;
-              if (monthlySchedule[index]) {
-                const total = monthlySchedule[index].totalPayment;
-                return `Total (PMT): $${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-              }
+              // Don't show "Total (PMT)" - it's redundant with the PMT line dataset
               return '';
             }
           }

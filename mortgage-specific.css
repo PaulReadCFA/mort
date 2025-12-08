@@ -11,10 +11,11 @@
    ========================================================================== */
 :root {
   /* Mortgage Calculator Specific Colors - Using brand palette */
-  --color-mortgage-payment: var(--color-blue-interactive);  /* #3c6ae5 - Monthly payment */
-  --color-mortgage-principal: var(--color-orange-deep);     /* #b95b1d - Principal */
-  --color-mortgage-interest: var(--color-purple-bold);      /* #7a46ff - Interest rate */
-  --color-mortgage-term: var(--color-green-data-alt);       /* #047857 - Loan term */
+  --color-mortgage-payment: var(--color-blue-interactive);  /* #3c6ae5 - Monthly payment (PMT) */
+  --color-mortgage-principal: var(--color-red-2);           /* #b82937 - Principal (PRN) */
+  --color-mortgage-interest: var(--color-teal-data);        /* #0079a6 - Interest (INT) */
+  --color-mortgage-term: var(--color-green-data-alt);       /* #047857 - Loan term (t) */
+  --color-mortgage-rate: var(--color-purple-bold);          /* #7a46ff - Interest rate (r) */
 }
 
 /* ==========================================================================
@@ -289,6 +290,21 @@
   justify-content: flex-end;
   width: 6rem;
   position: relative;
+}
+
+.input-prefix-inline {
+  position: absolute;
+  left: 0.4rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-gray-500);
+  pointer-events: none;
+  font-size: 0.875rem;
+  z-index: 1;
+}
+
+.input-field-inline.input-with-prefix {
+  padding-left: 1.2rem;
 }
 
 .input-field-inline {

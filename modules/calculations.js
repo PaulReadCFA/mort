@@ -111,9 +111,9 @@ export function calculate({ principal = 0, rate = 0, years = 0 }) {
  */
 export function validateInput(field, value) {
   const rules = {
-    principal: { min: 1000, max: 10000000, label: 'Loan Amount' },
-    rate: { min: 0.1, max: 20, label: 'Interest Rate' },
-    years: { min: 1, max: 40, label: 'Loan Term' }
+    principal: { min: 1000, max: 10000000, label: 'Mortgage amount', prefix: '$', suffix: '' },
+    rate: { min: 0.1, max: 20, label: 'Mortgage interest rate', prefix: '', suffix: '%' },
+    years: { min: 1, max: 40, label: 'Mortgage term', prefix: '', suffix: ' year' }
   };
 
   const rule = rules[field];
@@ -124,11 +124,15 @@ export function validateInput(field, value) {
   }
 
   if (value < rule.min) {
-    return `${rule.label} must be at least ${rule.min.toLocaleString()}`;
+    const suffix = rule.suffix === ' year' && rule.min !== 1 ? ' years' : rule.suffix;
+    const formattedMin = rule.prefix + rule.min.toLocaleString() + suffix;
+    return `${rule.label} must be at least ${formattedMin}`;
   }
 
   if (value > rule.max) {
-    return `${rule.label} must be no more than ${rule.max.toLocaleString()}`;
+    const suffix = rule.suffix === ' year' ? ' years' : rule.suffix;
+    const formattedMax = rule.prefix + rule.max.toLocaleString() + suffix;
+    return `${rule.label} must be no more than ${formattedMax}`;
   }
 
   return null;

@@ -165,6 +165,12 @@
 /* ==========================================================================
    2. RESULT BOXES - Mortgage-Specific (3-box layout)
    ========================================================================== */
+
+/* Table header override for better contrast with colored abbreviations */
+#data-table th {
+  background: #f9fafb !important;  /* Lighter than gray-100 for WCAG compliance */
+}
+
 .results-grid {
   display: flex;
   flex-direction: column;

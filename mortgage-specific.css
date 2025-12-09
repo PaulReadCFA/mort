@@ -298,6 +298,11 @@
   position: relative;
 }
 
+/* Wider input for mortgage amount field to accommodate $10,000,000 */
+.input-inline:first-child .input-with-suffix-inline {
+  width: 9rem;
+}
+
 .input-prefix-inline {
   position: absolute;
   left: 0.4rem;

@@ -19,6 +19,75 @@
 }
 
 /* ==========================================================================
+   TABLE EXPANDABLE ROWS
+   ========================================================================== */
+.year-row {
+  cursor: default;
+}
+
+.expand-btn {
+  background: none;
+  border: none;
+  color: var(--color-blue-interactive);
+  cursor: pointer;
+  padding: 0.25rem 0.35rem;
+  margin-right: 0.25rem;
+  font-size: 0.875rem;
+  vertical-align: middle;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease;
+  line-height: 1;
+}
+
+.expand-btn:hover {
+  color: var(--color-primary-dark-blue);
+}
+
+.expand-btn:focus {
+  outline: 2px solid var(--color-blue-interactive);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.expand-icon {
+  display: inline-block;
+  width: 0.875rem;
+  text-align: center;
+  font-size: 0.75rem;
+}
+
+.month-row {
+  background-color: var(--color-gray-50);
+  font-size: 0.875rem;
+}
+
+.month-row td {
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
+  border-top: 1px solid var(--color-gray-200);
+}
+
+.month-cell {
+  padding-left: 2.5rem !important;
+  color: var(--color-gray-600);
+  font-style: italic;
+  font-size: 0.8125rem;
+}
+
+/* Responsive - adjust for mobile */
+@media (max-width: 768px) {
+  .expand-btn {
+    padding: 0.5rem;
+  }
+  
+  .month-cell {
+    padding-left: 1.5rem !important;
+  }
+}
+
+
+/* ==========================================================================
    1.5 MODEL EQUATIONS GRID - Three Formula Boxes
    ========================================================================== */
 .model-equations-grid {
@@ -85,7 +154,7 @@
   margin-top: 0 !important;
   margin-bottom: 0.5rem !important;
   text-align: center !important;
-  text-transform: uppercase !important;
+  text-transform: none !important;  /* Keep original case - no uppercase */
   letter-spacing: 0.025em !important;
   padding: 0 !important;
 }

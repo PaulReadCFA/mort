@@ -64,9 +64,11 @@ export function renderChart({ monthlySchedule }, inputs) {
 
   // Prepare data for stacked bar chart - MONTHLY (360 bars)
   const labels = monthlySchedule.map(row => {
-    // Show year markers every 12 months, otherwise just month number
+    // Show year markers every 6 months for better readability
     if (row.monthInYear === 1) {
       return `Y${row.year}`;
+    } else if (row.monthInYear === 7) {
+      return `Y${row.year}.5`;
     }
     return '';  // Empty label for other months to reduce clutter
   });
@@ -164,7 +166,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             maxRotation: 0,
             minRotation: 0,
             callback: function(value) {
-              return '$' + value.toLocaleString();
+              return value.toLocaleString();  // No $ - unit in title
             }
           }
         },
@@ -179,7 +181,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             maxRotation: 0,
             minRotation: 0,
             callback: function(value) {
-              return value.toFixed(1) + '%';
+              return value.toFixed(1);  // No % - unit in title
             },
             color: '#7a46ff'
           },
@@ -193,7 +195,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           top: 30,  // Space for Y-axis titles
           right: 10,
           bottom: 10,
-          left: 10
+          left: 20  // Reduced padding - label is positioned outside chartArea
         }
       },
       plugins: {
@@ -221,10 +223,13 @@ export function renderChart({ monthlySchedule }, inputs) {
               const label = context.dataset.label || '';
               const value = context.parsed.y;
               
-              // Use sentence case labels from legend
-              let displayLabel = label;
+              // Interest rate should show % not $
+              if (label.includes('Interest rate')) {
+                return `${label}: ${value.toFixed(1)}%`;
+              }
               
-              return `${displayLabel}: $${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+              // Everything else shows $
+              return `${label}: $${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             },
             afterBody: function(context) {
               // Don't show "Total (PMT)" - it's redundant with the PMT line dataset
@@ -260,17 +265,77 @@ export function renderChart({ monthlySchedule }, inputs) {
           
           ctx.save();
           
-          // Left Y-axis title (Cash Flows)
+          // Left Y-axis title (Cash flows) - positioned over the Y-axis
           ctx.fillStyle = '#374151';
           ctx.font = 'bold 12px sans-serif';
-          ctx.textAlign = 'left';
+          ctx.textAlign = 'left';  // Left-align
           ctx.textBaseline = 'top';
-          ctx.fillText('Cash Flows ($)', chartArea.left, chartArea.top - 25);
+          ctx.fillText('Cash flows ($)', chartArea.left - 40, chartArea.top - 25);
           
           // Right Y-axis title (Rate %)
           ctx.fillStyle = '#7a46ff';
           ctx.textAlign = 'right';
           ctx.fillText('Rate (%)', chartArea.right, chartArea.top - 25);
+          
+          ctx.restore();
+        }
+      },
+      {
+        // Custom plugin to draw data labels on horizontal lines
+        id: 'lineLabels',
+        afterDatasetsDraw: (chart) => {
+          const ctx = chart.ctx;
+          const chartArea = chart.chartArea;
+          
+          ctx.save();
+          
+          // Find the PMT line dataset (Total mortgage cash flows)
+          const pmtDataset = chart.data.datasets.find(ds => ds.label === 'Total mortgage cash flows (PMT)');
+          const pmtIndex = chart.data.datasets.indexOf(pmtDataset);
+          
+          if (pmtDataset && pmtIndex >= 0) {
+            const pmtValue = pmtDataset.data[0];
+            const meta = chart.getDatasetMeta(pmtIndex);
+            
+            if (meta.data.length > 0) {
+              const yPosition = meta.data[0].y;
+              
+              // Draw PMT label
+              ctx.fillStyle = '#3c6ae5';
+              ctx.font = 'bold 11px sans-serif';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'bottom';
+              ctx.fillText(
+                `PMT: $${pmtValue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
+                chartArea.left + 10,
+                yPosition - 5
+              );
+            }
+          }
+          
+          // Find the rate line dataset
+          const rateDataset = chart.data.datasets.find(ds => ds.label === 'Interest rate (r)');
+          const rateIndex = chart.data.datasets.indexOf(rateDataset);
+          
+          if (rateDataset && rateIndex >= 0) {
+            const rateValue = rateDataset.data[0];
+            const meta = chart.getDatasetMeta(rateIndex);
+            
+            if (meta.data.length > 0) {
+              const yPosition = meta.data[0].y;
+              
+              // Draw rate label in center of chart
+              ctx.fillStyle = '#7a46ff';
+              ctx.font = 'bold 11px sans-serif';
+              ctx.textAlign = 'center';  // Center-aligned
+              ctx.textBaseline = 'bottom';
+              ctx.fillText(
+                `r: ${rateValue.toFixed(1)}%`,
+                (chartArea.left + chartArea.right) / 2,  // Centered horizontally
+                yPosition - 5
+              );
+            }
+          }
           
           ctx.restore();
         }
@@ -454,16 +519,16 @@ function createBarButtons(monthlySchedule, container) {
  * @param {number} index - Bar index to highlight
  */
 function highlightBar(index) {
-  // Update interest dataset (blue)
+  // Update interest dataset (teal)
   const interestDataset = chart.data.datasets[0];
   interestDataset.backgroundColor = interestDataset.data.map((_, i) => 
-    i === index ? '#2563eb' : '#3c6ae5'
+    i === index ? 'rgba(0, 121, 166, 0.5)' : 'rgba(0, 121, 166, 0.3)'  // Teal - darker when highlighted
   );
   
-  // Update principal dataset (green)
+  // Update principal dataset (red)
   const principalDataset = chart.data.datasets[1];
   principalDataset.backgroundColor = principalDataset.data.map((_, i) => 
-    i === index ? '#065f46' : '#047857'
+    i === index ? '#a02028' : '#b82937'  // Red - darker when highlighted
   );
   
   chart.update('none');

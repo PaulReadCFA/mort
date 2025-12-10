@@ -98,6 +98,40 @@ function renderINTEquation(result, inputs) {
 
   const mathML = `
     <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:center;">
+      <!-- General formula with summation -->
+      <div style="font-size:0.8rem;color:var(--color-gray-600);margin-bottom:0.25rem;">General formula (t ≥ 1):</div>
+      <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" style="font-size:0.85em;">
+        <mrow>
+          <msub>
+            <mi mathcolor="${COLORS.INT}" mathvariant="bold">INT</mi>
+            <mi>t</mi>
+          </msub>
+          <mo>=</mo>
+          <mfrac>
+            <mrow>
+              <mo>(</mo>
+              <mi mathcolor="${COLORS.PV}">PV</mi>
+              <mo>−</mo>
+              <munderover>
+                <mo>∑</mo>
+                <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
+                <mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow>
+              </munderover>
+              <msub>
+                <mi mathcolor="${COLORS.PRN}">PRN</mi>
+                <mi>i</mi>
+              </msub>
+              <mo>)</mo>
+              <mo>×</mo>
+              <mi mathcolor="${COLORS.r}">r</mi>
+            </mrow>
+            <mn>12</mn>
+          </mfrac>
+        </mrow>
+      </math>
+      
+      <!-- Specific example for month 1 -->
+      <div style="font-size:0.8rem;color:var(--color-gray-600);margin-top:0.5rem;margin-bottom:0.25rem;">Example for month 1:</div>
       <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" style="font-size:0.85em;">
         <mrow>
           <msub>

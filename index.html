@@ -47,7 +47,7 @@
         <div class="model-equations-grid">
           <!-- Monthly Payment (PMT) -->
           <div class="formula-box pmt">
-            <div class="formula-box-title">Monthly Payment (PMT)</div>
+            <div class="formula-box-title">Monthly payment (PMT)</div>
             <div class="equation-container" tabindex="0" role="region"
                  aria-label="Monthly payment formula: PMT equals r times PV divided by 1 minus the quantity 1 plus r to the power of negative t">
               <div id="pmt-equation">
@@ -58,7 +58,7 @@
 
           <!-- Interest Payment (INT_t) -->
           <div class="formula-box int">
-            <div class="formula-box-title">Interest Payment (INT<sub>t</sub>)</div>
+            <div class="formula-box-title">Interest payment (INT<sub>t</sub>)</div>
             <div class="equation-container" tabindex="0" role="region"
                  aria-label="Interest payment formula for month t: INT equals PV times r divided by 1">
               <div id="int-equation">
@@ -69,7 +69,7 @@
 
           <!-- Principal Payment (PRN_t) -->
           <div class="formula-box prn">
-            <div class="formula-box-title">Principal Payment (PRN<sub>t</sub>)</div>
+            <div class="formula-box-title">Principal payment (PRN<sub>t</sub>)</div>
             <div class="equation-container" tabindex="0" role="region"
                  aria-label="Principal payment formula for month t: PRN equals PMT minus INT">
               <div id="prn-equation">
@@ -104,8 +104,9 @@
           </div>
 
           <div id="table-container">
+            <div id="table-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
             <table id="data-table" tabindex="0" role="region" aria-label="Amortization schedule data table">
-              <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance</caption>
+              <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance. Years with expandable buttons can be activated to reveal monthly details.</caption>
               <thead>
                 <tr>
                   <th scope="col">Year</th>
@@ -128,7 +129,7 @@
         <div class="input-group-inline">
           <div class="input-inline">
             <label for="principal" class="input-label-inline">
-              Mortgage amount (<strong style="color:#b82937;">PV<sub>0</sub></strong>):
+              Mortgage amount (<strong style="color:#b82937;">PV</strong>):
             </label>
             <div class="input-with-suffix-inline">
               <span class="input-prefix-inline">$</span>

@@ -43,19 +43,19 @@ export function renderChart({ monthlySchedule }, inputs) {
   legend.innerHTML = `
     <span class="legend-item">
       <span class="legend-color" style="background-color: #0079a6;"></span>
-      Interest cash flows (<strong style="color: #0079a6;">INT</strong>)
+      Interest cash flows <span style="font-style: normal; color: inherit;">(<span style="color: #0079a6; font-weight: 700;">INT</span>)</span>
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background-color: #b82937;"></span>
-      Principal amortization (<strong style="color: #b82937;">PRN</strong>)
+      Principal amortization <span style="font-style: normal; color: inherit;">(<span style="color: #b82937; font-weight: 700;">PRN</span>)</span>
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background-color: #60a5fa; height: 3px; width: 20px;"></span>
-      Total mortgage cash flows (<strong style="color: #3c6ae5;">PMT</strong>)
+      Total mortgage cash flows <span style="font-style: normal; color: inherit;">(<span style="color: #3c6ae5; font-weight: 700;">PMT</span>)</span>
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background: repeating-linear-gradient(90deg, #7a46ff 0px, #7a46ff 5px, transparent 5px, transparent 10px); height: 3px; width: 20px;"></span>
-      Interest rate (<strong style="color: #7a46ff;">r</strong>) <strong style="color: #7a46ff;">${annualRate}%</strong>
+      Interest rate <span style="font-style: normal; color: inherit;">(<span style="color: #7a46ff; font-weight: 700;"><em>r</em></span>)</span> <strong style="color: #7a46ff;">${annualRate}%</strong>
     </span>
   `;
 
@@ -63,14 +63,23 @@ export function renderChart({ monthlySchedule }, inputs) {
   if (chart) chart.destroy();
 
   // Prepare data for stacked bar chart - MONTHLY (360 bars)
-  const labels = monthlySchedule.map(row => {
-    // Show year markers every 6 months for better readability
-    if (row.monthInYear === 1) {
-      return `Y${row.year}`;
-    } else if (row.monthInYear === 7) {
-      return `Y${row.year}.5`;
+  // Create smart x-axis labels
+  const labels = monthlySchedule.map((row, idx) => {
+    // Determine optimal label frequency based on total years
+    const years = monthlySchedule.length / 12;
+    let showEveryNYears = 1;
+    
+    if (years > 15) {
+      showEveryNYears = 2; // Show every 2 years for 16-30 years
+    } else if (years > 30) {
+      showEveryNYears = 3; // Show every 3 years for 31+ years
     }
-    return '';  // Empty label for other months to reduce clutter
+    
+    // Only show labels at year boundaries (month 1), and only at the intervals we want
+    if (row.monthInYear === 1 && row.year % showEveryNYears === 0) {
+      return `Y${row.year}`;
+    }
+    return '';  // Empty label for other months
   });
   
   const principalData = monthlySchedule.map(row => row.principal);
@@ -87,7 +96,7 @@ export function renderChart({ monthlySchedule }, inputs) {
         {
           label: 'Interest cash flows (INT)',
           data: interestData,
-          backgroundColor: 'rgba(0, 121, 166, 0.3)',  /* Teal semi-transparent */
+          backgroundColor: 'rgba(0, 121, 166, 0.7)',  /* Teal - more opaque since it's behind */
           borderWidth: 0,
           yAxisID: 'y',
           order: 2  // Draw first (behind)
@@ -95,7 +104,7 @@ export function renderChart({ monthlySchedule }, inputs) {
         {
           label: 'Principal amortization (PRN)',
           data: principalData,
-          backgroundColor: '#b82937',  /* Red solid */
+          backgroundColor: 'rgba(184, 41, 55, 0.6)',  /* Red - transparent to show teal through */
           borderWidth: 0,
           yAxisID: 'y',
           order: 1  // Draw second (on top of INT)
@@ -140,7 +149,11 @@ export function renderChart({ monthlySchedule }, inputs) {
           stacked: true,
           title: {
             display: true,
-            text: 'Months (Year markers shown)'
+            text: 'Months (year markers shown)',
+            font: {
+              weight: 'bold'
+            },
+            color: '#1f2937'  // Match left y-axis
           },
           grid: {
             display: false
@@ -148,26 +161,34 @@ export function renderChart({ monthlySchedule }, inputs) {
           ticks: {
             maxRotation: 0,
             minRotation: 0,
-            autoSkip: true,
-            maxTicksLimit: 30,  // Show ~30 year markers
+            autoSkip: false,  // Don't auto-skip, we control labels manually
             font: {
-              size: 10
-            }
+              size: 10,
+              weight: 'bold'
+            },
+            color: '#1f2937'  // Match left y-axis
           }
         },
         y: {
-          stacked: false,  // NOT stacked - overlay mode
+          stacked: false,  // Overlay mode - bars overlap
           beginAtZero: true,
           position: 'left',
           title: {
-            display: false  // We draw this manually at top
+            display: true,
+            text: 'Cash flows',
+            font: {
+              weight: 'bold'
+            },
+            color: '#1f2937'  // Darker grey
           },
           ticks: {
-            maxRotation: 0,
-            minRotation: 0,
             callback: function(value) {
-              return value.toLocaleString();  // No $ - unit in title
-            }
+              return '$' + value.toLocaleString();
+            },
+            font: {
+              weight: 'bold'
+            },
+            color: '#1f2937'  // Darker grey
           }
         },
         y2: {
@@ -175,13 +196,19 @@ export function renderChart({ monthlySchedule }, inputs) {
           min: 0,
           max: Math.max(12, annualRate * 1.5),
           title: {
-            display: false
+            display: true,
+            text: 'Rate',
+            font: {
+              weight: 'bold'
+            },
+            color: '#7a46ff'  // Purple to match axis
           },
           ticks: {
-            maxRotation: 0,
-            minRotation: 0,
             callback: function(value) {
-              return value.toFixed(1);  // No % - unit in title
+              return value.toFixed(1) + '%';
+            },
+            font: {
+              weight: 'bold'
             },
             color: '#7a46ff'
           },
@@ -192,10 +219,10 @@ export function renderChart({ monthlySchedule }, inputs) {
       },
       layout: {
         padding: {
-          top: 30,  // Space for Y-axis titles
+          top: 10,
           right: 10,
           bottom: 10,
-          left: 20  // Reduced padding - label is positioned outside chartArea
+          left: 10
         }
       },
       plugins: {
@@ -215,7 +242,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             title: function(context) {
               const index = context[0].dataIndex;
               if (monthlySchedule[index]) {
-                return `Year ${monthlySchedule[index].year}, month ${monthlySchedule[index].monthInYear}`;
+                return `Year ${monthlySchedule[index].year}, Month ${monthlySchedule[index].monthInYear}`;
               }
               return context[0].label;
             },
@@ -223,9 +250,9 @@ export function renderChart({ monthlySchedule }, inputs) {
               const label = context.dataset.label || '';
               const value = context.parsed.y;
               
-              // Interest rate should show % not $
+              // Interest rate should show % not $ and italicize r
               if (label.includes('Interest rate')) {
-                return `${label}: ${value.toFixed(1)}%`;
+                return `Interest rate (r): ${value.toFixed(1)}%`;
               }
               
               // Everything else shows $
@@ -257,31 +284,7 @@ export function renderChart({ monthlySchedule }, inputs) {
     },
     plugins: [
       {
-        // Custom plugin to draw horizontal Y-axis title at top
-        id: 'horizontalYTitle',
-        afterDraw: (chart) => {
-          const ctx = chart.ctx;
-          const chartArea = chart.chartArea;
-          
-          ctx.save();
-          
-          // Left Y-axis title (Cash flows) - positioned over the Y-axis
-          ctx.fillStyle = '#374151';
-          ctx.font = 'bold 12px sans-serif';
-          ctx.textAlign = 'left';  // Left-align
-          ctx.textBaseline = 'top';
-          ctx.fillText('Cash flows ($)', chartArea.left - 40, chartArea.top - 25);
-          
-          // Right Y-axis title (Rate %)
-          ctx.fillStyle = '#7a46ff';
-          ctx.textAlign = 'right';
-          ctx.fillText('Rate (%)', chartArea.right, chartArea.top - 25);
-          
-          ctx.restore();
-        }
-      },
-      {
-        // Custom plugin to draw data labels on horizontal lines
+        // Custom plugin to draw data labels on horizontal lines with white background for r
         id: 'lineLabels',
         afterDatasetsDraw: (chart) => {
           const ctx = chart.ctx;
@@ -324,16 +327,42 @@ export function renderChart({ monthlySchedule }, inputs) {
             if (meta.data.length > 0) {
               const yPosition = meta.data[0].y;
               
-              // Draw rate label in center of chart
-              ctx.fillStyle = '#7a46ff';
+              // Prepare text
+              const labelText = `r: ${rateValue.toFixed(1)}%`;
               ctx.font = 'bold 11px sans-serif';
-              ctx.textAlign = 'center';  // Center-aligned
-              ctx.textBaseline = 'bottom';
-              ctx.fillText(
-                `r: ${rateValue.toFixed(1)}%`,
-                (chartArea.left + chartArea.right) / 2,  // Centered horizontally
-                yPosition - 5
+              const rText = 'r';
+              const colonText = `: ${rateValue.toFixed(1)}%`;
+              
+              // Measure text components
+              ctx.font = 'italic bold 11px sans-serif';
+              const rWidth = ctx.measureText(rText).width;
+              ctx.font = 'bold 11px sans-serif';
+              const colonWidth = ctx.measureText(colonText).width;
+              const totalWidth = rWidth + colonWidth;
+              const padding = 4;
+              
+              // Draw white background rectangle
+              const xCenter = (chartArea.left + chartArea.right) / 2;
+              ctx.fillStyle = 'white';
+              ctx.fillRect(
+                xCenter - totalWidth / 2 - padding,
+                yPosition - 16,
+                totalWidth + padding * 2,
+                14
               );
+              
+              // Draw rate label with only r italicized
+              ctx.fillStyle = '#7a46ff';
+              ctx.textAlign = 'left';
+              ctx.textBaseline = 'bottom';
+              
+              // Draw italic r
+              ctx.font = 'italic bold 11px sans-serif';
+              ctx.fillText(rText, xCenter - totalWidth / 2, yPosition - 5);
+              
+              // Draw non-italic rest
+              ctx.font = 'bold 11px sans-serif';
+              ctx.fillText(colonText, xCenter - totalWidth / 2 + rWidth, yPosition - 5);
             }
           }
           
@@ -522,13 +551,13 @@ function highlightBar(index) {
   // Update interest dataset (teal)
   const interestDataset = chart.data.datasets[0];
   interestDataset.backgroundColor = interestDataset.data.map((_, i) => 
-    i === index ? 'rgba(0, 121, 166, 0.5)' : 'rgba(0, 121, 166, 0.3)'  // Teal - darker when highlighted
+    i === index ? 'rgba(0, 121, 166, 0.9)' : 'rgba(0, 121, 166, 0.7)'  // Teal - more opaque when highlighted
   );
   
   // Update principal dataset (red)
   const principalDataset = chart.data.datasets[1];
   principalDataset.backgroundColor = principalDataset.data.map((_, i) => 
-    i === index ? '#a02028' : '#b82937'  // Red - darker when highlighted
+    i === index ? 'rgba(184, 41, 55, 0.8)' : 'rgba(184, 41, 55, 0.6)'  // Red - more opaque when highlighted but still transparent
   );
   
   chart.update('none');

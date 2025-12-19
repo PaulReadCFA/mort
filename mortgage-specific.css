@@ -135,16 +135,37 @@
   overflow: hidden;
 }
 
+.formula-box:focus {
+  outline: 3px solid var(--color-gray-400);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(107, 114, 128, 0.1);
+}
+
 .formula-box.pmt {
   border-left-color: #3c6ae5 !important;  /* Blue */
 }
 
+.formula-box.pmt:focus {
+  outline-color: #3c6ae5;
+  box-shadow: 0 0 0 4px rgba(60, 106, 229, 0.1);
+}
+
 .formula-box.int {
-  border-left-color: #7a46ff !important;  /* Purple */
+  border-left-color: #0079a6 !important;  /* Teal to match INT color */
+}
+
+.formula-box.int:focus {
+  outline-color: #0079a6;
+  box-shadow: 0 0 0 4px rgba(0, 121, 166, 0.1);
 }
 
 .formula-box.prn {
-  border-left-color: #15803d !important;  /* Green */
+  border-left-color: #b82937 !important;  /* Red to match PRN color */
+}
+
+.formula-box.prn:focus {
+  outline-color: #b82937;
+  box-shadow: 0 0 0 4px rgba(184, 41, 55, 0.1);
 }
 
 .formula-box-title {
@@ -188,14 +209,14 @@
 }
 
 .equation-result-main.int {
-  color: #5b21b6;  /* Darker purple for contrast */
-  background: rgba(122, 70, 255, 0.08);
+  color: #005f7f;  /* Darker teal for contrast */
+  background: rgba(0, 121, 166, 0.08);
   font-weight: 700;
 }
 
 .equation-result-main.prn {
-  color: #047857;  /* Use existing darker green */
-  background: rgba(21, 128, 61, 0.08);
+  color: #8b1f2b;  /* Darker red for contrast */
+  background: rgba(184, 41, 55, 0.08);
   font-weight: 700;
 }
 
@@ -211,7 +232,7 @@
   font-size: 0.875rem;
   color: var(--color-gray-600);
   margin-bottom: 1rem;
-  text-align: center;
+  text-align: left;
 }
 
 /* ==========================================================================
@@ -241,9 +262,16 @@
 }
 
 .results-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+@media (min-width: 768px) {
+  .results-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+  }
 }
 
 /* Principal Amount Box - Orange theme */
@@ -254,20 +282,49 @@
   padding: 1.25rem;
 }
 
+.result-box-principal:focus {
+  outline: 3px solid #b95b1d;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(185, 91, 29, 0.1);
+}
+
+/* Result box titles - standardized typography with theme colors */
 .result-box-principal .result-title {
   font-size: 0.8125rem;
   font-weight: 600;
-  color: #8b4513;  /* Match darker orange */
+  color: #8b4513;  /* Orange theme */
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.025em;
 }
 
-.result-box-principal .result-value {
+.result-box-monthly .result-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #1e40af;  /* Blue theme */
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+.result-box-interest .result-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #7a46ff;  /* Purple theme */
+  margin-bottom: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.025em;
+}
+
+/* Result values - standardized BLACK across all boxes */
+.result-box-principal .result-value,
+.result-box-monthly .result-value,
+.result-box-interest .result-value {
   font-size: 1.5rem;
   font-weight: 800;
-  color: #8b4513;  /* Darker orange/brown for better contrast */
+  color: var(--color-gray-900);  /* Black for all numbers */
   line-height: 1.2;
+  margin-bottom: 0.5rem;
 }
 
 /* Monthly Payment Box - Blue theme */
@@ -278,21 +335,10 @@
   padding: 1.25rem;
 }
 
-.result-box-monthly .result-title {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #1e40af;  /* Match darker blue */
-  margin-bottom: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
-}
-
-.result-box-monthly .result-value {
-  font-size: 1.5rem;
-  font-weight: 800;
-  color: #1e40af;  /* Darker blue for better contrast */
-  line-height: 1.2;
-  margin-bottom: 0.5rem;
+.result-box-monthly:focus {
+  outline: 3px solid #3c6ae5;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(60, 106, 229, 0.1);
 }
 
 .result-box-monthly .result-subtitle {
@@ -309,27 +355,23 @@
   padding: 1.25rem;
 }
 
-.result-box-interest .result-title {
-  font-size: 0.8125rem;
-  font-weight: 600;
-  color: #7a46ff;
-  margin-bottom: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.025em;
+.result-box-interest:focus {
+  outline: 3px solid #7a46ff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(122, 70, 255, 0.1);
 }
 
 .result-box-interest .result-detail {
   font-size: 0.8125rem;
   font-weight: 500;
   color: var(--color-gray-700);
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.25rem;
   line-height: 1.6;
 }
 
 .result-box-interest .result-detail strong {
-  color: #7a46ff;
+  color: var(--color-gray-900);  /* Black for emphasis */
   font-weight: 600;
-  font-size: 0.875rem;
 }
 
 .result-box-interest .result-detail:last-child {
@@ -337,7 +379,7 @@
 }
 
 /* ==========================================================================
-   3. INPUT LAYOUT â€“ Bond-style Inline Layout
+   3. INPUT LAYOUT ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ Bond-style Inline Layout
    ========================================================================== */
 .input-group-inline {
   display: flex;
@@ -451,7 +493,7 @@
 }
 
 /* ==========================================================================
-   5. CHART LEGEND â€“ Mortgage-specific
+   5. CHART LEGEND ÃƒÂ¢Ã¢â€šÂ¬Ã¢â‚¬Å“ Mortgage-specific
    ========================================================================== */
 .chart-legend {
   display: flex;
@@ -497,7 +539,7 @@
 }
 
 
-/* Match the bond pageâ€™s robust centering */
+/* Match the bond pageÃƒÂ¢Ã¢â€šÂ¬Ã¢â€žÂ¢s robust centering */
 .equation-container { text-align: center; }
 #mathml-equation { display: inline-block; width: auto; }
 math[display="block"] { margin: 0.5em auto; }
@@ -519,9 +561,9 @@ math[display="block"] { margin: 0.5em auto; }
 }
 
 #equation-card .formula-box.int {
-  border-left-color: #7a46ff !important;
+  border-left-color: #0079a6 !important;  /* Teal */
 }
 
 #equation-card .formula-box.prn {
-  border-left-color: #15803d !important;
+  border-left-color: #b82937 !important;  /* Red */
 }

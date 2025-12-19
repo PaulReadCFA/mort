@@ -44,9 +44,9 @@ function renderPMTEquation(result, inputs) {
           <mo>=</mo>
           <mfrac linethickness="1.2px">
             <mrow>
-              <mi mathcolor="${COLORS.r}" mathvariant="italic">r</mi>
+              <mn mathcolor="${COLORS.r}">${(monthlyRate * 100).toFixed(4)}</mn>
               <mo>×</mo>
-              <mi mathcolor="${COLORS.PV}">PV</mi>
+              <mn mathcolor="${COLORS.PV}">${formatNumber(principal)}</mn>
             </mrow>
             <mrow>
               <mn>1</mn>
@@ -56,12 +56,12 @@ function renderPMTEquation(result, inputs) {
                   <mo>(</mo>
                   <mn>1</mn>
                   <mo>+</mo>
-                  <mi mathcolor="${COLORS.r}" mathvariant="italic">r</mi>
+                  <mn mathcolor="${COLORS.r}">${(monthlyRate * 100).toFixed(4)}</mn>
                   <mo>)</mo>
                 </mrow>
                 <mrow>
                   <mo>-</mo>
-                  <mi mathcolor="${COLORS.t}" mathvariant="italic">t</mi>
+                  <mn mathcolor="${COLORS.t}">${totalMonths}</mn>
                 </mrow>
               </msup>
             </mrow>
@@ -95,38 +95,6 @@ function renderINTEquation(result, inputs) {
 
   const mathML = `
     <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:center;">
-      <div style="font-size:0.8rem;color:var(--color-gray-600);margin-bottom:0.25rem;">General formula (t ≥ 1):</div>
-      <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" style="font-size:0.85em;">
-        <mrow>
-          <msub>
-            <mi mathcolor="${COLORS.INT}" mathvariant="bold">INT</mi>
-            <mi mathcolor="${COLORS.INT}" mathvariant="italic">t</mi>
-          </msub>
-          <mo>=</mo>
-          <mfrac>
-            <mrow>
-              <mo>(</mo>
-              <mi mathcolor="${COLORS.PV}">PV</mi>
-              <mo>-</mo>
-              <munderover>
-                <mo>∑</mo>
-                <mrow><mi>i</mi><mo>=</mo><mn>1</mn></mrow>
-                <mrow><mi mathcolor="${COLORS.INT}" mathvariant="italic">t</mi><mo>-</mo><mn>1</mn></mrow>
-              </munderover>
-              <msub>
-                <mi mathcolor="${COLORS.PRN}">PRN</mi>
-                <mi>i</mi>
-              </msub>
-              <mo>)</mo>
-              <mo>×</mo>
-              <mi mathcolor="${COLORS.r}" mathvariant="italic">r</mi>
-            </mrow>
-            <mn>12</mn>
-          </mfrac>
-        </mrow>
-      </math>
-      
-      <div style="font-size:0.8rem;color:var(--color-gray-600);font-style:italic;margin-top:0.5rem;margin-bottom:0.25rem;">Example for Month 1 (varies each month):</div>
       <math xmlns="http://www.w3.org/1998/Math/MathML" display="block" style="font-size:0.85em;">
         <mrow>
           <msub>
@@ -136,9 +104,9 @@ function renderINTEquation(result, inputs) {
           <mo>=</mo>
           <mfrac linethickness="1.2px">
             <mrow>
-              <mi mathcolor="${COLORS.PV}">PV</mi>
+              <mn mathcolor="${COLORS.PV}">${formatNumber(principal)}</mn>
               <mo>×</mo>
-              <mi mathcolor="${COLORS.r}" mathvariant="italic">r</mi>
+              <mn mathcolor="${COLORS.r}">${(monthlyRate * 100).toFixed(4)}</mn>
             </mrow>
             <mn>1</mn>
           </mfrac>
@@ -146,6 +114,9 @@ function renderINTEquation(result, inputs) {
       </math>
       <div class="equation-result-main int">
         = ${formatCurrency(int1)}
+      </div>
+      <div style="font-size:0.8125rem;color:var(--color-gray-600);font-style:italic;text-align:center;margin-top:0.5rem;">
+        For Month 1 (decreases each month)
       </div>
     </div>
   `;
@@ -176,15 +147,12 @@ function renderPRNEquation(result, inputs) {
         <mrow>
           <msub>
             <mi mathcolor="${COLORS.PRN}" mathvariant="bold">PRN</mi>
-            <mi mathcolor="${COLORS.PRN}" mathvariant="italic">t</mi>
+            <mn mathcolor="${COLORS.PRN}">1</mn>
           </msub>
           <mo>=</mo>
-          <mi mathcolor="${COLORS.PMT}">PMT</mi>
+          <mn mathcolor="${COLORS.PMT}">${formatNumber(monthlyPayment)}</mn>
           <mo>-</mo>
-          <msub>
-            <mi mathcolor="${COLORS.INT}">INT</mi>
-            <mi mathcolor="${COLORS.INT}" mathvariant="italic">t</mi>
-          </msub>
+          <mn mathcolor="${COLORS.INT}">${formatNumber(int1)}</mn>
         </mrow>
       </math>
       <div class="equation-result-main prn">

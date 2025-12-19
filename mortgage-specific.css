@@ -267,13 +267,6 @@
   gap: 1rem;
 }
 
-@media (min-width: 768px) {
-  .results-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.5rem;
-  }
-}
-
 /* Principal Amount Box - Orange theme */
 .result-box-principal {
   background-color: #fff7ed;  /* Light Orange BG */

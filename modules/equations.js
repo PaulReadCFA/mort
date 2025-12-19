@@ -90,8 +90,8 @@ function renderINTEquation(result, inputs) {
   if (!monthlySchedule || monthlySchedule.length === 0) return;
   
   // Show formula for Month 1 as example
-  const monthlyRate = rate / 100 / 12;
-  const int1 = (principal * monthlyRate).toFixed(2);
+  const annualRate = rate; // Use annual rate, not monthly
+  const int1 = (principal * rate / 100 / 12).toFixed(2);
 
   const mathML = `
     <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:center;">
@@ -106,9 +106,9 @@ function renderINTEquation(result, inputs) {
             <mrow>
               <mn mathcolor="${COLORS.PV}">${formatNumber(principal)}</mn>
               <mo>×</mo>
-              <mn mathcolor="${COLORS.r}">${(monthlyRate * 100).toFixed(4)}</mn>
+              <mn mathcolor="${COLORS.r}">${annualRate}</mn>
             </mrow>
-            <mn>1</mn>
+            <mn>12</mn>
           </mfrac>
         </mrow>
       </math>

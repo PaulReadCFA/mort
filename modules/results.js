@@ -21,20 +21,20 @@ export function renderResults({ monthlyPayment, annualPayment, totalInterest, to
   
   content.innerHTML = `
     <div class="results-grid" role="region" aria-label="Mortgage calculation results">
-      <article class="result-box result-box-principal" tabindex="0" role="group" 
+      <article class="result-box result-box-principal" tabindex="0" role="region"
                aria-label="Principal amount: ${formatCurrencyWithDecimals(principal)}">
         <div class="result-title">Principal Amount of Loan</div>
         <div class="result-value" aria-live="polite">${formatCurrencyWithDecimals(principal)}</div>
       </article>
       
-      <article class="result-box result-box-monthly" tabindex="0" role="group" 
+      <article class="result-box result-box-monthly" tabindex="0" role="region"
                aria-label="Monthly payment: ${formatCurrencyWithDecimals(monthlyPayment)}. Total payment: ${formatCurrencyWithDecimals(totalPaid)}">
         <div class="result-title">Monthly Payment</div>
         <div class="result-value" aria-live="polite">${formatCurrencyWithDecimals(monthlyPayment)}</div>
         <div class="result-subtitle">Total payment: ${formatCurrencyWithDecimals(totalPaid)}</div>
       </article>
       
-      <article class="result-box result-box-interest" tabindex="0" role="group" 
+      <article class="result-box result-box-interest" tabindex="0" role="region"
                aria-label="Total interest paid: ${formatCurrencyWithDecimals(totalInterest)}. Monthly rate ${monthlyRate.toFixed(4)} percent, Yearly rate ${inputs.rate.toFixed(2)} percent">
         <div class="result-title">Total Interest Paid</div>
         <div class="result-value" aria-live="polite">${formatCurrencyWithDecimals(totalInterest)}</div>

@@ -35,6 +35,7 @@ function renderPMTEquation(result, inputs) {
   
   const monthlyRate = rate / 100 / 12;
   const totalMonths = years * 12;
+  const monthlyRateDisplay = parseFloat(monthlyRate.toFixed(6)).toString();
 
   const mathML = `
     <div style="display:flex;flex-direction:column;gap:0.75rem;align-items:center;">
@@ -44,7 +45,7 @@ function renderPMTEquation(result, inputs) {
           <mo>=</mo>
           <mfrac linethickness="1.2px">
             <mrow>
-              <mn mathcolor="${COLORS.r}">${(monthlyRate * 100).toFixed(4)}</mn>
+              <mn mathcolor="${COLORS.r}">${monthlyRateDisplay}</mn>
               <mo>×</mo>
               <mn mathcolor="${COLORS.PV}">${formatNumber(principal)}</mn>
             </mrow>
@@ -56,7 +57,7 @@ function renderPMTEquation(result, inputs) {
                   <mo>(</mo>
                   <mn>1</mn>
                   <mo>+</mo>
-                  <mn mathcolor="${COLORS.r}">${(monthlyRate * 100).toFixed(4)}</mn>
+                  <mn mathcolor="${COLORS.r}">${monthlyRateDisplay}</mn>
                   <mo>)</mo>
                 </mrow>
                 <mrow>
@@ -90,7 +91,7 @@ function renderINTEquation(result, inputs) {
   if (!monthlySchedule || monthlySchedule.length === 0) return;
   
   // Show formula for Month 1 as example
-  const annualRate = rate; // Use annual rate, not monthly
+  const rateAsDecimal = parseFloat((rate / 100).toFixed(4)).toString();
   const int1 = (principal * rate / 100 / 12).toFixed(2);
 
   const mathML = `
@@ -106,7 +107,7 @@ function renderINTEquation(result, inputs) {
             <mrow>
               <mn mathcolor="${COLORS.PV}">${formatNumber(principal)}</mn>
               <mo>×</mo>
-              <mn mathcolor="${COLORS.r}">${annualRate}</mn>
+              <mn mathcolor="${COLORS.r}">${rateAsDecimal}</mn>
             </mrow>
             <mn>12</mn>
           </mfrac>
@@ -150,9 +151,9 @@ function renderPRNEquation(result, inputs) {
             <mn mathcolor="${COLORS.PRN}">1</mn>
           </msub>
           <mo>=</mo>
-          <mn mathcolor="${COLORS.PMT}">${formatNumber(monthlyPayment)}</mn>
+          <mn mathcolor="${COLORS.PMT}">${formatCurrency(monthlyPayment).replace('$', '')}</mn>
           <mo>-</mo>
-          <mn mathcolor="${COLORS.INT}">${formatNumber(int1)}</mn>
+          <mn mathcolor="${COLORS.INT}">${formatCurrency(int1).replace('$', '')}</mn>
         </mrow>
       </math>
       <div class="equation-result-main prn">

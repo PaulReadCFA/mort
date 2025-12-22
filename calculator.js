@@ -18,6 +18,7 @@ function init() {
   setupInputs();
   setupViewToggle();
   setupSkipLink();
+  setupResultsToggle();
   subscribe(updateAll);
   detectNarrowScreen();
   window.addEventListener('resize', debounce(detectNarrowScreen, 200));
@@ -45,6 +46,30 @@ function setupSkipLink() {
       }, 100);
     });
   }
+}
+
+/* ---------- RESULTS TOGGLE ---------- */
+function setupResultsToggle() {
+  const toggleBtn = $('#toggle-results-btn');
+  const content = $('#results-content');
+  
+  if (!toggleBtn || !content) return;
+  
+  listen(toggleBtn, 'click', () => {
+    const expanded = toggleBtn.getAttribute('aria-expanded') === 'true';
+    
+    if (expanded) {
+      // Collapse
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      toggleBtn.setAttribute('aria-label', 'Expand interest data section');
+      content.style.display = 'none';
+    } else {
+      // Expand
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      toggleBtn.setAttribute('aria-label', 'Collapse interest data section');
+      content.style.display = 'block';
+    }
+  });
 }
 
 /* ---------- INPUT HANDLERS ---------- */

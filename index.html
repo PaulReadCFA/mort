@@ -83,8 +83,8 @@
         </div>
       </section>
 
-      <!-- CARD 2 - Data Entry (STICKY) -->
-      <section class="card card-sticky" id="data-entry" tabindex="-1" role="region" aria-labelledby="inputs-title">
+      <!-- CARD 2 - Data Entry -->
+      <section class="card" id="data-entry" tabindex="-1" role="region" aria-labelledby="inputs-title">
         <h4 class="card-title" id="inputs-title">Mortgage Cash Flow Calculator</h4>
 
         <div class="input-group-inline">
@@ -93,7 +93,7 @@
               Mortgage amount (<strong style="color:#b95b1d;">PV</strong>):
             </label>
             <div class="input-with-suffix-inline">
-              <span class="input-prefix-inline">$</span>
+              <span class="input-prefix-inline">USD</span>
               <input type="number" id="principal" class="input-field-inline input-with-prefix"
                      min="1000" max="10000000" step="1000" value="800000"
                      aria-required="true">
@@ -168,7 +168,15 @@
 
       <!-- CARD 4 - Interest Data -->
       <section class="card" id="results-card" tabindex="-1" aria-labelledby="results-title">
-        <h4 class="card-title" id="results-title">Interest Data</h4>
+        <div class="card-header-with-controls">
+          <h4 class="card-title" id="results-title">Interest Data</h4>
+          <button id="toggle-results-btn" class="toggle-section-btn" 
+                  aria-expanded="true" 
+                  aria-controls="results-content"
+                  aria-label="Collapse interest data section">
+            <span class="toggle-icon" aria-hidden="true">▼</span>
+          </button>
+        </div>
         <div id="results-content" aria-live="polite"></div>
         <div id="result-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
       </section>

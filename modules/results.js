@@ -54,10 +54,9 @@ export function renderResults({ monthlyPayment, annualPayment, totalInterest, to
  * @returns {string} - Formatted currency string with .00
  */
 function formatCurrencyWithDecimals(value) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  const formatted = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(value);
+  return 'USD ' + formatted;
 }

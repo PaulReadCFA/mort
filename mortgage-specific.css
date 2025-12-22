@@ -25,6 +25,40 @@
   cursor: default;
 }
 
+/* Section toggle button (for collapsible cards) */
+.toggle-section-btn {
+  background: none;
+  border: none;
+  color: var(--color-gray-600);
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+  font-size: 1rem;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.2s ease, transform 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.toggle-section-btn:hover {
+  color: var(--color-gray-800);
+}
+
+.toggle-section-btn:focus {
+  outline: 2px solid var(--color-blue-interactive);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+.toggle-section-btn .toggle-icon {
+  display: inline-block;
+  transition: transform 0.2s ease;
+}
+
+.toggle-section-btn[aria-expanded="false"] .toggle-icon {
+  transform: rotate(-90deg);
+}
+
 .expand-btn {
   background: none;
   border: none;
@@ -419,7 +453,7 @@
 }
 
 .input-field-inline.input-with-prefix {
-  padding-left: 1.2rem;
+  padding-left: 2.5rem;
 }
 
 .input-field-inline {

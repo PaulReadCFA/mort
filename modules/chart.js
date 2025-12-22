@@ -175,7 +175,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           position: 'left',
           title: {
             display: true,
-            text: 'Cash flows',
+            text: 'Cash flows (USD)',
             font: {
               weight: 'bold'
             },
@@ -183,7 +183,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           },
           ticks: {
             callback: function(value) {
-              return '$' + value.toLocaleString();
+              return value.toLocaleString();
             },
             font: {
               weight: 'bold'
@@ -250,13 +250,13 @@ export function renderChart({ monthlySchedule }, inputs) {
               const label = context.dataset.label || '';
               const value = context.parsed.y;
               
-              // Interest rate should show % not $ and italicize r
+              // Interest rate should show % not USD and italicize r
               if (label.includes('Interest rate')) {
                 return `Interest rate (r): ${value.toFixed(1)}%`;
               }
               
-              // Everything else shows $
-              return `${label}: $${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+              // Everything else shows USD
+              return `${label}: USD ${value.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
             },
             afterBody: function(context) {
               // Don't show "Total (PMT)" - it's redundant with the PMT line dataset
@@ -450,7 +450,7 @@ function createBarButtons(monthlySchedule, container) {
     btn.className = 'chart-bar-button';
     btn.tabIndex = index === 0 ? 0 : -1;
     btn.setAttribute('aria-label', 
-      `Year ${row.year}, Month ${row.monthInYear}: Interest $${formatCurrency(row.interest)}, Principal $${formatCurrency(row.principal)}, Total $${formatCurrency(row.totalPayment)}`
+      `Year ${row.year}, Month ${row.monthInYear}: Interest USD ${formatCurrency(row.interest)}, Principal USD ${formatCurrency(row.principal)}, Total USD ${formatCurrency(row.totalPayment)}`
     );
 
     // Position button over the entire stacked bar
@@ -608,7 +608,7 @@ function announceBar(row, index, isTableFocus = false) {
   // Throttle announcements - only announce after user pauses
   announceTimeout = setTimeout(() => {
     // Announce monthly data: "Year X, Month Y: Interest $XXX, Principal $XXX, Total $XXX"
-    region.textContent = `Year ${row.year}, Month ${row.monthInYear}: Interest $${formatCurrency(row.interest)}, Principal $${formatCurrency(row.principal)}, Total $${formatCurrency(row.totalPayment)}`;
+    region.textContent = `Year ${row.year}, Month ${row.monthInYear}: Interest USD ${formatCurrency(row.interest)}, Principal USD ${formatCurrency(row.principal)}, Total USD ${formatCurrency(row.totalPayment)}`;
     
     // Clear announcement after it's been read
     setTimeout(() => {

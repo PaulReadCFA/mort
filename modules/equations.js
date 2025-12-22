@@ -151,9 +151,9 @@ function renderPRNEquation(result, inputs) {
             <mn mathcolor="${COLORS.PRN}">1</mn>
           </msub>
           <mo>=</mo>
-          <mn mathcolor="${COLORS.PMT}">${formatCurrency(monthlyPayment).replace('$', '')}</mn>
+          <mn mathcolor="${COLORS.PMT}">${formatCurrency(monthlyPayment).replace('USD ', '')}</mn>
           <mo>-</mo>
-          <mn mathcolor="${COLORS.INT}">${formatCurrency(int1).replace('$', '')}</mn>
+          <mn mathcolor="${COLORS.INT}">${formatCurrency(int1).replace('USD ', '')}</mn>
         </mrow>
       </math>
       <div class="equation-result-main prn">
@@ -179,13 +179,12 @@ function formatNumber(value) {
 }
 
 /**
- * Format as currency
+ * Format as currency with USD prefix
  */
 function formatCurrency(value) {
-  return new Intl.NumberFormat('en-US', {
-    style: 'currency',
-    currency: 'USD',
+  const formatted = new Intl.NumberFormat('en-US', {
     minimumFractionDigits: 2,
     maximumFractionDigits: 2
   }).format(value);
+  return 'USD ' + formatted;
 }

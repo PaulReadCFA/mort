@@ -48,10 +48,10 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
           ` : ''}
           <span style="display: inline-block; min-width: 3.5rem;">Year ${row.year}</span>
         </td>
-        <td data-label="Principal amortization"><span class="mobile-abbr" style="color: #b82937;">PRN</span><span style="color: #b82937; font-weight: 600;">$${formatCurrency(row.principal)}</span></td>
-        <td data-label="Interest cash flows"><span class="mobile-abbr" style="color: #0079a6;">INT</span><span style="color: #0079a6; font-weight: 600;">$${formatCurrency(row.interest)}</span></td>
-        <td data-label="Total mortgage cash flows"><span class="mobile-abbr" style="color: #3c6ae5;">PMT</span><span style="color: #3c6ae5; font-weight: 600;">$${formatCurrency(row.totalPayment)}</span></td>
-        <td data-label="Remaining balance"><span>$${formatCurrency(row.remainingBalance)}</span></td>
+        <td data-label="Principal amortization"><span class="mobile-abbr" style="color: #b82937;">PRN</span><span style="color: #b82937; font-weight: 600;">USD ${formatCurrency(row.principal)}</span></td>
+        <td data-label="Interest cash flows"><span class="mobile-abbr" style="color: #0079a6;">INT</span><span style="color: #0079a6; font-weight: 600;">USD ${formatCurrency(row.interest)}</span></td>
+        <td data-label="Total mortgage cash flows"><span class="mobile-abbr" style="color: #3c6ae5;">PMT</span><span style="color: #3c6ae5; font-weight: 600;">USD ${formatCurrency(row.totalPayment)}</span></td>
+        <td data-label="Remaining balance"><span>USD ${formatCurrency(row.remainingBalance)}</span></td>
       </tr>
     `;
     
@@ -61,10 +61,10 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
         html += `
           <tr class="month-row" id="${monthRowsId}-${month.monthInYear}" hidden>
             <td class="month-cell">Month ${month.monthInYear}</td>
-            <td data-label="Principal amortization"><span class="mobile-abbr" style="color: #b82937;">PRN</span><span style="color: #b82937;">$${formatCurrency(month.principal)}</span></td>
-            <td data-label="Interest cash flows"><span class="mobile-abbr" style="color: #0079a6;">INT</span><span style="color: #0079a6;">$${formatCurrency(month.interest)}</span></td>
-            <td data-label="Total mortgage cash flows"><span class="mobile-abbr" style="color: #3c6ae5;">PMT</span><span style="color: #3c6ae5;">$${formatCurrency(month.totalPayment)}</span></td>
-            <td data-label="Remaining balance"><span>$${formatCurrency(month.remainingBalance)}</span></td>
+            <td data-label="Principal amortization"><span class="mobile-abbr" style="color: #b82937;">PRN</span><span style="color: #b82937;">USD ${formatCurrency(month.principal)}</span></td>
+            <td data-label="Interest cash flows"><span class="mobile-abbr" style="color: #0079a6;">INT</span><span style="color: #0079a6;">USD ${formatCurrency(month.interest)}</span></td>
+            <td data-label="Total mortgage cash flows"><span class="mobile-abbr" style="color: #3c6ae5;">PMT</span><span style="color: #3c6ae5;">USD ${formatCurrency(month.totalPayment)}</span></td>
+            <td data-label="Remaining balance"><span>USD ${formatCurrency(month.remainingBalance)}</span></td>
           </tr>
         `;
       });

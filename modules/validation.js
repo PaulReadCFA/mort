@@ -72,7 +72,11 @@ export function setupFieldValidation(fieldId, callback) {
   if (!element) return;
 
   listen(element, 'blur', () => {
-    const value = Number(element.value);
+    // For principal, strip commas before parsing
+    const rawValue = fieldId === 'principal' 
+      ? element.value.replace(/,/g, '') 
+      : element.value;
+    const value = Number(rawValue);
     const error = validateInput(fieldId, value);
     
     if (error) {

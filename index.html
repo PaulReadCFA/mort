@@ -94,15 +94,16 @@
             </label>
             <div class="input-with-suffix-inline">
               <span class="input-prefix-inline">USD</span>
-              <input type="number" id="principal" class="input-field-inline input-with-prefix"
-                     min="1000" max="10000000" step="1000" value="800000"
+              <input type="text" id="principal" class="input-field-inline input-with-prefix"
+                     inputmode="decimal"
+                     value="800,000"
                      aria-required="true">
             </div>
           </div>
 
           <div class="input-inline">
             <label for="rate" class="input-label-inline">
-              Mortgage interest rate (<strong style="color:#7a46ff;"><em>r</em></strong>):
+              Annual mortgage interest rate (<strong style="color:#7a46ff;"><em>r</em></strong>):
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="rate" class="input-field-inline"

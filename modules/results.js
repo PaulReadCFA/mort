@@ -22,11 +22,12 @@ export function renderResults({ monthlyPayment, annualPayment, totalInterest, to
   content.innerHTML = `
     <div class="results-grid">
       <article class="result-box result-box-interest" tabindex="0" role="region"
-               aria-label="Total interest paid: ${formatCurrencyWithDecimals(totalInterest)}. Monthly rate ${monthlyRate.toFixed(4)} percent, Yearly rate ${inputs.rate.toFixed(2)} percent">
+               aria-label="Total interest paid: ${formatCurrencyWithDecimals(totalInterest)}. Annual rate ${inputs.rate.toFixed(2)} percent, Monthly rate ${monthlyRate.toFixed(4)} percent">
         <div class="result-title">Total Interest Paid</div>
         <div class="result-value" aria-live="polite">${formatCurrencyWithDecimals(totalInterest)}</div>
-        <div class="result-detail">Monthly rate: <strong>${monthlyRate.toFixed(4)}%</strong></div>
-        <div class="result-detail">Yearly rate: <strong>${inputs.rate.toFixed(2)}%</strong></div>
+        <div class="result-detail">Annual mortgage interest rate: <strong>${inputs.rate.toFixed(2)}%</strong></div>
+        <div class="result-detail">Monthly interest rate: <strong>${monthlyRate.toFixed(4)}%</strong></div>
+        <div class="result-detail">Monthly rate equals the calculator input for annual rate divided by 12.</div>
       </article>
     </div>
   `;

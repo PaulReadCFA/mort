@@ -83,7 +83,7 @@ const announceChange = debounce((field, value) => {
   };
   
   const formattedValue = field === 'principal' 
-    ? `$${value.toLocaleString()}`
+    ? `USD ${value.toLocaleString()}`
     : field === 'rate'
     ? `${value}%`
     : `${value} years`;
@@ -98,7 +98,11 @@ function setupInputs() {
     if (!element) return;
 
     const updateValue = debounce(() => {
-      const value = Number(element.value);
+      // For principal, strip commas before parsing
+      const rawValue = id === 'principal' 
+        ? element.value.replace(/,/g, '') 
+        : element.value;
+      const value = Number(rawValue);
       
       // Validate and update state
       if (!isNaN(value) && value > 0) {
@@ -116,8 +120,27 @@ function setupInputs() {
     listen(element, 'input', updateValue);
     listen(element, 'change', updateValue);
     
-    // Setup validation
+    // Setup validation first
     setupFieldValidation(id, updateValue);
+    
+    // Format principal with commas on blur (after validation)
+    if (id === 'principal') {
+      listen(element, 'blur', () => {
+        // Use setTimeout to ensure this runs after validation
+        setTimeout(() => {
+          const rawValue = element.value.replace(/,/g, '');
+          const numValue = Number(rawValue);
+          if (!isNaN(numValue) && numValue > 0) {
+            element.value = numValue.toLocaleString('en-US');
+          }
+        }, 10);
+      });
+      
+      listen(element, 'focus', () => {
+        // Remove commas for easier editing
+        element.value = element.value.replace(/,/g, '');
+      });
+    }
   });
 }
 

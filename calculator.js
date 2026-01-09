@@ -151,10 +151,40 @@ function setupViewToggle() {
 
   updateButtonStates();
 
-  listen(chartBtn, 'click', () => {
-    setState({ view: 'chart' });
-    updateButtonStates();
-  });
+  // Chart button - use addEventListener directly with capture phase
+  if (chartBtn) {
+    chartBtn.addEventListener('click', (e) => {
+      // FIRST: Check if narrow screen before anything else
+      const isForced = document.body.classList.contains('force-table');
+      
+      if (isForced || chartBtn.disabled) {
+        e.preventDefault();
+        e.stopPropagation();
+        e.stopImmediatePropagation();
+        
+        console.log('Chart button blocked - narrow screen detected');
+        
+        // Visual feedback: briefly highlight table button
+        if (tableBtn) {
+          tableBtn.style.transition = 'transform 0.2s ease';
+          tableBtn.style.transform = 'scale(1.05)';
+          setTimeout(() => {
+            tableBtn.style.transform = 'scale(1)';
+          }, 200);
+        }
+        
+        // Force table view
+        setState({ view: 'table' });
+        updateButtonStates();
+        
+        return false;
+      }
+      
+      // Normal behavior - allow chart view
+      setState({ view: 'chart' });
+      updateButtonStates();
+    }, true); // Use capture phase
+  }
 
   listen(tableBtn, 'click', () => {
     setState({ view: 'table' });
@@ -198,7 +228,9 @@ function updateButtonStates() {
 
 /* ---------- RESPONSIVE BEHAVIOR ---------- */
 function detectNarrowScreen() {
-  const narrow = window.innerWidth <= 768;
+  const narrow = window.innerWidth <= 600;
+  
+  console.log(`detectNarrowScreen: width=${window.innerWidth}, narrow=${narrow}`);
   
   if (narrow) {
     document.body.classList.add('force-table');

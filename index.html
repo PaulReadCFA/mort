@@ -7,6 +7,27 @@
   <link rel="stylesheet" href="cfa-base.css">
   <link rel="stylesheet" href="mortgage-specific.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$']]
+      },
+      svg: {
+        fontCache: 'global'
+      },
+      startup: {
+        pageReady() {
+          return MathJax.startup.defaultPageReady().then(() => {
+            // Remove tabindex from inline MathJax (formula titles) to fix ARC errors
+            document.querySelectorAll('mjx-container').forEach(el => {
+              el.removeAttribute('tabindex');
+            });
+          });
+        }
+      }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
 </head>
 <body>
 
@@ -39,16 +60,53 @@
   <div class="container">
     <main class="content">
 
-      <!-- CARD 1 - Equation (stays at top) -->
+      <!-- CARD 1 - Static Equations -->
+      <section class="card" id="static-equations-card">
+        <div class="static-equations-grid">
+          <!-- Monthly Cash Flow Equation -->
+          <div class="static-equation-row" role="group" aria-label="Monthly Cash Flow Equation">
+            <p class="static-equation-label">Monthly Cash Flow Equation:</p>
+            <div class="static-equation-math">
+              $\textcolor{#3c6ae5}{\text{PMT}} = \dfrac{\dfrac{\textcolor{#7a46ff}{r}}{12} \times \textcolor{#b95b1d}{\text{PV}}}{1 - \left(1 + \dfrac{\textcolor{#7a46ff}{r}}{12}\right)^{-\textcolor{#0079a6}{T}}}$
+            </div>
+          </div>
+
+          <!-- Interest Cash Flow Equation for Year 1 -->
+          <div class="static-equation-row" role="group" aria-label="Interest Cash Flow Equation for Year 1">
+            <p class="static-equation-label">Interest Cash Flow Equation for Year 1:</p>
+            <div class="static-equation-math">
+              $\textcolor{#0079a6}{\text{INT}_1} = \dfrac{\textcolor{#b95b1d}{\text{PV}} \times \textcolor{#7a46ff}{r}}{12}$
+            </div>
+          </div>
+
+          <!-- General Interest Cash Flow where t ≥ 2 -->
+          <div class="static-equation-row" role="group" aria-label="General Interest Cash Flow Equation where t is greater than or equal to 2">
+            <p class="static-equation-label">General Interest Cash Flow Equation where t ≥ 2:</p>
+            <div class="static-equation-math">
+              $\textcolor{#0079a6}{\text{INT}_t} = \dfrac{\left(\textcolor{#b95b1d}{\text{PV}} - \sum_{i=1}^{\textcolor{#0079a6}{t}-1} \textcolor{#b82937}{\text{PRN}_i}\right) \times \textcolor{#7a46ff}{r}}{12}$
+            </div>
+          </div>
+
+          <!-- Principal Amortization Equation -->
+          <div class="static-equation-row" role="group" aria-label="Principal Amortization Equation">
+            <p class="static-equation-label">Principal Amortization Equation:</p>
+            <div class="static-equation-math">
+              $\textcolor{#b82937}{\text{PRN}_t} = \textcolor{#3c6ae5}{\text{PMT}} - \textcolor{#0079a6}{\text{INT}_t}$
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- CARD 2 - Dynamic Equation -->
       <section class="card" id="equation-card">
-        <h4 class="card-title">Mortgage Cash Flow Equations</h4>
+        <h4 class="card-title">Dynamic Cash Flow Equations</h4>
         <p class="equation-intro">These dynamic equations display the monthly payment and how it splits between interest and principal based on your inputs.</p>
 
         <div class="model-equations-grid" role="region" aria-label="Mortgage payment formulas">
           <!-- Monthly Payment (PMT) -->
           <article class="formula-box pmt" tabindex="0" role="region"
                    aria-label="Monthly payment formula and result">
-            <div class="formula-box-title">Monthly payment (<strong style="color: #3c6ae5;">PMT</strong>)</div>
+            <div class="formula-box-title">Monthly payment (<strong style="color: #3c6ae5;">$\text{PMT}$</strong>)</div>
             <div class="equation-container" role="region"
                  aria-label="Monthly payment formula: PMT equals r times PV divided by 1 minus the quantity 1 plus r to the power of negative t">
               <div id="pmt-equation">
@@ -60,7 +118,7 @@
           <!-- Interest Payment (INT_t) -->
           <article class="formula-box int" tabindex="0" role="region"
                    aria-label="Interest payment formula and result for month t">
-            <div class="formula-box-title">Interest payment (<strong style="color: #0079a6;">INT<sub><em>t</em></sub></strong>)</div>
+            <div class="formula-box-title">Interest payment (<strong style="color: #0079a6;">$\text{INT}_t$</strong>)</div>
             <div class="equation-container" role="region"
                  aria-label="Interest payment formula for month t: INT equals PV times r divided by 1">
               <div id="int-equation">
@@ -72,7 +130,7 @@
           <!-- Principal Payment (PRN_t) -->
           <article class="formula-box prn" tabindex="0" role="region"
                    aria-label="Principal payment formula and result for month t">
-            <div class="formula-box-title">Principal payment (<strong style="color: #b82937;">PRN<sub><em>t</em></sub></strong>)</div>
+            <div class="formula-box-title">Principal payment (<strong style="color: #b82937;">$\text{PRN}_t$</strong>)</div>
             <div class="equation-container" role="region"
                  aria-label="Principal payment formula for month t: PRN equals PMT minus INT">
               <div id="prn-equation">
@@ -83,9 +141,12 @@
         </div>
       </section>
 
-      <!-- CARD 2 - Data Entry -->
+      <!-- CARD 3 - Data Entry -->
       <section class="card" id="data-entry" tabindex="-1" role="region" aria-labelledby="inputs-title">
         <h4 class="card-title" id="inputs-title">Mortgage Cash Flow Calculator</h4>
+        <p style="font-size: 0.875rem; color: var(--color-gray-600); margin-bottom: 1rem;">
+          Enter your mortgage details below. The calculations and visualizations will update automatically as you change the values.
+        </p>
 
         <div class="input-group-inline">
           <div class="input-inline">
@@ -103,7 +164,7 @@
 
           <div class="input-inline">
             <label for="rate" class="input-label-inline">
-              Annual mortgage interest rate (<strong style="color:#7a46ff;"><em>r</em></strong>):
+              Annual interest rate (<strong style="color:#7a46ff;"><em>r</em></strong>):
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="rate" class="input-field-inline"
@@ -133,16 +194,16 @@
         </div>
       </section>
 
-      <!-- CARD 3 - Visualization -->
+      <!-- CARD 4 - Visualization -->
       <section class="card" id="visualization-card" tabindex="-1" aria-labelledby="visualization-title">
         <div class="card-header-with-controls">
           <h4 class="card-title" id="visualization-title">Mortgage Cash Flows</h4>
           <div class="view-controls">
-            <button id="view-chart-btn" class="toggle-btn active" aria-pressed="true" title="If Chart is unavailable, zoom out in your browser window.">Chart</button>
+            <button id="view-chart-btn" class="toggle-btn active" aria-pressed="true">Chart</button>
             <button id="view-table-btn" class="toggle-btn" aria-pressed="false">Table</button>
           </div>
         </div>
-        <p class="sr-only" id="chart-keyboard-help">Chart keyboard navigation: Arrow keys move between periods, Page Up/Down jump by year, T key focuses table, Home/End go to first/last period</p>
+        <p class="sr-only" id="chart-keyboard-help">Chart keyboard navigation: Arrow keys move between months, Page Up/Down jump by year, T key focuses table, Home/End go to first/last month</p>
 
         <div id="chart-container" class="chart-wrapper">
           <canvas id="chart" role="img" aria-label="Stacked bar chart showing principal and interest payments" aria-describedby="chart-keyboard-help"></canvas>
@@ -151,7 +212,7 @@
 
         <div id="table-container">
           <div id="table-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
-          <table id="data-table" tabindex="0" role="region" aria-label="Amortization schedule data table">
+          <table id="data-table" tabindex="-1" aria-label="Amortization schedule data table">
             <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance. Years with expandable buttons can be activated to reveal monthly details.</caption>
             <thead>
               <tr>
@@ -167,17 +228,9 @@
         </div>
       </section>
 
-      <!-- CARD 4 - Interest Data -->
+      <!-- CARD 5 - Interest Data -->
       <section class="card" id="results-card" tabindex="-1" aria-labelledby="results-title">
-        <div class="card-header-with-controls">
-          <h4 class="card-title" id="results-title">Interest Data</h4>
-          <button id="toggle-results-btn" class="toggle-section-btn" 
-                  aria-expanded="true" 
-                  aria-controls="results-content"
-                  aria-label="Collapse interest data section">
-            <span class="toggle-icon" aria-hidden="true">▼</span>
-          </button>
-        </div>
+        <h4 class="card-title" id="results-title">Interest Data</h4>
         <div id="results-content" aria-live="polite"></div>
         <div id="result-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
       </section>

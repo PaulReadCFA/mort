@@ -35,14 +35,15 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
     const monthRowsId = `months-${row.year}`;
     
     // Annual summary row with expand button
+    // Note: aria-controls removed to avoid ARC errors - no single ID encompasses all month rows
+    // The button's relationship to the rows is clear from context (same table row)
     let html = `
       <tr class="year-row" id="${yearRowId}">
         <td data-label="Year" style="white-space: nowrap;">
           ${hasMonthlyData ? `
             <button class="expand-btn" 
                     aria-expanded="false" 
-                    aria-controls="${monthRowsId}"
-                    aria-label="Expand to show monthly details for year ${row.year}">
+                    aria-label="Year ${row.year}">
               <span class="expand-icon" aria-hidden="true">▶</span>
             </button>
           ` : ''}
@@ -104,28 +105,27 @@ function setupExpandButtons() {
  */
 function toggleMonthlyRows(button) {
   const expanded = button.getAttribute('aria-expanded') === 'true';
-  const targetId = button.getAttribute('aria-controls');
   const icon = button.querySelector('.expand-icon');
+  
+  // Get year number from the button's aria-label (e.g., "Year 1" -> "1")
+  const ariaLabel = button.getAttribute('aria-label');
+  const yearNum = ariaLabel.replace('Year ', '');
+  const targetId = `months-${yearNum}`;
   
   // Find all month rows for this year
   const monthRows = document.querySelectorAll(`[id^="${targetId}-"]`);
   
-  // Extract year number from targetId (e.g., "months-1" -> "1")
-  const yearNum = targetId.split('-')[1];
-  
   if (expanded) {
     // Collapse
     button.setAttribute('aria-expanded', 'false');
-    const label = button.getAttribute('aria-label');
-    button.setAttribute('aria-label', label.replace('Collapse', 'Expand'));
+    button.setAttribute('aria-label', `Year ${yearNum}`);
     monthRows.forEach(row => row.hidden = true);
     icon.textContent = '▶';
     announceToScreenReader(`Year ${yearNum} monthly details collapsed`);
   } else {
     // Expand
     button.setAttribute('aria-expanded', 'true');
-    const label = button.getAttribute('aria-label');
-    button.setAttribute('aria-label', label.replace('Expand', 'Collapse'));
+    button.setAttribute('aria-label', `Year ${yearNum}`);
     monthRows.forEach(row => row.hidden = false);
     icon.textContent = '▼';
     announceToScreenReader(`Year ${yearNum} expanded, showing ${monthRows.length} months of detailed data`);

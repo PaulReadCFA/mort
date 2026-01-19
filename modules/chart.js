@@ -55,7 +55,7 @@ export function renderChart({ monthlySchedule }, inputs) {
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background: repeating-linear-gradient(90deg, #7a46ff 0px, #7a46ff 5px, transparent 5px, transparent 10px); height: 3px; width: 20px;"></span>
-      Interest rate <span style="font-style: normal; color: inherit;">(<span style="color: #7a46ff; font-weight: 700;"><em>r</em></span>)</span> <strong style="color: #7a46ff;">${annualRate}%</strong>
+      Annual interest rate <span style="font-style: normal; color: inherit;">(<span style="color: #7a46ff; font-weight: 700;"><em>r</em></span>)</span> <strong style="color: #7a46ff;">${annualRate}%</strong>
     </span>
   `;
 
@@ -122,9 +122,9 @@ export function renderChart({ monthlySchedule }, inputs) {
           yAxisID: 'y',
           order: 0  // Draw on top
         },
-        // Interest rate horizontal line
+        // Annual interest rate horizontal line
         {
-          label: 'Interest rate (r)',
+          label: 'Annual interest rate (r)',
           data: labels.map(() => annualRate),
           type: 'line',
           borderColor: '#7a46ff',
@@ -149,7 +149,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           stacked: true,
           title: {
             display: true,
-            text: 'Months (year markers shown)',
+            text: 'Mortgage term: months (year markers shown)',
             font: {
               weight: 'bold'
             },
@@ -197,7 +197,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           max: Math.max(12, annualRate * 1.5),
           title: {
             display: true,
-            text: 'Rate',
+            text: 'Annual interest rate',
             font: {
               weight: 'bold'
             },
@@ -219,7 +219,7 @@ export function renderChart({ monthlySchedule }, inputs) {
       },
       layout: {
         padding: {
-          top: 10,
+          top: 25,
           right: 10,
           bottom: 10,
           left: 10
@@ -250,9 +250,9 @@ export function renderChart({ monthlySchedule }, inputs) {
               const label = context.dataset.label || '';
               const value = context.parsed.y;
               
-              // Interest rate should show % not USD and italicize r
-              if (label.includes('Interest rate')) {
-                return `Interest rate (r): ${value.toFixed(1)}%`;
+              // Annual interest rate should show % not USD and italicize r
+              if (label.includes('Annual interest rate')) {
+                return `Annual interest rate (r): ${value.toFixed(1)}%`;
               }
               
               // Everything else shows USD
@@ -317,7 +317,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           }
           
           // Find the rate line dataset
-          const rateDataset = chart.data.datasets.find(ds => ds.label === 'Interest rate (r)');
+          const rateDataset = chart.data.datasets.find(ds => ds.label === 'Annual interest rate (r)');
           const rateIndex = chart.data.datasets.indexOf(rateDataset);
           
           if (rateDataset && rateIndex >= 0) {

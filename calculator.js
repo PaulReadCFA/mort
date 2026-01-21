@@ -28,9 +28,23 @@ function init() {
 
 /* ---------- SKIP LINK HANDLER ---------- */
 function setupSkipLink() {
-  const skipLink = document.querySelector('.skip-link[href="#data-table"]');
-  if (skipLink) {
-    skipLink.addEventListener('click', (e) => {
+  // Handle skip to data entry (first input field)
+  const skipToEntry = document.querySelector('.skip-link[href="#principal"]');
+  if (skipToEntry) {
+    skipToEntry.addEventListener('click', (e) => {
+      e.preventDefault();
+      const principalInput = $('#principal');
+      if (principalInput) {
+        principalInput.focus();
+        principalInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    });
+  }
+  
+  // Handle skip to data table
+  const skipToTable = document.querySelector('.skip-link[href="#data-table"]');
+  if (skipToTable) {
+    skipToTable.addEventListener('click', (e) => {
       e.preventDefault();
       // Switch to table view
       setState({ view: 'table' });
@@ -75,8 +89,14 @@ function setupInputs() {
     const updateValue = debounce(() => {
       // For principal, strip commas before parsing
       const rawValue = id === 'principal' 
-        ? element.value.replace(/,/g, '') 
-        : element.value;
+        ? element.value.replace(/,/g, '').trim()
+        : element.value.trim();
+      
+      // Handle empty input gracefully
+      if (rawValue === '') {
+        return; // Don't update state on empty - wait for blur
+      }
+      
       const value = Number(rawValue);
       
       // Validate and update state
@@ -103,7 +123,14 @@ function setupInputs() {
       listen(element, 'blur', () => {
         // Use setTimeout to ensure this runs after validation
         setTimeout(() => {
-          const rawValue = element.value.replace(/,/g, '');
+          const rawValue = element.value.replace(/,/g, '').trim();
+          
+          // Handle empty value
+          if (rawValue === '') {
+            element.value = lastAnnounced[id].toLocaleString('en-US');
+            return;
+          }
+          
           const numValue = Number(rawValue);
           if (!isNaN(numValue) && numValue > 0) {
             element.value = numValue.toLocaleString('en-US');
@@ -114,6 +141,31 @@ function setupInputs() {
       listen(element, 'focus', () => {
         // Remove commas for easier editing
         element.value = element.value.replace(/,/g, '');
+      });
+    }
+    
+    // Prevent invalid characters in number inputs
+    if (id === 'rate' || id === 'years') {
+      listen(element, 'keypress', (e) => {
+        const char = String.fromCharCode(e.which || e.keyCode);
+        const currentValue = element.value;
+        
+        // Allow: backspace, delete, tab, escape, enter
+        if ([8, 9, 27, 13].indexOf(e.keyCode) !== -1) return;
+        
+        // For rate, allow one decimal point
+        if (id === 'rate' && char === '.' && currentValue.indexOf('.') === -1) return;
+        
+        // For years, no decimal allowed
+        if (id === 'years' && char === '.') {
+          e.preventDefault();
+          return;
+        }
+        
+        // Only allow digits
+        if (!/^\d$/.test(char)) {
+          e.preventDefault();
+        }
       });
     }
   });

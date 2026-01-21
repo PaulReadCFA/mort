@@ -25,10 +25,12 @@
 }
 
 .static-equation-label {
-  font-size: 1.05rem;
+  font-size: 0.9375rem;  /* 15px - matches dividend */
   font-weight: 600;
-  line-height: 1.4;
-  color: #000000;
+  line-height: 1.5;  /* 22.5px at 15px base */
+  color: var(--color-gray-800);  /* rgb(31, 41, 55) */
+  margin: 0;
+  padding: 0;
 }
 
 .static-equation-math {
@@ -329,6 +331,19 @@
 /* ==========================================================================
    2. RESULT BOXES - Mortgage-Specific (3-box layout)
    ========================================================================== */
+
+/* Table description */
+.table-description {
+  font-size: 0.875rem;
+  color: var(--color-gray-700);
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.table-description strong {
+  color: var(--color-gray-900);
+  font-weight: 600;
+}
 
 /* Table header override for better contrast with colored abbreviations */
 #data-table th {

@@ -51,7 +51,7 @@ function renderPMTEquation(result, inputs) {
             </mrow>
             <mrow>
               <mn>1</mn>
-              <mo>-</mo>
+              <mo>−</mo>
               <msup>
                 <mrow>
                   <mo>(</mo>
@@ -61,7 +61,7 @@ function renderPMTEquation(result, inputs) {
                   <mo>)</mo>
                 </mrow>
                 <mrow>
-                  <mo>-</mo>
+                  <mo>−</mo>
                   <mn mathcolor="${COLORS.t}">${totalMonths}</mn>
                 </mrow>
               </msup>
@@ -69,7 +69,7 @@ function renderPMTEquation(result, inputs) {
           </mfrac>
         </mrow>
       </math>
-      <div class="equation-result-main pmt">
+      <div class="equation-result-main pmt" role="status" aria-live="polite">
         = ${formatCurrency(monthlyPayment)}
       </div>
     </div>
@@ -113,10 +113,10 @@ function renderINTEquation(result, inputs) {
           </mfrac>
         </mrow>
       </math>
-      <div class="equation-result-main int">
+      <div class="equation-result-main int" role="status" aria-live="polite">
         = ${formatCurrency(int1)}
       </div>
-      <div style="font-size:0.8125rem;color:var(--color-gray-600);font-style:italic;text-align:center;margin-top:0.5rem;">
+      <div style="font-size:0.8125rem;color:var(--color-gray-600);font-style:italic;text-align:center;margin-top:0.5rem;" aria-hidden="true">
         For Month 1 (decreases each month)
       </div>
     </div>
@@ -152,14 +152,14 @@ function renderPRNEquation(result, inputs) {
           </msub>
           <mo>=</mo>
           <mn mathcolor="${COLORS.PMT}">${formatCurrency(monthlyPayment).replace('USD ', '')}</mn>
-          <mo>-</mo>
+          <mo>−</mo>
           <mn mathcolor="${COLORS.INT}">${formatCurrency(int1).replace('USD ', '')}</mn>
         </mrow>
       </math>
-      <div class="equation-result-main prn">
+      <div class="equation-result-main prn" role="status" aria-live="polite">
         = ${formatCurrency(prn1)}
       </div>
-      <div style="font-size:0.8125rem;color:var(--color-gray-600);font-style:italic;text-align:center;margin-top:0.5rem;">
+      <div style="font-size:0.8125rem;color:var(--color-gray-600);font-style:italic;text-align:center;margin-top:0.5rem;" aria-hidden="true">
         For Month 1 (increases each month)
       </div>
     </div>

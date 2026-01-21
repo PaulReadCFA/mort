@@ -7,34 +7,55 @@
   <link rel="stylesheet" href="cfa-base.css">
   <link rel="stylesheet" href="mortgage-specific.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
-  <script>
-    window.MathJax = {
-      tex: {
-        inlineMath: [['$', '$']]
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']],
+        processEscapes: true,
+        skipTags: ["script","noscript","style","textarea","pre","code"]
       },
-      svg: {
-        fontCache: 'global'
+      TeX: {
+        extensions: ["color.js"]
       },
-      startup: {
-        pageReady() {
-          return MathJax.startup.defaultPageReady().then(() => {
-            // Remove tabindex from inline MathJax (formula titles) to fix ARC errors
-            document.querySelectorAll('mjx-container').forEach(el => {
-              el.removeAttribute('tabindex');
-            });
-          });
-        }
-      }
-    };
+      "HTML-CSS": {
+        availableFonts: ["TeX"],
+        scale: 100,
+        linebreaks: { automatic: true }
+      },
+      SVG: {
+        font: "TeX",
+        linebreaks: { automatic: true }
+      },
+      showMathMenu: false,
+      showProcessingMessages: false,
+      messageStyle: "none"
+    });
+    
+    // Fix ARIA issues after MathJax renders - use RegisterStartupHook to ensure it runs after rendering
+    MathJax.Hub.Register.StartupHook("End", function() {
+      setTimeout(function() {
+        // Remove tabindex from ALL MathJax elements
+        document.querySelectorAll('.MathJax, .MathJax_Display, .MathJax_SVG, span[id^="MathJax-Element"]').forEach(el => {
+          el.removeAttribute('tabindex');
+          el.setAttribute('aria-hidden', 'true');
+        });
+        
+        // Also remove from any nested spans inside MathJax
+        document.querySelectorAll('.MathJax span[tabindex], .MathJax_Display span[tabindex], .MathJax_SVG span[tabindex]').forEach(el => {
+          el.removeAttribute('tabindex');
+        });
+      }, 100);
+    });
   </script>
-  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" async></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_SVG" async></script>
 </head>
 <body>
 
   <!-- SKIP LINKS -->
   <nav aria-label="Skip links">
-    <a href="#data-entry" class="skip-link">Skip to data entry</a>
-    <a href="#data-table" class="skip-link">Skip to data table (recommended for screen readers)</a>
+    <a href="#principal" class="skip-link">Skip to data entry</a>
+    <a href="#data-table" class="skip-link">Skip to data table</a>
   </nav>
 
   <!-- NOSCRIPT FALLBACK -->
@@ -71,19 +92,19 @@
             </div>
           </div>
 
-          <!-- Interest Cash Flow Equation for Year 1 -->
-          <div class="static-equation-row" role="group" aria-label="Interest Cash Flow Equation for Year 1">
-            <p class="static-equation-label">Interest Cash Flow Equation for Year 1:</p>
+          <!-- Interest Cash Flow Equation for t = 1 -->
+          <div class="static-equation-row" role="group" aria-label="Interest Cash Flow Equation for t equals 1, first payment">
+            <p class="static-equation-label">Interest Cash Flow Equation for t = 1, first payment:</p>
             <div class="static-equation-math">
               $\textcolor{#0079a6}{\text{INT}_1} = \dfrac{\textcolor{#b95b1d}{\text{PV}} \times \textcolor{#7a46ff}{r}}{12}$
             </div>
           </div>
 
-          <!-- General Interest Cash Flow where t ≥ 2 -->
+          <!-- General Interest Cash Flow where t >= 2 -->
           <div class="static-equation-row" role="group" aria-label="General Interest Cash Flow Equation where t is greater than or equal to 2">
-            <p class="static-equation-label">General Interest Cash Flow Equation where t ≥ 2:</p>
+            <p class="static-equation-label">General Interest Cash Flow Equation where t &ge; 2:</p>
             <div class="static-equation-math">
-              $\textcolor{#0079a6}{\text{INT}_t} = \dfrac{\left(\textcolor{#b95b1d}{\text{PV}} - \sum_{i=1}^{\textcolor{#0079a6}{t}-1} \textcolor{#b82937}{\text{PRN}_i}\right) \times \textcolor{#7a46ff}{r}}{12}$
+              $\textcolor{#0079a6}{\text{INT}_t} = \dfrac{\left(\textcolor{#b95b1d}{\text{PV}} - \sum\limits_{i=1}^{\textcolor{#0079a6}{t}-1} \textcolor{#b82937}{\text{PRN}_i}\right) \times \textcolor{#7a46ff}{r}}{12}$
             </div>
           </div>
 
@@ -105,10 +126,9 @@
         <div class="model-equations-grid" role="region" aria-label="Mortgage payment formulas">
           <!-- Monthly Payment (PMT) -->
           <article class="formula-box pmt" tabindex="0" role="region"
-                   aria-label="Monthly payment formula and result">
+                   aria-label="Monthly payment formula. PMT equals r times PV divided by 1 minus the quantity 1 plus r to the power of negative t. Current result shown below equation.">
             <div class="formula-box-title">Monthly payment (<strong style="color: #3c6ae5;">$\text{PMT}$</strong>)</div>
-            <div class="equation-container" role="region"
-                 aria-label="Monthly payment formula: PMT equals r times PV divided by 1 minus the quantity 1 plus r to the power of negative t">
+            <div class="equation-container">
               <div id="pmt-equation">
                 <!-- Populated by JavaScript -->
               </div>
@@ -117,10 +137,9 @@
 
           <!-- Interest Payment (INT_t) -->
           <article class="formula-box int" tabindex="0" role="region"
-                   aria-label="Interest payment formula and result for month t">
+                   aria-label="Interest payment formula for month t. INT equals PV times r divided by 12. Current result for month 1 shown below equation.">
             <div class="formula-box-title">Interest payment (<strong style="color: #0079a6;">$\text{INT}_t$</strong>)</div>
-            <div class="equation-container" role="region"
-                 aria-label="Interest payment formula for month t: INT equals PV times r divided by 1">
+            <div class="equation-container">
               <div id="int-equation">
                 <!-- Populated by JavaScript -->
               </div>
@@ -129,10 +148,9 @@
 
           <!-- Principal Payment (PRN_t) -->
           <article class="formula-box prn" tabindex="0" role="region"
-                   aria-label="Principal payment formula and result for month t">
+                   aria-label="Principal payment formula for month t. PRN equals PMT minus INT. Current result for month 1 shown below equation.">
             <div class="formula-box-title">Principal payment (<strong style="color: #b82937;">$\text{PRN}_t$</strong>)</div>
-            <div class="equation-container" role="region"
-                 aria-label="Principal payment formula for month t: PRN equals PMT minus INT">
+            <div class="equation-container">
               <div id="prn-equation">
                 <!-- Populated by JavaScript -->
               </div>
@@ -199,8 +217,8 @@
         <div class="card-header-with-controls">
           <h4 class="card-title" id="visualization-title">Mortgage Cash Flows</h4>
           <div class="view-controls">
-            <button id="view-chart-btn" class="toggle-btn active" aria-pressed="true">Chart</button>
-            <button id="view-table-btn" class="toggle-btn" aria-pressed="false">Table</button>
+            <button id="view-chart-btn" class="toggle-btn active" aria-pressed="true" title="Switch to chart view">Chart</button>
+            <button id="view-table-btn" class="toggle-btn" aria-pressed="false" title="Switch to table view">Table</button>
           </div>
         </div>
         <p class="sr-only" id="chart-keyboard-help">Chart keyboard navigation: Arrow keys move between months, Page Up/Down jump by year, T key focuses table, Home/End go to first/last month</p>
@@ -212,6 +230,9 @@
 
         <div id="table-container">
           <div id="table-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+          <p class="table-description" style="font-size: 0.875rem; color: var(--color-gray-700); margin-bottom: 1rem;">
+            <strong>Keyboard shortcuts (when focused on expand buttons):</strong> Home/End to jump to first/last year, Page Up/Down to jump 5 years, Arrow keys to navigate between years.
+          </p>
           <table id="data-table" tabindex="-1" aria-label="Amortization schedule data table">
             <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance. Years with expandable buttons can be activated to reveal monthly details.</caption>
             <thead>

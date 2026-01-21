@@ -43,8 +43,8 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
           ${hasMonthlyData ? `
             <button class="expand-btn" 
                     aria-expanded="false" 
-                    aria-label="Year ${row.year}">
-              <span class="expand-icon" aria-hidden="true">▶</span>
+                    aria-label="Expand year ${row.year}">
+              <span class="expand-icon" aria-hidden="true">&#9654;</span>
             </button>
           ` : ''}
           <span style="display: inline-block; min-width: 3.5rem;">Year ${row.year}</span>
@@ -76,6 +76,9 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
   
   // Add event listeners to expand buttons
   setupExpandButtons();
+  
+  // Setup keyboard navigation for year rows
+  setupTableNavigation();
 }
 
 /**
@@ -101,15 +104,121 @@ function setupExpandButtons() {
 }
 
 /**
+ * Setup keyboard navigation for table year rows
+ * Navigation works when table has focus or when expand buttons have focus
+ */
+function setupTableNavigation() {
+  const table = document.getElementById('data-table');
+  if (!table) return;
+  
+  // Add navigation to expand buttons
+  const buttons = document.querySelectorAll('.expand-btn');
+  
+  buttons.forEach(button => {
+    button.addEventListener('keydown', function(e) {
+      // Don't handle Enter/Space here - let setupExpandButtons handle it
+      if (e.key === 'Enter' || e.key === ' ') {
+        return;
+      }
+      
+      handleTableNavigation(e, this);
+    });
+  });
+  
+  // Also allow navigation when table itself has focus (via skip link)
+  table.addEventListener('keydown', function(e) {
+    // Only handle if table itself is focused (not a child element)
+    if (document.activeElement === table) {
+      handleTableNavigation(e, null);
+    }
+  });
+}
+
+/**
+ * Handle keyboard navigation within table
+ * @param {KeyboardEvent} e - Keyboard event
+ * @param {HTMLElement|null} currentButton - Currently focused button, or null if table focused
+ */
+function handleTableNavigation(e, currentButton) {
+  const buttons = Array.from(document.querySelectorAll('.expand-btn'));
+  if (buttons.length === 0) return;
+  
+  let currentIndex = currentButton ? buttons.indexOf(currentButton) : -1;
+  let targetIndex = currentIndex;
+  
+  switch(e.key) {
+    case 'Home':
+      e.preventDefault();
+      targetIndex = 0;
+      break;
+    
+    case 'End':
+      e.preventDefault();
+      targetIndex = buttons.length - 1;
+      break;
+    
+    case 'PageUp':
+      e.preventDefault();
+      targetIndex = Math.max(0, currentIndex - 5);
+      break;
+    
+    case 'PageDown':
+      e.preventDefault();
+      targetIndex = Math.min(buttons.length - 1, currentIndex + 5);
+      break;
+    
+    case 'ArrowUp':
+      if (currentIndex > 0) {
+        e.preventDefault();
+        targetIndex = currentIndex - 1;
+      }
+      break;
+    
+    case 'ArrowDown':
+      if (currentIndex < buttons.length - 1) {
+        e.preventDefault();
+        targetIndex = currentIndex + 1;
+      } else if (currentIndex === -1) {
+        // If table is focused and user presses down, go to first button
+        e.preventDefault();
+        targetIndex = 0;
+      }
+      break;
+    
+    default:
+      return; // Don't handle other keys
+  }
+  
+  // Focus and announce if we moved
+  if (targetIndex >= 0 && targetIndex !== currentIndex) {
+    const targetButton = buttons[targetIndex];
+    targetButton.focus();
+    
+    // Scroll the row into view
+    const row = targetButton.closest('tr');
+    if (row) {
+      row.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    
+    // Extract year number from button's aria-label
+    const ariaLabel = targetButton.getAttribute('aria-label');
+    const yearMatch = ariaLabel.match(/\d+/);
+    const yearNum = yearMatch ? yearMatch[0] : targetIndex + 1;
+    
+    announceToScreenReader(`Moved to year ${yearNum}`);
+  }
+}
+
+/**
  * Toggle monthly rows visibility
  */
 function toggleMonthlyRows(button) {
   const expanded = button.getAttribute('aria-expanded') === 'true';
   const icon = button.querySelector('.expand-icon');
   
-  // Get year number from the button's aria-label (e.g., "Year 1" -> "1")
+  // Get year number from the button's aria-label (e.g., "Expand year 1" -> "1")
   const ariaLabel = button.getAttribute('aria-label');
-  const yearNum = ariaLabel.replace('Year ', '');
+  const yearNum = ariaLabel.match(/\d+/)[0];
   const targetId = `months-${yearNum}`;
   
   // Find all month rows for this year
@@ -118,14 +227,14 @@ function toggleMonthlyRows(button) {
   if (expanded) {
     // Collapse
     button.setAttribute('aria-expanded', 'false');
-    button.setAttribute('aria-label', `Year ${yearNum}`);
+    button.setAttribute('aria-label', `Expand year ${yearNum}`);
     monthRows.forEach(row => row.hidden = true);
     icon.textContent = '▶';
     announceToScreenReader(`Year ${yearNum} monthly details collapsed`);
   } else {
     // Expand
     button.setAttribute('aria-expanded', 'true');
-    button.setAttribute('aria-label', `Year ${yearNum}`);
+    button.setAttribute('aria-label', `Collapse year ${yearNum}`);
     monthRows.forEach(row => row.hidden = false);
     icon.textContent = '▼';
     announceToScreenReader(`Year ${yearNum} expanded, showing ${monthRows.length} months of detailed data`);

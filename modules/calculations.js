@@ -111,28 +111,59 @@ export function calculate({ principal = 0, rate = 0, years = 0 }) {
  */
 export function validateInput(field, value) {
   const rules = {
-    principal: { min: 1000, max: 10000000, label: 'Mortgage amount', prefix: '$', suffix: '' },
-    rate: { min: 0.1, max: 20, label: 'Mortgage interest rate', prefix: '', suffix: '%' },
+    principal: { min: 1000, max: 10000000, label: 'Mortgage amount', prefix: 'USD ', suffix: '' },
+    rate: { min: 0.1, max: 20, label: 'Annual interest rate', prefix: '', suffix: '%' },
     years: { min: 1, max: 40, label: 'Mortgage term', prefix: '', suffix: ' year' }
   };
 
   const rule = rules[field];
   if (!rule) return null;
 
-  if (isNaN(value) || value === null || value === '') {
+  // Check for empty, null, undefined, or NaN
+  if (value === null || value === undefined || value === '' || isNaN(value)) {
     return `${rule.label} is required`;
   }
 
-  if (value < rule.min) {
+  // Convert to number if it's a string
+  const numValue = typeof value === 'string' ? parseFloat(value) : value;
+  
+  // Check if conversion resulted in NaN
+  if (isNaN(numValue)) {
+    return `${rule.label} must be a valid number`;
+  }
+
+  // Check for negative or zero values
+  if (numValue <= 0) {
+    return `${rule.label} must be greater than zero`;
+  }
+
+  // Check minimum value
+  if (numValue < rule.min) {
     const suffix = rule.suffix === ' year' && rule.min !== 1 ? ' years' : rule.suffix;
     const formattedMin = rule.prefix + rule.min.toLocaleString() + suffix;
     return `${rule.label} must be at least ${formattedMin}`;
   }
 
-  if (value > rule.max) {
+  // Check maximum value
+  if (numValue > rule.max) {
     const suffix = rule.suffix === ' year' ? ' years' : rule.suffix;
     const formattedMax = rule.prefix + rule.max.toLocaleString() + suffix;
     return `${rule.label} must be no more than ${formattedMax}`;
+  }
+
+  // Special validation for rate - check decimal precision
+  if (field === 'rate') {
+    const decimalPlaces = (numValue.toString().split('.')[1] || '').length;
+    if (decimalPlaces > 2) {
+      return `${rule.label} can have at most 2 decimal places`;
+    }
+  }
+
+  // Special validation for years - must be whole number
+  if (field === 'years') {
+    if (!Number.isInteger(numValue)) {
+      return `${rule.label} must be a whole number`;
+    }
   }
 
   return null;

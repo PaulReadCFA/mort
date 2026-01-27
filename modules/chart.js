@@ -197,7 +197,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           max: Math.max(12, annualRate * 1.5),
           title: {
             display: true,
-            text: 'Annual interest rate',
+            text: 'Annual interest rate (𝑟) %',
             font: {
               weight: 'bold'
             },
@@ -205,7 +205,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           },
           ticks: {
             callback: function(value) {
-              return value.toFixed(1) + '%';
+              return value.toFixed(1);
             },
             font: {
               weight: 'bold'

@@ -197,7 +197,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           max: Math.max(12, annualRate * 1.5),
           title: {
             display: true,
-            text: 'Annual interest rate (r)',
+            text: 'Annual interest rate',
             font: {
               weight: 'bold'
             },
@@ -339,16 +339,26 @@ export function renderChart({ monthlySchedule }, inputs) {
               ctx.font = 'bold 11px sans-serif';
               const colonWidth = ctx.measureText(colonText).width;
               const totalWidth = rWidth + colonWidth;
-              const padding = 4;
+              const padding = 6;  // Increased from 4 to 6 for more breathing room
               
               // Draw white background rectangle
               const xCenter = (chartArea.left + chartArea.right) / 2;
               ctx.fillStyle = 'white';
               ctx.fillRect(
                 xCenter - totalWidth / 2 - padding,
-                yPosition - 16,
+                yPosition - 18,  // Increased from 16
                 totalWidth + padding * 2,
-                14
+                16  // Increased from 14
+              );
+              
+              // Draw purple border around background
+              ctx.strokeStyle = '#7a46ff';
+              ctx.lineWidth = 2;
+              ctx.strokeRect(
+                xCenter - totalWidth / 2 - padding,
+                yPosition - 18,  // Increased from 16
+                totalWidth + padding * 2,
+                16  // Increased from 14
               );
               
               // Draw rate label with only r italicized

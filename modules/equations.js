@@ -21,6 +21,28 @@ export function renderEquations(result, inputs) {
   renderPMTEquation(result, inputs);
   renderINTEquation(result, inputs);
   renderPRNEquation(result, inputs);
+  
+  // Trigger MathJax to re-process the updated equations
+  if (typeof MathJax !== 'undefined' && MathJax.Hub) {
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub], function() {
+      // Remove tabindex from MathJax elements for accessibility
+      setTimeout(function() {
+        document.querySelectorAll('.MathJax[tabindex]').forEach(function(el) {
+          el.removeAttribute('tabindex');
+        });
+      }, 10);
+      setTimeout(function() {
+        document.querySelectorAll('.MathJax[tabindex]').forEach(function(el) {
+          el.removeAttribute('tabindex');
+        });
+      }, 100);
+      setTimeout(function() {
+        document.querySelectorAll('.MathJax[tabindex]').forEach(function(el) {
+          el.removeAttribute('tabindex');
+        });
+      }, 500);
+    });
+  }
 }
 
 /**

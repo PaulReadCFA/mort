@@ -650,3 +650,42 @@ math[display="block"] { margin: 0.5em auto; }
 #equation-card .formula-box.prn {
   border-left-color: #b82937 !important;  /* Red */
 }
+
+/* ==========================================================================
+   DYNAMIC EQUATION - AGGRESSIVE MOBILE SCALING
+   ========================================================================== */
+
+/* More aggressive scaling for dynamic equations at narrow widths */
+@media (max-width: 400px) {
+  #dynamic-equation-container math,
+  .formula-box math {
+    font-size: 0.55em !important;
+  }
+  
+  .equation-container {
+    padding: 0.25rem !important;
+    overflow-x: hidden !important;  /* Hide scrollbar, rely on scaling */
+  }
+}
+
+@media (max-width: 340px) {
+  #dynamic-equation-container math,
+  .formula-box math {
+    font-size: 0.5em !important;
+  }
+  
+  .equation-container {
+    padding: 0.125rem !important;
+  }
+}
+
+/* Ensure formula boxes don't overflow */
+.formula-box .equation-container {
+  overflow-x: hidden !important;
+  width: 100%;
+}
+
+.formula-box math {
+  max-width: 100%;
+  display: inline-block !important;
+}

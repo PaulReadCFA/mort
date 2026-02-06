@@ -9,6 +9,17 @@
 /* ==========================================================================
    1. STATIC EQUATIONS GRID - Two column layout
    ========================================================================== */
+/* Prevent layout jump during MathJax re-render */
+#static-equations-card {
+  min-height: 400px;
+}
+
+@media (max-width: 700px) {
+  #static-equations-card {
+    min-height: 600px;  /* Taller when equations stack */
+  }
+}
+
 .static-equations-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -166,6 +177,17 @@
 /* ==========================================================================
    1.5 MODEL EQUATIONS GRID - Three Formula Boxes
    ========================================================================== */
+/* Prevent layout jump during equation re-render */
+#equation-card {
+  min-height: 380px;
+}
+
+@media (max-width: 767px) {
+  #equation-card {
+    min-height: 600px;  /* Taller when stacked vertically */
+  }
+}
+
 .model-equations-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -184,7 +206,7 @@
   }
   
   .formula-box {
-    min-height: auto;
+    min-height: 160px;  /* Prevent individual boxes from jumping */
   }
 }
 
@@ -267,6 +289,8 @@
   box-shadow: none !important;
   padding: 0.5rem !important;
   margin: 0 !important;
+  /* Prevent jump during MathJax re-render */
+  min-height: 100px;
 }
 
 /* Equation result styling */
@@ -578,6 +602,17 @@
 /* ==========================================================================
    5. CHART LEGEND - Mortgage-specific
    ========================================================================== */
+/* Prevent jump when chart regenerates from stepper arrows */
+#visualization-card {
+  min-height: 600px;
+}
+
+@media (max-width: 600px) {
+  #visualization-card {
+    min-height: 500px;
+  }
+}
+
 .chart-legend {
   display: flex;
   flex-wrap: wrap;

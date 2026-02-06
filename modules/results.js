@@ -32,20 +32,8 @@ export function renderResults({ monthlyPayment, annualPayment, totalInterest, to
     </div>
   `;
 
-  // Announce changes to screen readers
-  if (lastValues !== null) {
-    const changed = [];
-    if (Math.abs(monthlyPayment - lastValues.monthlyPayment) > 0.01) {
-      changed.push(`Monthly payment updated to ${formatCurrencyWithDecimals(monthlyPayment)}`);
-    }
-    
-    if (changed.length > 0) {
-      const announcement = $('#result-announcement');
-      announcement.textContent = changed.join('. ');
-      setTimeout(() => announcement.textContent = '', 2000);
-    }
-  }
-
+  // Note: Removed redundant announcements here to reduce screen reader verbosity
+  // The input change announcements in calculator.js are sufficient
   lastValues = { monthlyPayment, annualPayment, totalInterest, totalPaid };
 }
 

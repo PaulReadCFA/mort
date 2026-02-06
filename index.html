@@ -220,7 +220,7 @@
             <button id="view-table-btn" class="toggle-btn" aria-pressed="false" title="Switch to table view">Table</button>
           </div>
         </div>
-        <p class="sr-only" id="chart-keyboard-help">Chart keyboard navigation: Arrow keys move between months, Page Up/Down jump by year, T key focuses table, Home/End go to first/last month</p>
+        <p class="sr-only" id="chart-keyboard-help">Use arrow keys to navigate the chart, or press T to go to the table view.</p>
 
         <div id="chart-container" class="chart-wrapper">
           <canvas id="chart" role="img" aria-label="Stacked bar chart showing principal and interest payments" aria-describedby="chart-keyboard-help"></canvas>
@@ -230,7 +230,7 @@
         <div id="table-container">
           <div id="table-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
           <p class="table-description" style="font-size: 0.875rem; color: var(--color-gray-700); margin-bottom: 1rem;">
-            <strong>Keyboard shortcuts (when focused on expand buttons):</strong> Home/End to jump to first/last year, Page Up/Down to jump 5 years, Arrow keys to navigate between years.
+            <strong>Navigate the table:</strong> Use arrow keys to move between years, or press Home/End to jump to the first or last year.
           </p>
           <table id="data-table" tabindex="-1" aria-label="Amortization schedule data table">
             <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance. Years with expandable buttons can be activated to reveal monthly details.</caption>

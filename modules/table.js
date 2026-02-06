@@ -205,7 +205,7 @@ function handleTableNavigation(e, currentButton) {
     const yearMatch = ariaLabel.match(/\d+/);
     const yearNum = yearMatch ? yearMatch[0] : targetIndex + 1;
     
-    announceToScreenReader(`Moved to year ${yearNum}`);
+    announceToScreenReader(`Year ${yearNum}`);
   }
 }
 
@@ -229,15 +229,15 @@ function toggleMonthlyRows(button) {
     button.setAttribute('aria-expanded', 'false');
     button.setAttribute('aria-label', `Expand year ${yearNum}`);
     monthRows.forEach(row => row.hidden = true);
-    icon.textContent = '▶';
-    announceToScreenReader(`Year ${yearNum} monthly details collapsed`);
+    icon.textContent = '\u25B6';  // Right-pointing triangle
+    announceToScreenReader(`Year ${yearNum} collapsed`);
   } else {
     // Expand
     button.setAttribute('aria-expanded', 'true');
     button.setAttribute('aria-label', `Collapse year ${yearNum}`);
     monthRows.forEach(row => row.hidden = false);
-    icon.textContent = '▼';
-    announceToScreenReader(`Year ${yearNum} expanded, showing ${monthRows.length} months of detailed data`);
+    icon.textContent = '\u25BC';  // Down-pointing triangle
+    announceToScreenReader(`Year ${yearNum} expanded`);
   }
 }
 

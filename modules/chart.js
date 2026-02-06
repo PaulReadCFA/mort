@@ -27,7 +27,7 @@ export function renderChart({ monthlySchedule }, inputs) {
   // Make canvas keyboard focusable
   canvas.tabIndex = 0;
   canvas.setAttribute('role', 'application');
-  canvas.setAttribute('aria-label', 'Mortgage amortization chart. Use arrow keys to navigate months, Page Up/Down to jump by year, T to focus table, Home/End for first/last month.');
+  canvas.setAttribute('aria-label', 'Mortgage payment chart. Use arrow keys to navigate, T for table view.');
 
  // Get interest rate from inputs
   const annualRate = inputs?.rate || 6;
@@ -37,6 +37,7 @@ export function renderChart({ monthlySchedule }, inputs) {
   if (!legend) {
     legend = document.createElement('div');
     legend.className = 'chart-legend';
+    legend.setAttribute('aria-hidden', 'true');
     container.parentElement.insertBefore(legend, container);
   }
   
@@ -197,7 +198,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           max: Math.max(12, annualRate * 1.5),
           title: {
             display: true,
-            text: 'Annual interest rate (𝑟) %',
+            text: 'Annual interest rate (ð‘Ÿ) %',
             font: {
               weight: 'bold'
             },
@@ -521,11 +522,6 @@ function createBarButtons(monthlySchedule, container) {
         const table = document.getElementById('data-table');
         if (table) {
           table.focus();
-          const announcement = document.getElementById('chart-announcement');
-          if (announcement) {
-            announcement.textContent = 'Focused on data table';
-            setTimeout(() => announcement.textContent = '', 2000);
-          }
         }
         return;
       }
@@ -545,7 +541,7 @@ function createBarButtons(monthlySchedule, container) {
         helpShown = true;
         const announcement = document.getElementById('chart-announcement');
         if (announcement) {
-          announcement.textContent = 'Use arrow keys to navigate months, Page Up/Down to jump by year, T for table, Home/End for first/last';
+          announcement.textContent = 'Use arrow keys to navigate, T for table view';
           setTimeout(() => announcement.textContent = '', 5000);
         }
       }
@@ -604,9 +600,8 @@ let announceTimeout = null;
 function announceBar(row, index, isTableFocus = false) {
   const region = $('#chart-announcement');
   
+  // Skip announcement if switching to table - screen reader handles it
   if (isTableFocus) {
-    region.textContent = 'Focused on data table';
-    setTimeout(() => region.textContent = '', 2000);
     return;
   }
   

@@ -68,12 +68,12 @@ function renderPMTEquation(result, inputs) {
           <mfrac linethickness="1.2px">
             <mrow>
               <mn mathcolor="${COLORS.r}">${monthlyRateDisplay}</mn>
-              <mo>×</mo>
+              <mo>\u00D7</mo>
               <mn mathcolor="${COLORS.PV}">${formatNumber(principal)}</mn>
             </mrow>
             <mrow>
               <mn>1</mn>
-              <mo>−</mo>
+              <mo>\u2212</mo>
               <msup>
                 <mrow>
                   <mo>(</mo>
@@ -83,7 +83,7 @@ function renderPMTEquation(result, inputs) {
                   <mo>)</mo>
                 </mrow>
                 <mrow>
-                  <mo>−</mo>
+                  <mo>\u2212</mo>
                   <mn mathcolor="${COLORS.t}">${totalMonths}</mn>
                 </mrow>
               </msup>
@@ -128,7 +128,7 @@ function renderINTEquation(result, inputs) {
           <mfrac linethickness="1.2px">
             <mrow>
               <mn mathcolor="${COLORS.PV}">${formatNumber(principal)}</mn>
-              <mo>×</mo>
+              <mo>\u00D7</mo>
               <mn mathcolor="${COLORS.r}">${rateAsDecimal}</mn>
             </mrow>
             <mn>12</mn>
@@ -174,7 +174,7 @@ function renderPRNEquation(result, inputs) {
           </msub>
           <mo>=</mo>
           <mn mathcolor="${COLORS.PMT}">${formatCurrency(monthlyPayment).replace('USD ', '')}</mn>
-          <mo>−</mo>
+          <mo>\u2212</mo>
           <mn mathcolor="${COLORS.INT}">${formatCurrency(int1).replace('USD ', '')}</mn>
         </mrow>
       </math>

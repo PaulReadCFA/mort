@@ -18,6 +18,17 @@
   --color-teal-data: #0079a6;            /* 4.90:1 - Adjusted brand cyan */
   --color-green-data: #15803d;           /* 5.02:1 - Professional green */
   --color-green-data-alt: #047857;       /* 5.48:1 - Alternative green */
+  --color-red-principal: #b82937;        /* 5.30:1 - PRN principal red */
+
+  /* Darker contrast shades for text on light backgrounds */
+  --color-blue-contrast: #1e40af;        /* 7.32:1 - Darker blue for result box text */
+  --color-teal-contrast: #005f7f;        /* 7.04:1 - Darker teal for result box text */
+  --color-red-contrast: #8b1f2b;         /* 7.29:1 - Darker red for result box text */
+  --color-orange-contrast: #8b4513;      /* 7.15:1 - Darker orange for result box text */
+
+  /* Input border colours */
+  --color-input-border: #8b93a7;         /* Resting border */
+  --color-input-border-hover: #5f6b82;   /* Hover border */
   
   /* CFA Brand Colors (legacy) */
   --color-primary: #3c6ae5;

@@ -62,7 +62,7 @@ function setupSkipLink() {
 }
 
 /* ---------- INPUT HANDLERS ---------- */
-let lastAnnounced = { principal: 800000, rate: 6, years: 30 };
+let lastValidValue = { principal: 800000, rate: 6, years: 30 };
 
 function setupInputs() {
   ['principal', 'rate', 'years'].forEach(id => {
@@ -78,7 +78,7 @@ function setupInputs() {
       if (!isNaN(value) && value > 0) {
         const newInputs = { ...state.inputs, [id]: value };
         setState({ inputs: newInputs });
-        lastAnnounced[id] = value;
+        lastValidValue[id] = value;
       }
     }, 300);
 
@@ -91,7 +91,7 @@ function setupInputs() {
       listen(element, 'blur', () => {
         setTimeout(() => {
           const raw = element.value.replace(/,/g, '').trim();
-          if (raw === '') { element.value = lastAnnounced[id].toLocaleString('en-US'); return; }
+          if (raw === '') { element.value = lastValidValue[id].toLocaleString('en-US'); return; }
           const num = Number(raw);
           if (!isNaN(num) && num > 0) element.value = num.toLocaleString('en-US');
         }, 10);

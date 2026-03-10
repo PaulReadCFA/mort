@@ -64,11 +64,11 @@
    ========================================================================== */
 :root {
   /* Mortgage Calculator Specific Colors - Using brand palette */
-  --color-mortgage-payment: var(--color-blue-interactive);  /* #3c6ae5 - Monthly payment (PMT) */
-  --color-mortgage-principal: var(--color-red-2);           /* #b82937 - Principal (PRN) */
-  --color-mortgage-interest: var(--color-teal-data);        /* #0079a6 - Interest (INT) */
-  --color-mortgage-term: var(--color-green-data-alt);       /* #047857 - Loan term (t) */
-  --color-mortgage-rate: var(--color-purple-bold);          /* #7a46ff - Interest rate (r) */
+  --color-mortgage-payment: var(--color-blue-interactive);  /* var(--color-blue-interactive) - Monthly payment (PMT) */
+  --color-mortgage-principal: var(--color-red-principal);           /* var(--color-red-principal) - Principal (PRN) */
+  --color-mortgage-interest: var(--color-teal-data);        /* var(--color-teal-data) - Interest (INT) */
+  --color-mortgage-term: var(--color-green-data-alt);       /* var(--color-green-data-alt) - Loan term (t) */
+  --color-mortgage-rate: var(--color-purple-bold);          /* var(--color-purple-bold) - Interest rate (r) */
 }
 
 /* ==========================================================================
@@ -242,29 +242,29 @@
 }
 
 .formula-box.pmt {
-  border-left-color: #3c6ae5 !important;  /* Blue */
+  border-left-color: var(--color-blue-interactive) !important;  /* Blue */
 }
 
 .formula-box.pmt:focus {
-  outline-color: #3c6ae5;
+  outline-color: var(--color-blue-interactive);
   box-shadow: 0 0 0 4px rgba(60, 106, 229, 0.1);
 }
 
 .formula-box.int {
-  border-left-color: #0079a6 !important;  /* Teal to match INT color */
+  border-left-color: var(--color-teal-data) !important;  /* Teal to match INT color */
 }
 
 .formula-box.int:focus {
-  outline-color: #0079a6;
+  outline-color: var(--color-teal-data);
   box-shadow: 0 0 0 4px rgba(0, 121, 166, 0.1);
 }
 
 .formula-box.prn {
-  border-left-color: #b82937 !important;  /* Red to match PRN color */
+  border-left-color: var(--color-red-principal) !important;  /* Red to match PRN color */
 }
 
 .formula-box.prn:focus {
-  outline-color: #b82937;
+  outline-color: var(--color-red-principal);
   box-shadow: 0 0 0 4px rgba(184, 41, 55, 0.1);
 }
 
@@ -307,19 +307,19 @@
 }
 
 .equation-result-main.pmt {
-  color: #1e40af;  /* Darker blue for contrast */
+  color: var(--color-blue-contrast);  /* Darker blue for contrast */
   background: rgba(60, 106, 229, 0.08);
   font-weight: 700;  /* Bolder for better readability */
 }
 
 .equation-result-main.int {
-  color: #005f7f;  /* Darker teal for contrast */
+  color: var(--color-teal-contrast);  /* Darker teal for contrast */
   background: rgba(0, 121, 166, 0.08);
   font-weight: 700;
 }
 
 .equation-result-main.prn {
-  color: #8b1f2b;  /* Darker red for contrast */
+  color: var(--color-red-contrast);  /* Darker red for contrast */
   background: rgba(184, 41, 55, 0.08);
   font-weight: 700;
 }
@@ -375,7 +375,7 @@
 
 /* Table header override for better contrast with colored abbreviations */
 #data-table th {
-  background: #f9fafb !important;  /* Lighter than gray-100 for WCAG compliance */
+  background: var(--color-gray-50) !important;  /* Lighter than gray-100 for WCAG compliance */
 }
 
 .results-grid {
@@ -386,14 +386,14 @@
 
 /* Principal Amount Box - Orange theme */
 .result-box-principal {
-  background-color: #fff7ed;  /* Light Orange BG */
-  border: 2px solid #b95b1d;  /* Orange Deep border */
+  background-color: var(--color-bg-orange);  /* Light Orange BG */
+  border: 2px solid var(--color-orange-deep);  /* Orange Deep border */
   border-radius: 0.5rem;
   padding: 1.25rem;
 }
 
 .result-box-principal:focus {
-  outline: 3px solid #b95b1d;
+  outline: 3px solid var(--color-orange-deep);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(185, 91, 29, 0.1);
 }
@@ -402,7 +402,7 @@
 .result-box-principal .result-title {
   font-size: 1rem;
   font-weight: 400;
-  color: #8b4513;
+  color: var(--color-orange-contrast);
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -411,7 +411,7 @@
 .result-box-monthly .result-title {
   font-size: 1rem;
   font-weight: 400;
-  color: #1e40af;
+  color: var(--color-blue-contrast);
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -420,7 +420,7 @@
 .result-box-interest .result-title {
   font-size: 1rem;
   font-weight: 400;
-  color: #7a46ff;
+  color: var(--color-purple-bold);
   margin-bottom: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.025em;
@@ -440,14 +440,14 @@
 
 /* Monthly Payment Box - Blue theme */
 .result-box-monthly {
-  background-color: #eff6ff;  /* Light Blue BG */
-  border: 2px solid #3c6ae5;  /* Blue Interactive border */
+  background-color: var(--color-bg-blue);  /* Light Blue BG */
+  border: 2px solid var(--color-blue-interactive);  /* Blue Interactive border */
   border-radius: 0.5rem;
   padding: 1.25rem;
 }
 
 .result-box-monthly:focus {
-  outline: 3px solid #3c6ae5;
+  outline: 3px solid var(--color-blue-interactive);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(60, 106, 229, 0.1);
 }
@@ -460,14 +460,14 @@
 
 /* Interest Box - Purple theme */
 .result-box-interest {
-  background-color: #faf5ff;  /* Light Purple BG */
-  border: 2px solid #7a46ff;  /* Purple Bold border */
+  background-color: var(--color-bg-purple);  /* Light Purple BG */
+  border: 2px solid var(--color-purple-bold);  /* Purple Bold border */
   border-radius: 0.5rem;
   padding: 1.25rem;
 }
 
 .result-box-interest:focus {
-  outline: 3px solid #7a46ff;
+  outline: 3px solid var(--color-purple-bold);
   outline-offset: 2px;
   box-shadow: 0 0 0 4px rgba(122, 70, 255, 0.1);
 }
@@ -617,7 +617,7 @@
   width: 100%;
   padding: 0.4rem 0.5rem;
   padding-right: 1.5rem;
-  border: 1.5px solid #8b93a7;
+  border: 1.5px solid var(--color-input-border);
   border-radius: 0.375rem;
   font-size: 1rem;
   text-align: right;
@@ -625,7 +625,7 @@
 }
 
 .input-field-inline:hover {
-  border-color: #5f6b82;
+  border-color: var(--color-input-border-hover);
 }
 
 .input-field-inline:focus {
@@ -734,15 +734,15 @@ math[display="block"] { margin: 0.5em auto; }
 }
 
 #equation-card .formula-box.pmt {
-  border-left-color: #3c6ae5 !important;
+  border-left-color: var(--color-blue-interactive) !important;
 }
 
 #equation-card .formula-box.int {
-  border-left-color: #0079a6 !important;  /* Teal */
+  border-left-color: var(--color-teal-data) !important;  /* Teal */
 }
 
 #equation-card .formula-box.prn {
-  border-left-color: #b82937 !important;  /* Red */
+  border-left-color: var(--color-red-principal) !important;  /* Red */
 }
 
 /* ==========================================================================

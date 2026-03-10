@@ -528,7 +528,7 @@
   container-type: inline-size;
 }
 
-@container (min-width: 860px) {
+@container (min-width: 980px) {
   .input-group-inline {
     flex-direction: row;
     flex-wrap: wrap;
@@ -563,7 +563,7 @@
 /* Ultra-narrow: no extra rules needed — column default handles all narrow widths */
 
 /* Viewport media query fallback for browsers without container query support */
-@media (min-width: 960px) {
+@media (min-width: 1080px) {
   .input-group-inline {
     flex-direction: row;
     flex-wrap: wrap;

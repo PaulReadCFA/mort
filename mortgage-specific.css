@@ -206,7 +206,7 @@
   }
   
   .formula-box {
-    min-height: 160px;  /* Prevent individual boxes from jumping */
+    height: 240px;  /* Slightly taller when stacked — more horizontal space for equations */
   }
 }
 
@@ -226,7 +226,9 @@
   background: white !important;
   border-radius: 0 0.5rem 0.5rem 0 !important;
   margin-top: 0 !important;
-  min-height: 160px;
+  /* Fixed height prevents MathJax re-render from causing layout shift */
+  height: 220px;
+  min-height: unset;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -289,8 +291,10 @@
   box-shadow: none !important;
   padding: 0.5rem !important;
   margin: 0 !important;
-  /* Prevent jump during MathJax re-render */
-  min-height: 100px;
+  /* Fixed height — prevents MathJax re-render from shifting layout */
+  height: 170px;
+  min-height: unset;
+  overflow: hidden;
 }
 
 /* Equation result styling */
@@ -486,85 +490,112 @@
 }
 
 /* ==========================================================================
-   3. INPUT LAYOUT - Bond-style Inline Layout
+   3. INPUT LAYOUT - Stacked by default, inline when wide enough
    ========================================================================== */
 .input-group-inline {
   display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 1.25rem;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
 }
 
 .input-inline {
   display: flex;
-  align-items: center;
-  gap: 0.375rem;
-  /* Allow label+input to wrap internally when very narrow */
-  flex-wrap: wrap;
-  /* Remove white-space: nowrap so label can reflow */
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+  width: 100%;
 }
 
 .input-label-inline {
   font-size: 0.875rem;
   color: var(--color-gray-700);
-  min-width: fit-content;
+  width: 100%;
 }
 
 .input-with-suffix-inline {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 6rem;
+  width: 9rem;
+  flex-shrink: 0;
   position: relative;
 }
 
-/* Wider input for mortgage amount field to accommodate $10,000,000 */
-.input-inline:first-child .input-with-suffix-inline {
-  width: 9rem;
-}
-
-/* Container query — stacks inputs when the card itself is narrow
+/* Container query — go inline when the card is genuinely wide enough
    (works inside iframes regardless of viewport width) */
 #data-entry {
   container-type: inline-size;
 }
 
-@container (max-width: 560px) {
+@container (min-width: 860px) {
   .input-group-inline {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
-  }
-
-  .input-inline {
-    width: 100%;
+    flex-direction: row;
     flex-wrap: nowrap;
-  }
-
-  .input-with-suffix-inline {
-    width: auto;
-    flex: 1;
-    max-width: 12rem;
-  }
-}
-
-/* Viewport media query kept as fallback for older browsers */
-@media (max-width: 640px) {
-  .input-group-inline {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 1rem;
+    align-items: center;
+    gap: 1.25rem;
   }
 
   .input-inline {
-    width: 100%;
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 0.375rem;
+  }
+
+  .input-label-inline {
+    white-space: nowrap;
+    width: auto;
+    flex: 0 0 auto;
   }
 
   .input-with-suffix-inline {
-    width: 100%;
-    max-width: 12rem;
+    width: 7rem;
+  }
+
+  .input-inline:first-child .input-with-suffix-inline {
+    width: 9rem;
   }
 }
+
+/* Ultra-narrow: no extra rules needed — column default handles all narrow widths */
+
+/* Viewport media query fallback for browsers without container query support */
+@media (min-width: 960px) {
+  .input-group-inline {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    align-items: center;
+    gap: 1.25rem;
+  }
+
+  .input-inline {
+    flex-direction: row;
+    align-items: center;
+    width: auto;
+    flex: 1 1 0;
+    min-width: 0;
+    gap: 0.375rem;
+  }
+
+  .input-label-inline {
+    white-space: nowrap;
+    width: auto;
+    flex: 0 0 auto;
+  }
+
+  .input-with-suffix-inline {
+    width: 7rem;
+  }
+
+  .input-inline:first-child .input-with-suffix-inline {
+    width: 9rem;
+  }
+}
+
+
 
 .input-prefix-inline {
   position: absolute;

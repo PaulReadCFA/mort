@@ -3,6 +3,7 @@
  * Renders three equations: PMT, INT_t, and PRN_t with actual values
  */
 
+import { formatCurrencyUSD } from './utils.js';
 const COLORS = {
   PMT: '#3c6ae5',      // Blue - Monthly payment
   INT: '#0079a6',      // Teal - Interest payment
@@ -92,7 +93,7 @@ function renderPMTEquation(result, inputs) {
         </mrow>
       </math>
       <div class="equation-result-main pmt" role="status" aria-live="polite">
-        = ${formatCurrency(monthlyPayment)}
+        = ${formatCurrencyUSD(monthlyPayment)}
       </div>
     </div>
   `;
@@ -136,7 +137,7 @@ function renderINTEquation(result, inputs) {
         </mrow>
       </math>
       <div class="equation-result-main int" role="status" aria-live="polite">
-        = ${formatCurrency(int1)}
+        = ${formatCurrencyUSD(int1)}
       </div>
       <div style="font-size:0.8125rem;color:var(--color-gray-600);font-style:italic;text-align:center;margin-top:0.5rem;" aria-hidden="true">
         For Month 1 (decreases each month)
@@ -173,13 +174,13 @@ function renderPRNEquation(result, inputs) {
             <mn mathcolor="${COLORS.PRN}">1</mn>
           </msub>
           <mo>=</mo>
-          <mn mathcolor="${COLORS.PMT}">${formatCurrency(monthlyPayment).replace('USD ', '')}</mn>
+          <mn mathcolor="${COLORS.PMT}">${formatCurrencyUSD(monthlyPayment).replace('USD ', '')}</mn>
           <mo>\u2212</mo>
-          <mn mathcolor="${COLORS.INT}">${formatCurrency(int1).replace('USD ', '')}</mn>
+          <mn mathcolor="${COLORS.INT}">${formatCurrencyUSD(int1).replace('USD ', '')}</mn>
         </mrow>
       </math>
       <div class="equation-result-main prn" role="status" aria-live="polite">
-        = ${formatCurrency(prn1)}
+        = ${formatCurrencyUSD(prn1)}
       </div>
       <div style="font-size:0.8125rem;color:var(--color-gray-600);font-style:italic;text-align:center;margin-top:0.5rem;" aria-hidden="true">
         For Month 1 (increases each month)
@@ -198,15 +199,4 @@ function formatNumber(value) {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0
   });
-}
-
-/**
- * Format as currency with USD prefix
- */
-function formatCurrency(value) {
-  const formatted = new Intl.NumberFormat('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  }).format(value);
-  return 'USD ' + formatted;
 }

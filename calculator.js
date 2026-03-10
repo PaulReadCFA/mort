@@ -64,107 +64,86 @@ function setupSkipLink() {
 /* ---------- INPUT HANDLERS ---------- */
 let lastAnnounced = { principal: 800000, rate: 6, years: 30 };
 
-const announceChange = debounce((field, value) => {
-  const labels = {
-    principal: 'Loan Amount',
-    rate: 'Interest Rate',
-    years: 'Loan Term'
-  };
-  
-  const formattedValue = field === 'principal' 
-    ? `USD ${value.toLocaleString()}`
-    : field === 'rate'
-    ? `${value}%`
-    : `${value} years`;
-  
-  $('#result-announcement').textContent = `${labels[field]} changed to ${formattedValue}`;
-  setTimeout(() => $('#result-announcement').textContent = '', 1500);
-}, 500);
-
 function setupInputs() {
   ['principal', 'rate', 'years'].forEach(id => {
     const element = $(`#${id}`);
     if (!element) return;
 
     const updateValue = debounce(() => {
-      // For principal, strip commas before parsing
-      const rawValue = id === 'principal' 
+      const rawValue = id === 'principal'
         ? element.value.replace(/,/g, '').trim()
         : element.value.trim();
-      
-      // Handle empty input gracefully
-      if (rawValue === '') {
-        return; // Don't update state on empty - wait for blur
-      }
-      
+      if (rawValue === '') return;
       const value = Number(rawValue);
-      
-      // Validate and update state
       if (!isNaN(value) && value > 0) {
         const newInputs = { ...state.inputs, [id]: value };
         setState({ inputs: newInputs });
-        
-        // Announce significant changes
-        if (Math.abs(value - lastAnnounced[id]) > 0.01) {
-          announceChange(id, value);
-          lastAnnounced[id] = value;
-        }
+        lastAnnounced[id] = value;
       }
     }, 300);
 
     listen(element, 'input', updateValue);
     listen(element, 'change', updateValue);
-    
-    // Setup validation first
     setupFieldValidation(id, updateValue);
-    
-    // Format principal with commas on blur (after validation)
+
+    // Principal: comma formatting on blur/focus, numeric-only keydown + paste
     if (id === 'principal') {
       listen(element, 'blur', () => {
-        // Use setTimeout to ensure this runs after validation
         setTimeout(() => {
-          const rawValue = element.value.replace(/,/g, '').trim();
-          
-          // Handle empty value
-          if (rawValue === '') {
-            element.value = lastAnnounced[id].toLocaleString('en-US');
-            return;
-          }
-          
-          const numValue = Number(rawValue);
-          if (!isNaN(numValue) && numValue > 0) {
-            element.value = numValue.toLocaleString('en-US');
-          }
+          const raw = element.value.replace(/,/g, '').trim();
+          if (raw === '') { element.value = lastAnnounced[id].toLocaleString('en-US'); return; }
+          const num = Number(raw);
+          if (!isNaN(num) && num > 0) element.value = num.toLocaleString('en-US');
         }, 10);
       });
-      
+
       listen(element, 'focus', () => {
-        // Remove commas for easier editing
         element.value = element.value.replace(/,/g, '');
       });
-    }
-    
-    // Prevent invalid characters in number inputs
-    if (id === 'rate' || id === 'years') {
-      listen(element, 'keypress', (e) => {
-        const char = String.fromCharCode(e.which || e.keyCode);
-        const currentValue = element.value;
-        
-        // Allow: backspace, delete, tab, escape, enter
-        if ([8, 9, 27, 13].indexOf(e.keyCode) !== -1) return;
-        
-        // For rate, allow one decimal point
-        if (id === 'rate' && char === '.' && currentValue.indexOf('.') === -1) return;
-        
-        // For years, no decimal allowed
-        if (id === 'years' && char === '.') {
-          e.preventDefault();
-          return;
+
+      listen(element, 'keydown', (e) => {
+        const actionKeys = ['Backspace','Delete','Tab','Escape','Enter','ArrowLeft','ArrowRight','Home','End'];
+        if (actionKeys.includes(e.key)) return;
+        if ((e.ctrlKey || e.metaKey) && ['a','c','v','x','z'].includes(e.key.toLowerCase())) return;
+        if (!/^\d$/.test(e.key)) e.preventDefault();
+      });
+
+      listen(element, 'paste', (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        const digits = text.replace(/[^\d]/g, '');
+        if (digits) {
+          const start = element.selectionStart;
+          const end = element.selectionEnd;
+          element.value = element.value.slice(0, start) + digits + element.value.slice(end);
+          element.selectionStart = element.selectionEnd = start + digits.length;
+          element.dispatchEvent(new Event('input', { bubbles: true }));
         }
-        
-        // Only allow digits
-        if (!/^\d$/.test(char)) {
-          e.preventDefault();
+      });
+    }
+
+    if (id === 'rate' || id === 'years') {
+      listen(element, 'keydown', (e) => {
+        const actionKeys = ['Backspace','Delete','Tab','Escape','Enter','ArrowLeft','ArrowRight','ArrowUp','ArrowDown','Home','End'];
+        if (actionKeys.includes(e.key)) return;
+        if ((e.ctrlKey || e.metaKey) && ['a','c','v','x','z'].includes(e.key.toLowerCase())) return;
+        if (id === 'rate' && e.key === '.' && !element.value.includes('.')) return;
+        if (id === 'years' && e.key === '.') { e.preventDefault(); return; }
+        if (!/^\d$/.test(e.key)) e.preventDefault();
+      });
+
+      listen(element, 'paste', (e) => {
+        e.preventDefault();
+        const text = (e.clipboardData || window.clipboardData).getData('text');
+        const allowed = id === 'rate'
+          ? text.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1')
+          : text.replace(/[^\d]/g, '');
+        if (allowed) {
+          const start = element.selectionStart;
+          const end = element.selectionEnd;
+          element.value = element.value.slice(0, start) + allowed + element.value.slice(end);
+          element.selectionStart = element.selectionEnd = start + allowed.length;
+          element.dispatchEvent(new Event('input', { bubbles: true }));
         }
       });
     }
@@ -188,8 +167,6 @@ function setupViewToggle() {
         e.preventDefault();
         e.stopPropagation();
         e.stopImmediatePropagation();
-        
-        console.log('Chart button blocked - narrow screen detected');
         
         // Visual feedback: briefly highlight table button
         if (tableBtn) {
@@ -253,8 +230,6 @@ function updateButtonStates() {
 /* ---------- RESPONSIVE BEHAVIOR ---------- */
 function detectNarrowScreen() {
   const narrow = window.innerWidth <= 600;
-  
-  console.log(`detectNarrowScreen: width=${window.innerWidth}, narrow=${narrow}`);
   
   if (narrow) {
     document.body.classList.add('force-table');

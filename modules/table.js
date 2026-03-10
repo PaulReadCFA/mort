@@ -4,7 +4,7 @@
  * Shows 30 annual rows (not 360 monthly - that's for the chart)
  */
 
-import { $ } from './utils.js';
+import { $, formatCurrency } from './utils.js';
 
 /**
  * Render annual amortization table with expandable monthly details
@@ -250,16 +250,4 @@ function announceToScreenReader(message) {
     announcement.textContent = message;
     setTimeout(() => announcement.textContent = '', 2000);
   }
-}
-
-/**
- * Format number as currency
- * @param {number} value - Number to format
- * @returns {string} - Formatted currency string (no USD prefix)
- */
-function formatCurrency(value) {
-  return value.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
 }

@@ -48,3 +48,12 @@ export function formatCurrency(value) {
     maximumFractionDigits: 2
   });
 }
+
+/**
+ * Format number as currency with USD prefix
+ * @param {number} value - Number to format
+ * @returns {string} - Formatted currency string with USD prefix
+ */
+export function formatCurrencyUSD(value) {
+  return 'USD ' + formatCurrency(value);
+}

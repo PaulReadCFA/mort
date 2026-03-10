@@ -3,7 +3,7 @@
  * Includes roving tabindex, keyboard navigation, and tooltips
  */
 
-import { $ } from './utils.js';
+import { $, formatCurrency } from './utils.js';
 
 let chart = null;
 let barButtons = [];
@@ -27,7 +27,7 @@ export function renderChart({ monthlySchedule }, inputs) {
   // Make canvas keyboard focusable
   canvas.tabIndex = 0;
   canvas.setAttribute('role', 'application');
-  canvas.setAttribute('aria-label', 'Mortgage payment chart. Use arrow keys to navigate, T for table view.');
+  canvas.setAttribute('aria-label', 'Mortgage payment chart. Use arrow keys to navigate across time periods.');
 
  // Get interest rate from inputs
   const annualRate = inputs?.rate || 6;
@@ -37,7 +37,8 @@ export function renderChart({ monthlySchedule }, inputs) {
   if (!legend) {
     legend = document.createElement('div');
     legend.className = 'chart-legend';
-    legend.setAttribute('aria-hidden', 'true');
+    legend.setAttribute('role', 'region');
+    legend.setAttribute('aria-label', 'Chart legend');
     container.parentElement.insertBefore(legend, container);
   }
   
@@ -141,6 +142,9 @@ export function renderChart({ monthlySchedule }, inputs) {
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      animation: {
+        duration: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 400
+      },
       interaction: {
         mode: 'index',
         intersect: false
@@ -198,7 +202,7 @@ export function renderChart({ monthlySchedule }, inputs) {
           max: Math.max(12, annualRate * 1.5),
           title: {
             display: true,
-            text: 'Annual interest rate (ð‘Ÿ) %',
+            text: 'Annual interest rate (r) %',
             font: {
               weight: 'bold'
             },
@@ -263,14 +267,6 @@ export function renderChart({ monthlySchedule }, inputs) {
               // Don't show "Total (PMT)" - it's redundant with the PMT line dataset
               return '';
             }
-          }
-        }
-      },
-      onClick: (e, elements) => {
-        if (elements.length > 0) {
-          const index = elements[0].index;
-          if (barButtons[index]) {
-            barButtons[index].focus();
           }
         }
       },
@@ -541,7 +537,7 @@ function createBarButtons(monthlySchedule, container) {
         helpShown = true;
         const announcement = document.getElementById('chart-announcement');
         if (announcement) {
-          announcement.textContent = 'Use arrow keys to navigate, T for table view';
+          announcement.textContent = 'Use arrow keys to navigate across time periods';
           setTimeout(() => announcement.textContent = '', 5000);
         }
       }
@@ -644,16 +640,4 @@ export function destroyChart() {
     const note = vizCard.querySelector('.educational-note');
     if (note) note.remove();
   }
-}
-
-/**
- * Format number as currency
- * @param {number} value - Number to format
- * @returns {string} - Formatted currency string
- */
-function formatCurrency(value) {
-  return value.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  });
 }

@@ -4,6 +4,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Mortgage Calculator</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="cfa-base.css">
   <link rel="stylesheet" href="mortgage-specific.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
@@ -81,7 +84,7 @@
     <main class="content">
 
       <!-- CARD 1 - Static Equations -->
-      <section class="card" id="static-equations-card">
+      <section class="card" id="static-equations-card" aria-label="Static Cash Flow Equations">
         <div class="static-equations-grid">
           <!-- Monthly Cash Flow Equation -->
           <div class="static-equation-row" role="group" aria-label="Monthly Cash Flow Equation">
@@ -118,13 +121,13 @@
       </section>
 
       <!-- CARD 2 - Dynamic Equation -->
-      <section class="card" id="equation-card">
-        <h4 class="card-title">Dynamic Cash Flow Equations</h4>
+      <section class="card" id="equation-card" aria-labelledby="equation-card-title">
+        <h4 class="card-title" id="equation-card-title">Dynamic Cash Flow Equations</h4>
         <p class="equation-intro">These dynamic equations display the monthly payment and how it splits between interest and principal based on your inputs.</p>
 
-        <div class="model-equations-grid" role="region" aria-label="Mortgage payment formulas">
+        <div class="model-equations-grid" role="group" aria-label="Mortgage payment formulas">
           <!-- Monthly Payment (PMT) -->
-          <article class="formula-box pmt" tabindex="0" role="region"
+          <article class="formula-box pmt" role="article" tabindex="0"
                    aria-label="Monthly payment formula. PMT equals r times PV divided by 1 minus the quantity 1 plus r to the power of negative t. Current result shown below equation.">
             <div class="formula-box-title">Monthly payment (<strong style="color: #3c6ae5;">$\text{PMT}$</strong>)</div>
             <div class="equation-container">
@@ -135,7 +138,7 @@
           </article>
 
           <!-- Interest Payment (INT_t) -->
-          <article class="formula-box int" tabindex="0" role="region"
+          <article class="formula-box int" role="article" tabindex="0"
                    aria-label="Interest payment formula for month t. INT equals PV times r divided by 12. Current result for month 1 shown below equation.">
             <div class="formula-box-title">Interest payment (<strong style="color: #0079a6;">$\text{INT}_t$</strong>)</div>
             <div class="equation-container">
@@ -146,7 +149,7 @@
           </article>
 
           <!-- Principal Payment (PRN_t) -->
-          <article class="formula-box prn" tabindex="0" role="region"
+          <article class="formula-box prn" role="article" tabindex="0"
                    aria-label="Principal payment formula for month t. PRN equals PMT minus INT. Current result for month 1 shown below equation.">
             <div class="formula-box-title">Principal payment (<strong style="color: #b82937;">$\text{PRN}_t$</strong>)</div>
             <div class="equation-container">
@@ -168,43 +171,45 @@
         <div class="input-group-inline">
           <div class="input-inline">
             <label for="principal" class="input-label-inline">
-              Mortgage amount (<strong style="color:#b95b1d;">PV</strong>):
+              Mortgage amount (<strong style="color:#b95b1d;">PV</strong>), USD:
             </label>
             <div class="input-with-suffix-inline">
-              <span class="input-prefix-inline">USD</span>
+              <span class="input-prefix-inline" aria-hidden="true">USD</span>
               <input type="text" id="principal" class="input-field-inline input-with-prefix"
-                     inputmode="decimal"
+                     inputmode="numeric"
+                     autocomplete="off"
                      value="800,000"
                      aria-required="true">
             </div>
-          </div>
 
           <div class="input-inline">
             <label for="rate" class="input-label-inline">
-              Annual interest rate (<strong style="color:#7a46ff;"><em>r</em></strong>):
+              Annual interest rate (<strong style="color:#7a46ff;"><em>r</em></strong>), %:
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="rate" class="input-field-inline"
                      min="0.1" max="20" step="0.1" value="6"
+                     autocomplete="off"
                      aria-required="true">
-              <span class="input-suffix-inline">%</span>
+              <span class="input-suffix-inline" aria-hidden="true">%</span>
             </div>
           </div>
 
           <div class="input-inline">
             <label for="years" class="input-label-inline">
-              Mortgage term:
+              Mortgage term, years:
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="years" class="input-field-inline"
                      min="1" max="40" step="1" value="30"
+                     autocomplete="off"
                      aria-required="true">
-              <span class="input-suffix-inline">yrs</span>
+              <span class="input-suffix-inline" aria-hidden="true">yrs</span>
             </div>
           </div>
         </div>
 
-        <div id="validation-summary" class="validation-summary" role="alert" aria-live="polite"
+        <div id="validation-summary" class="validation-summary" role="alert"
              style="display:none;">
           <div class="validation-title">Please correct the following:</div>
           <ul id="validation-list"></ul>
@@ -220,18 +225,15 @@
             <button id="view-table-btn" class="toggle-btn" aria-pressed="false" title="Switch to table view">Table</button>
           </div>
         </div>
-        <p class="sr-only" id="chart-keyboard-help">Use arrow keys to navigate the chart, or press T to go to the table view.</p>
+        <p class="sr-only" id="chart-keyboard-help">Use arrow keys to navigate the chart across time periods.</p>
 
         <div id="chart-container" class="chart-wrapper">
-          <canvas id="chart" role="img" aria-label="Stacked bar chart showing principal and interest payments" aria-describedby="chart-keyboard-help"></canvas>
+          <canvas id="chart" aria-label="Mortgage payment chart. Use arrow keys to navigate across time periods." aria-describedby="chart-keyboard-help"></canvas>
           <div id="chart-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
         </div>
 
         <div id="table-container">
           <div id="table-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
-          <p class="table-description" style="font-size: 0.875rem; color: var(--color-gray-700); margin-bottom: 1rem;">
-            <strong>Navigate the table:</strong> Use arrow keys to move between years, or press Home/End to jump to the first or last year.
-          </p>
           <table id="data-table" tabindex="-1" aria-label="Amortization schedule data table">
             <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance. Years with expandable buttons can be activated to reveal monthly details.</caption>
            <thead>
@@ -251,8 +253,7 @@
       <!-- CARD 5 - Interest Data -->
       <section class="card" id="results-card" tabindex="-1" aria-labelledby="results-title">
         <h4 class="card-title" id="results-title">Interest Data</h4>
-        <div id="results-content" aria-live="polite"></div>
-        <div id="result-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+        <div id="results-content"></div>
       </section>
 
     </main>

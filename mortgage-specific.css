@@ -190,23 +190,20 @@
 
 .model-equations-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: 1fr;
   gap: 1rem;
 }
 
-@media (min-width: 768px) {
+@media (min-width: 960px) {
   .model-equations-grid {
-    grid-template-columns: 1fr 1fr 1fr;  /* Equal thirds */
+    grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
-@media (max-width: 767px) {
-  .model-equations-grid {
-    grid-template-columns: 1fr;
-  }
-  
+@media (max-width: 959px) {
   .formula-box {
-    height: 240px;  /* Slightly taller when stacked — more horizontal space for equations */
+    min-height: 290px;
+    height: auto;
   }
 }
 
@@ -226,13 +223,14 @@
   background: white !important;
   border-radius: 0 0.5rem 0.5rem 0 !important;
   margin-top: 0 !important;
-  /* Fixed height prevents MathJax re-render from causing layout shift */
-  height: 220px;
-  min-height: unset;
+  /* min-height prevents most MathJax layout shift without clipping content */
+  min-height: 270px;
+  height: auto;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: visible;
 }
 
 .formula-box:focus {
@@ -278,6 +276,8 @@
   text-transform: none !important;
   letter-spacing: normal !important;
   padding: 0 !important;
+  white-space: normal !important;
+  word-break: break-word !important;
 }
 
 .equation-container {
@@ -291,10 +291,12 @@
   box-shadow: none !important;
   padding: 0.5rem !important;
   margin: 0 !important;
-  /* Fixed height — prevents MathJax re-render from shifting layout */
-  height: 170px;
-  min-height: unset;
-  overflow: hidden;
+  /* min-height prevents most MathJax layout shift without clipping content */
+  min-height: 220px;
+  height: auto;
+  overflow-x: auto;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* Equation result styling */

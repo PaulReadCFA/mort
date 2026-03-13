@@ -179,12 +179,12 @@
    ========================================================================== */
 /* Prevent layout jump during equation re-render */
 #equation-card {
-  min-height: 380px;
+  min-height: 420px;
 }
 
 @media (max-width: 767px) {
   #equation-card {
-    min-height: 600px;  /* Taller when stacked vertically */
+    min-height: 640px;  /* Taller when stacked vertically */
   }
 }
 

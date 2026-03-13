@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mortgage Cash Flow Equations</title>
+  <style>
+    /* ── Reset ── */
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html { font-size: 16px; }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: white;
+      color: #1f2937;
+      line-height: 1.5;
+      padding: 1.25rem;
+    }
+
+    /* ── CSS variables (subset of cfa-base.css) ── */
+    :root {
+      --color-gray-800: #1f2937;
+      --color-gray-50:  #f9fafb;
+    }
+
+    /* ── Layout jump prevention ── */
+    #static-equations-card {
+      min-height: 380px;
+    }
+
+    @media (max-width: 700px) {
+      #static-equations-card {
+        min-height: 580px;
+      }
+    }
+
+    /* ── Grid ── */
+    .static-equations-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .static-equation-row {
+      display: grid;
+      grid-template-columns: minmax(0, 1.6fr) minmax(0, 1.2fr);
+      align-items: center;
+      column-gap: 1.75rem;
+      row-gap: 0.75rem;
+    }
+
+    .static-equation-label {
+      font-size: 0.9375rem;
+      font-weight: 600;
+      line-height: 1.5;
+      color: var(--color-gray-800);
+      margin: 0;
+      padding: 0;
+    }
+
+    .static-equation-math {
+      text-align: left;
+    }
+
+    /* ── Stack on narrow ── */
+    @media (max-width: 700px) {
+      .static-equation-row {
+        grid-template-columns: 1fr;
+      }
+
+      .static-equation-math {
+        text-align: center;
+      }
+    }
+
+    /* ── MathJax overrides ── */
+    math {
+      display: inline-block;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--color-gray-800);
+      margin: 0.5rem auto;
+    }
+
+    .equation-container {
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
+      text-align: center;
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+  </style>
+
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$', '$']],
+        displayMath: [['$$', '$$']],
+        processEscapes: true,
+        skipTags: ["script","noscript","style","textarea","pre","code"]
+      },
+      TeX: {
+        extensions: ["color.js"]
+      },
+      "HTML-CSS": {
+        availableFonts: ["TeX"],
+        scale: 100,
+        linebreaks: { automatic: true }
+      },
+      SVG: {
+        font: "TeX",
+        linebreaks: { automatic: true }
+      },
+      showProcessingMessages: false,
+      messageStyle: "none"
+    });
+
+    MathJax.Hub.Register.StartupHook("End", function() {
+      setTimeout(function() {
+        document.querySelectorAll('.MathJax, .MathJax_Display, .MathJax_SVG, span[id^="MathJax-Element"]').forEach(function(el) {
+          el.removeAttribute('tabindex');
+          el.setAttribute('aria-hidden', 'true');
+        });
+      }, 100);
+    });
+  </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_SVG"></script>
+</head>
+<body>
+
+  <section id="static-equations-card" aria-label="Static Cash Flow Equations">
+    <div class="static-equations-grid">
+
+      <!-- Monthly Cash Flow Equation -->
+      <div class="static-equation-row" role="group" aria-label="Monthly Cash Flow Equation">
+        <p class="static-equation-label">Monthly Cash Flow Equation:</p>
+        <div class="static-equation-math">
+          $\textcolor{#3c6ae5}{\text{PMT}} = \dfrac{\dfrac{\textcolor{#7a46ff}{r}}{12} \times \textcolor{#b95b1d}{\text{PV}}}{1 - \left(1 + \dfrac{\textcolor{#7a46ff}{r}}{12}\right)^{-\textcolor{#0079a6}{T}}}$
+        </div>
+      </div>
+
+      <!-- Interest Cash Flow Equation for t = 1 -->
+      <div class="static-equation-row" role="group" aria-label="Interest Cash Flow Equation for t equals 1, first payment">
+        <p class="static-equation-label">Interest Cash Flow Equation for t = 1, first payment:</p>
+        <div class="static-equation-math">
+          $\textcolor{#0079a6}{\text{INT}_1} = \dfrac{\textcolor{#b95b1d}{\text{PV}} \times \textcolor{#7a46ff}{r}}{12}$
+        </div>
+      </div>
+
+      <!-- General Interest Cash Flow where t >= 2 -->
+      <div class="static-equation-row" role="group" aria-label="General Interest Cash Flow Equation where t is greater than or equal to 2">
+        <p class="static-equation-label">General Interest Cash Flow Equation where t &ge; 2:</p>
+        <div class="static-equation-math">
+          $\textcolor{#0079a6}{\text{INT}_t} = \dfrac{\left(\textcolor{#b95b1d}{\text{PV}} - \sum\limits_{i=1}^{\textcolor{#0079a6}{t}-1} \textcolor{#b82937}{\text{PRN}_i}\right) \times \textcolor{#7a46ff}{r}}{12}$
+        </div>
+      </div>
+
+      <!-- Principal Amortization Equation -->
+      <div class="static-equation-row" role="group" aria-label="Principal Amortization Equation">
+        <p class="static-equation-label">Principal Amortization Equation:</p>
+        <div class="static-equation-math">
+          $\textcolor{#b82937}{\text{PRN}_t} = \textcolor{#3c6ae5}{\text{PMT}} - \textcolor{#0079a6}{\text{INT}_t}$
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</body>
+</html>

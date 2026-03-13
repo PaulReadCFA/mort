@@ -83,85 +83,7 @@
   <div class="container">
     <main class="content">
 
-      <!-- CARD 1 - Static Equations -->
-      <section class="card" id="static-equations-card" aria-label="Static Cash Flow Equations">
-        <div class="static-equations-grid">
-          <!-- Monthly Cash Flow Equation -->
-          <div class="static-equation-row" role="group" aria-label="Monthly Cash Flow Equation">
-            <p class="static-equation-label">Monthly Cash Flow Equation:</p>
-            <div class="static-equation-math">
-              $\textcolor{#3c6ae5}{\text{PMT}} = \dfrac{\dfrac{\textcolor{#7a46ff}{r}}{12} \times \textcolor{#b95b1d}{\text{PV}}}{1 - \left(1 + \dfrac{\textcolor{#7a46ff}{r}}{12}\right)^{-\textcolor{#0079a6}{T}}}$
-            </div>
-          </div>
-
-          <!-- Interest Cash Flow Equation for t = 1 -->
-          <div class="static-equation-row" role="group" aria-label="Interest Cash Flow Equation for t equals 1, first payment">
-            <p class="static-equation-label">Interest Cash Flow Equation for t = 1, first payment:</p>
-            <div class="static-equation-math">
-              $\textcolor{#0079a6}{\text{INT}_1} = \dfrac{\textcolor{#b95b1d}{\text{PV}} \times \textcolor{#7a46ff}{r}}{12}$
-            </div>
-          </div>
-
-          <!-- General Interest Cash Flow where t >= 2 -->
-          <div class="static-equation-row" role="group" aria-label="General Interest Cash Flow Equation where t is greater than or equal to 2">
-            <p class="static-equation-label">General Interest Cash Flow Equation where t &ge; 2:</p>
-            <div class="static-equation-math">
-              $\textcolor{#0079a6}{\text{INT}_t} = \dfrac{\left(\textcolor{#b95b1d}{\text{PV}} - \sum\limits_{i=1}^{\textcolor{#0079a6}{t}-1} \textcolor{#b82937}{\text{PRN}_i}\right) \times \textcolor{#7a46ff}{r}}{12}$
-            </div>
-          </div>
-
-          <!-- Principal Amortization Equation -->
-          <div class="static-equation-row" role="group" aria-label="Principal Amortization Equation">
-            <p class="static-equation-label">Principal Amortization Equation:</p>
-            <div class="static-equation-math">
-              $\textcolor{#b82937}{\text{PRN}_t} = \textcolor{#3c6ae5}{\text{PMT}} - \textcolor{#0079a6}{\text{INT}_t}$
-            </div>
-          </div>
-        </div>
-      </section>
-
-      <!-- CARD 2 - Dynamic Equation -->
-      <section class="card" id="equation-card" aria-labelledby="equation-card-title">
-        <h4 class="card-title" id="equation-card-title">Dynamic Cash Flow Equations</h4>
-        <p class="equation-intro">These dynamic equations display the monthly payment and how it splits between interest and principal based on your inputs.</p>
-
-        <div class="model-equations-grid" role="group" aria-label="Mortgage payment formulas">
-          <!-- Monthly Payment (PMT) -->
-          <article class="formula-box pmt" role="article" tabindex="0"
-                   aria-label="Monthly payment formula. PMT equals r times PV divided by 1 minus the quantity 1 plus r to the power of negative t. Current result shown below equation.">
-            <div class="formula-box-title">Monthly payment (<strong style="color: #3c6ae5;">$\text{PMT}$</strong>)</div>
-            <div class="equation-container">
-              <div id="pmt-equation">
-                <!-- Populated by JavaScript -->
-              </div>
-            </div>
-          </article>
-
-          <!-- Interest Payment (INT_t) -->
-          <article class="formula-box int" role="article" tabindex="0"
-                   aria-label="Interest payment formula for month t. INT equals PV times r divided by 12. Current result for month 1 shown below equation.">
-            <div class="formula-box-title">Interest payment (<strong style="color: #0079a6;">$\text{INT}_t$</strong>)</div>
-            <div class="equation-container">
-              <div id="int-equation">
-                <!-- Populated by JavaScript -->
-              </div>
-            </div>
-          </article>
-
-          <!-- Principal Payment (PRN_t) -->
-          <article class="formula-box prn" role="article" tabindex="0"
-                   aria-label="Principal payment formula for month t. PRN equals PMT minus INT. Current result for month 1 shown below equation.">
-            <div class="formula-box-title">Principal payment (<strong style="color: #b82937;">$\text{PRN}_t$</strong>)</div>
-            <div class="equation-container">
-              <div id="prn-equation">
-                <!-- Populated by JavaScript -->
-              </div>
-            </div>
-          </article>
-        </div>
-      </section>
-
-      <!-- CARD 3 - Data Entry -->
+      <!-- CARD 1 - Data Entry -->
       <section class="card" id="data-entry" tabindex="-1" role="region" aria-labelledby="inputs-title">
         <h4 class="card-title" id="inputs-title">Mortgage Cash Flow Calculator</h4>
         <p style="color: var(--color-gray-600); margin-bottom: 1rem;">
@@ -217,7 +139,48 @@
         </div>
       </section>
 
-      <!-- CARD 4 - Visualization -->
+      <!-- CARD 2 - Dynamic Equation -->
+      <section class="card" id="equation-card" aria-labelledby="equation-card-title">
+        <h4 class="card-title" id="equation-card-title">Dynamic Cash Flow Equations</h4>
+        <p class="equation-intro">These dynamic equations display the monthly payment and how it splits between interest and principal based on your inputs.</p>
+
+        <div class="model-equations-grid" role="group" aria-label="Mortgage payment formulas">
+          <!-- Monthly Payment (PMT) -->
+          <article class="formula-box pmt" role="article" tabindex="0"
+                   aria-label="Monthly payment formula. PMT equals r times PV divided by 1 minus the quantity 1 plus r to the power of negative t. Current result shown below equation.">
+            <div class="formula-box-title">Monthly payment (<strong style="color: #3c6ae5;">$\text{PMT}$</strong>)</div>
+            <div class="equation-container">
+              <div id="pmt-equation">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+          </article>
+
+          <!-- Interest Payment (INT_t) -->
+          <article class="formula-box int" role="article" tabindex="0"
+                   aria-label="Interest payment formula for month t. INT equals PV times r divided by 12. Current result for month 1 shown below equation.">
+            <div class="formula-box-title">Interest payment (<strong style="color: #0079a6;">$\text{INT}_t$</strong>)</div>
+            <div class="equation-container">
+              <div id="int-equation">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+          </article>
+
+          <!-- Principal Payment (PRN_t) -->
+          <article class="formula-box prn" role="article" tabindex="0"
+                   aria-label="Principal payment formula for month t. PRN equals PMT minus INT. Current result for month 1 shown below equation.">
+            <div class="formula-box-title">Principal payment (<strong style="color: #b82937;">$\text{PRN}_t$</strong>)</div>
+            <div class="equation-container">
+              <div id="prn-equation">
+                <!-- Populated by JavaScript -->
+              </div>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- CARD 3 - Visualization -->
       <section class="card" id="visualization-card" tabindex="-1" aria-labelledby="visualization-title">
         <div class="card-header-with-controls">
           <h4 class="card-title" id="visualization-title">Mortgage Cash Flows</h4>
@@ -251,7 +214,7 @@
         </div>
       </section>
 
-      <!-- CARD 5 - Interest Data -->
+      <!-- CARD 4 - Interest Data -->
       <section class="card" id="results-card" tabindex="-1" aria-labelledby="results-title">
         <h4 class="card-title" id="results-title">Interest Data</h4>
         <div id="results-content"></div>

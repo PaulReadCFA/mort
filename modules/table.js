@@ -79,6 +79,9 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
   
   // Setup keyboard navigation for year rows
   setupTableNavigation();
+
+  // Explicitly announce update so all screen readers (not just JAWS) are notified
+  announceToScreenReader('Table updated');
 }
 
 /**

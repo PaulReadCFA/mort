@@ -194,13 +194,13 @@
   gap: 1rem;
 }
 
-@media (min-width: 960px) {
+@media (min-width: 620px) {
   .model-equations-grid {
     grid-template-columns: 1fr 1fr 1fr;
   }
 }
 
-@media (max-width: 959px) {
+@media (max-width: 619px) {
   .formula-box {
     min-height: 290px;
     height: auto;

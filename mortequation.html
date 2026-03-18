@@ -1,30 +1,33 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mortgage Cash Flow Equations</title>
-  <style>
-    /* ── Reset ── */
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortgage Cash Flow Equations | CFA Institute</title>
 
-    html { font-size: 16px; }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-size: 16px;
+    }
 
     body {
-      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: white;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #ffffff;
       color: #1f2937;
       line-height: 1.5;
       padding: 1.25rem;
     }
 
-    /* ── CSS variables (subset of cfa-base.css) ── */
     :root {
       --color-gray-800: #1f2937;
-      --color-gray-50:  #f9fafb;
     }
 
-    /* ── Layout jump prevention ── */
     #static-equations-card {
       min-height: 380px;
     }
@@ -35,7 +38,6 @@
       }
     }
 
-    /* ── Grid ── */
     .static-equations-grid {
       display: grid;
       grid-template-columns: 1fr;
@@ -56,15 +58,24 @@
       font-weight: 600;
       line-height: 1.5;
       color: var(--color-gray-800);
-      margin: 0;
-      padding: 0;
     }
 
     .static-equation-math {
       text-align: left;
+      overflow-x: auto;
+      overflow-y: hidden;
+      -webkit-overflow-scrolling: touch;
     }
 
-    /* ── Stack on narrow ── */
+    .static-equation-math math {
+      display: inline-block;
+      font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", serif;
+      font-size: 1.125rem;
+      font-weight: 600;
+      color: var(--color-gray-800);
+      margin: 0.5rem auto;
+    }
+
     @media (max-width: 700px) {
       .static-equation-row {
         grid-template-columns: 1fr;
@@ -73,22 +84,6 @@
       .static-equation-math {
         text-align: center;
       }
-    }
-
-    /* ── MathJax overrides ── */
-    math {
-      display: inline-block;
-      font-size: 1.125rem;
-      font-weight: 600;
-      color: var(--color-gray-800);
-      margin: 0.5rem auto;
-    }
-
-    .equation-container {
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      text-align: center;
     }
 
     @media (prefers-reduced-motion: reduce) {
@@ -101,78 +96,168 @@
 
   <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [['$', '$']],
-        displayMath: [['$$', '$$']],
-        processEscapes: true,
-        skipTags: ["script","noscript","style","textarea","pre","code"]
-      },
-      TeX: {
-        extensions: ["color.js"]
+      MathML: {
+        extensions: ["content-mathml.js"]
       },
       "HTML-CSS": {
-        availableFonts: ["TeX"],
         scale: 100,
         linebreaks: { automatic: true }
       },
-      SVG: {
-        font: "TeX",
-        linebreaks: { automatic: true }
-      },
       showProcessingMessages: false,
-      messageStyle: "none"
+      messageStyle: "none",
+      showMathMenu: false,
+      skipStartupTypeset: false
     });
 
-    MathJax.Hub.Register.StartupHook("End", function() {
-      setTimeout(function() {
-        document.querySelectorAll('.MathJax, .MathJax_Display, .MathJax_SVG, span[id^="MathJax-Element"]').forEach(function(el) {
-          el.removeAttribute('tabindex');
-          el.setAttribute('aria-hidden', 'true');
-        });
-      }, 100);
+    function removeMathJaxTabindex() {
+      document.querySelectorAll(".MathJax, .MathJax_Display, [id^='MathJax-']").forEach(function (el) {
+        el.removeAttribute("tabindex");
+      });
+    }
+
+    MathJax.Hub.Register.StartupHook("End", function () {
+      removeMathJaxTabindex();
+      setTimeout(removeMathJaxTabindex, 100);
+      setTimeout(removeMathJaxTabindex, 500);
+      setTimeout(removeMathJaxTabindex, 1000);
     });
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_SVG"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=MML_HTMLorMML"></script>
 </head>
 <body>
-
-  <section id="static-equations-card" aria-label="Static Cash Flow Equations">
+  <section id="static-equations-card" aria-label="Static cash flow equations">
     <div class="static-equations-grid">
 
-      <!-- Monthly Cash Flow Equation -->
-      <div class="static-equation-row" role="group" aria-label="Monthly Cash Flow Equation">
+      <div class="static-equation-row">
         <p class="static-equation-label">Monthly Cash Flow Equation:</p>
         <div class="static-equation-math">
-          $\textcolor{#3c6ae5}{\text{PMT}} = \dfrac{\dfrac{\textcolor{#7a46ff}{r}}{12} \times \textcolor{#b95b1d}{\text{PV}}}{1 - \left(1 + \dfrac{\textcolor{#7a46ff}{r}}{12}\right)^{-\textcolor{#0079a6}{T}}}$
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mrow>
+              <mi mathcolor="#3c6ae5">PMT</mi>
+              <mo>=</mo>
+              <mfrac>
+                <mrow>
+                  <mfrac>
+                    <mi mathcolor="#7a46ff">r</mi>
+                    <mn>12</mn>
+                  </mfrac>
+                  <mo>&times;</mo>
+                  <mi mathcolor="#b95b1d">PV</mi>
+                </mrow>
+                <mrow>
+                  <mn>1</mn>
+                  <mo>&minus;</mo>
+                  <msup>
+                    <mrow>
+                      <mo>(</mo>
+                      <mn>1</mn>
+                      <mo>+</mo>
+                      <mfrac>
+                        <mi mathcolor="#7a46ff">r</mi>
+                        <mn>12</mn>
+                      </mfrac>
+                      <mo>)</mo>
+                    </mrow>
+                    <mrow>
+                      <mo>&minus;</mo>
+                      <mi mathcolor="#0079a6">T</mi>
+                    </mrow>
+                  </msup>
+                </mrow>
+              </mfrac>
+            </mrow>
+          </math>
         </div>
       </div>
 
-      <!-- Interest Cash Flow Equation for t = 1 -->
-      <div class="static-equation-row" role="group" aria-label="Interest Cash Flow Equation for t equals 1, first payment">
-        <p class="static-equation-label">Interest Cash Flow Equation for t = 1, first payment:</p>
+      <div class="static-equation-row">
+        <p class="static-equation-label">Interest Cash Flow Equation for <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>t</mi></math> = 1, first payment:</p>
         <div class="static-equation-math">
-          $\textcolor{#0079a6}{\text{INT}_1} = \dfrac{\textcolor{#b95b1d}{\text{PV}} \times \textcolor{#7a46ff}{r}}{12}$
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mrow>
+              <msub>
+                <mi mathcolor="#0079a6">INT</mi>
+                <mn>1</mn>
+              </msub>
+              <mo>=</mo>
+              <mfrac>
+                <mrow>
+                  <mi mathcolor="#b95b1d">PV</mi>
+                  <mo>&times;</mo>
+                  <mi mathcolor="#7a46ff">r</mi>
+                </mrow>
+                <mn>12</mn>
+              </mfrac>
+            </mrow>
+          </math>
         </div>
       </div>
 
-      <!-- General Interest Cash Flow where t >= 2 -->
-      <div class="static-equation-row" role="group" aria-label="General Interest Cash Flow Equation where t is greater than or equal to 2">
-        <p class="static-equation-label">General Interest Cash Flow Equation where t &ge; 2:</p>
+      <div class="static-equation-row">
+        <p class="static-equation-label">General Interest Cash Flow Equation where <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>t</mi><mo>&ge;</mo><mn>2</mn></mrow></math>:</p>
         <div class="static-equation-math">
-          $\textcolor{#0079a6}{\text{INT}_t} = \dfrac{\left(\textcolor{#b95b1d}{\text{PV}} - \sum\limits_{i=1}^{\textcolor{#0079a6}{t}-1} \textcolor{#b82937}{\text{PRN}_i}\right) \times \textcolor{#7a46ff}{r}}{12}$
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mrow>
+              <msub>
+                <mi mathcolor="#0079a6">INT</mi>
+                <mi>t</mi>
+              </msub>
+              <mo>=</mo>
+              <mfrac>
+                <mrow>
+                  <mo>(</mo>
+                  <mi mathcolor="#b95b1d">PV</mi>
+                  <mo>&minus;</mo>
+                  <munderover>
+                    <mo>&sum;</mo>
+                    <mrow>
+                      <mi>i</mi>
+                      <mo>=</mo>
+                      <mn>1</mn>
+                    </mrow>
+                    <mrow>
+                      <mi mathcolor="#0079a6">t</mi>
+                      <mo>&minus;</mo>
+                      <mn>1</mn>
+                    </mrow>
+                  </munderover>
+                  <msub>
+                    <mi mathcolor="#b82937">PRN</mi>
+                    <mi>i</mi>
+                  </msub>
+                  <mo>)</mo>
+                  <mo>&times;</mo>
+                  <mi mathcolor="#7a46ff">r</mi>
+                </mrow>
+                <mn>12</mn>
+              </mfrac>
+            </mrow>
+          </math>
         </div>
       </div>
 
-      <!-- Principal Amortization Equation -->
-      <div class="static-equation-row" role="group" aria-label="Principal Amortization Equation">
+      <div class="static-equation-row">
         <p class="static-equation-label">Principal Amortization Equation:</p>
         <div class="static-equation-math">
-          $\textcolor{#b82937}{\text{PRN}_t} = \textcolor{#3c6ae5}{\text{PMT}} - \textcolor{#0079a6}{\text{INT}_t}$
+          <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
+            <mrow>
+              <msub>
+                <mi mathcolor="#b82937">PRN</mi>
+                <mi>t</mi>
+              </msub>
+              <mo>=</mo>
+              <mi mathcolor="#3c6ae5">PMT</mi>
+              <mo>&minus;</mo>
+              <msub>
+                <mi mathcolor="#0079a6">INT</mi>
+                <mi>t</mi>
+              </msub>
+            </mrow>
+          </math>
         </div>
       </div>
 
     </div>
   </section>
-
 </body>
 </html>

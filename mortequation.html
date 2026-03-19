@@ -6,7 +6,7 @@
   <title>Mortgage Cash Flow Equations | CFA Institute</title>
 
   <style>
-    * {
+    *, *::before, *::after {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
@@ -60,6 +60,11 @@
       color: var(--color-gray-800);
     }
 
+    .static-equation-label math {
+      font-family: "STIX Two Math", "Cambria Math", "Latin Modern Math", serif;
+      font-size: 1em;
+    }
+
     .static-equation-math {
       text-align: left;
       overflow-x: auto;
@@ -74,6 +79,7 @@
       font-weight: 600;
       color: var(--color-gray-800);
       margin: 0.5rem auto;
+      min-width: max-content;
     }
 
     @media (max-width: 700px) {
@@ -105,7 +111,6 @@
       },
       showProcessingMessages: false,
       messageStyle: "none",
-      showMathMenu: false,
       skipStartupTypeset: false
     });
 
@@ -119,9 +124,9 @@
       removeMathJaxTabindex();
       setTimeout(removeMathJaxTabindex, 100);
       setTimeout(removeMathJaxTabindex, 500);
-      setTimeout(removeMathJaxTabindex, 1000);
     });
   </script>
+
   <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=MML_HTMLorMML"></script>
 </head>
 <body>
@@ -171,7 +176,11 @@
       </div>
 
       <div class="static-equation-row">
-        <p class="static-equation-label">Interest Cash Flow Equation for <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>t</mi></math> = 1, first payment:</p>
+        <p class="static-equation-label">
+          Interest Cash Flow Equation for
+          <math xmlns="http://www.w3.org/1998/Math/MathML"><mi>t</mi></math>
+          = 1, first payment:
+        </p>
         <div class="static-equation-math">
           <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
             <mrow>
@@ -194,7 +203,13 @@
       </div>
 
       <div class="static-equation-row">
-        <p class="static-equation-label">General Interest Cash Flow Equation where <math xmlns="http://www.w3.org/1998/Math/MathML"><mrow><mi>t</mi><mo>&ge;</mo><mn>2</mn></mrow></math>:</p>
+        <p class="static-equation-label">
+          General Interest Cash Flow Equation where
+          <math xmlns="http://www.w3.org/1998/Math/MathML">
+            <mrow><mi>t</mi><mo>&ge;</mo><mn>2</mn></mrow>
+          </math>
+          :
+        </p>
         <div class="static-equation-math">
           <math xmlns="http://www.w3.org/1998/Math/MathML" display="block">
             <mrow>

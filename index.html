@@ -148,7 +148,7 @@
           <!-- Monthly Payment (PMT) -->
           <article class="formula-box pmt" role="article" tabindex="0"
                    aria-label="Monthly payment formula. PMT equals r times PV divided by 1 minus the quantity 1 plus r to the power of negative t. Current result shown below equation.">
-            <div class="formula-box-title">Monthly payment (<strong style="color: #3c6ae5;">$\text{PMT}$</strong>)</div>
+            <div class="formula-box-title">Monthly payment (<strong style="color: var(--color-blue-interactive);">PMT</strong>)</div>
             <div class="equation-container">
               <div id="pmt-equation">
                 <!-- Populated by JavaScript -->
@@ -159,7 +159,7 @@
           <!-- Interest Payment (INT_t) -->
           <article class="formula-box int" role="article" tabindex="0"
                    aria-label="Interest payment formula for month t. INT equals PV times r divided by 12. Current result for month 1 shown below equation.">
-            <div class="formula-box-title">Interest payment (<strong style="color: #0079a6;">$\text{INT}_t$</strong>)</div>
+            <div class="formula-box-title">Interest payment (<strong style="color: var(--color-teal-data);">INT<sub>t</sub></strong>)</div>
             <div class="equation-container">
               <div id="int-equation">
                 <!-- Populated by JavaScript -->
@@ -170,7 +170,7 @@
           <!-- Principal Payment (PRN_t) -->
           <article class="formula-box prn" role="article" tabindex="0"
                    aria-label="Principal payment formula for month t. PRN equals PMT minus INT. Current result for month 1 shown below equation.">
-            <div class="formula-box-title">Principal payment (<strong style="color: #b82937;">$\text{PRN}_t$</strong>)</div>
+            <div class="formula-box-title">Principal payment (<strong style="color: var(--color-red-principal);">PRN<sub>t</sub></strong>)</div>
             <div class="equation-container">
               <div id="prn-equation">
                 <!-- Populated by JavaScript -->
@@ -189,10 +189,10 @@
             <button id="view-table-btn" class="toggle-btn" aria-pressed="false" title="Switch to table view">Table</button>
           </div>
         </div>
-        <p class="sr-only" id="chart-keyboard-help">Use arrow keys to navigate the chart across time periods.</p>
+        <p class="sr-only" id="chart-keyboard-help" hidden>Use arrow keys to navigate the chart across time periods.</p>
 
         <div id="chart-container" class="chart-wrapper">
-          <canvas id="chart" aria-label="Mortgage payment chart. Use arrow keys to navigate across time periods." aria-describedby="chart-keyboard-help"></canvas>
+          <canvas id="chart" aria-label="Mortgage payment chart. Use arrow keys to navigate across time periods."></canvas>
           <div id="chart-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
         </div>
 

@@ -99,6 +99,14 @@ function renderPMTEquation(result, inputs) {
   `;
 
   container.innerHTML = mathML;
+
+  // Update article aria-label to include current result so SR users hear it on focus
+  const article = container.closest('article');
+  if (article) {
+    article.setAttribute('aria-label',
+      `Monthly payment formula. PMT equals monthly rate times loan amount, divided by 1 minus 1 plus monthly rate to the power of negative total months. Result: ${formatCurrencyUSD(monthlyPayment)}`
+    );
+  }
 }
 
 /**
@@ -146,6 +154,13 @@ function renderINTEquation(result, inputs) {
   `;
 
   container.innerHTML = mathML;
+
+  const article = container.closest('article');
+  if (article) {
+    article.setAttribute('aria-label',
+      `Interest payment formula for month 1. INT equals loan amount times annual rate, divided by 12. Result for Month 1: ${formatCurrencyUSD(int1)}`
+    );
+  }
 }
 
 /**
@@ -189,6 +204,13 @@ function renderPRNEquation(result, inputs) {
   `;
 
   container.innerHTML = mathML;
+
+  const article = container.closest('article');
+  if (article) {
+    article.setAttribute('aria-label',
+      `Principal payment formula for month 1. PRN equals monthly payment minus interest payment. Result for Month 1: ${formatCurrencyUSD(prn1)}`
+    );
+  }
 }
 
 /**

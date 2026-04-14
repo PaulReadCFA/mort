@@ -10,7 +10,14 @@ import { renderResults } from './modules/results.js';
 import { renderChart, destroyChart } from './modules/chart.js';
 import { renderTable } from './modules/table.js';
 import { renderEquations } from './modules/equations.js';
-import { $, listen, debounce } from './modules/utils.js';
+import {
+  $,
+  listen,
+  debounce,
+  clampNumericInputLength,
+  NUMERIC_INPUT_MAX_CHARS,
+  FORMATTED_NUMERIC_INPUT_MAX_CHARS
+} from './modules/utils.js';
 import { validateAll, setupFieldValidation } from './modules/validation.js';
 
 /* ---------- INITIALIZATION ---------- */
@@ -82,8 +89,15 @@ function setupInputs() {
       }
     }, 300);
 
-    listen(element, 'input', updateValue);
-    listen(element, 'change', updateValue);
+    const onInput = () => {
+      clampNumericInputLength(
+        element,
+        id === 'principal' ? FORMATTED_NUMERIC_INPUT_MAX_CHARS : NUMERIC_INPUT_MAX_CHARS
+      );
+      updateValue();
+    };
+    listen(element, 'input', onInput);
+    listen(element, 'change', onInput);
     setupFieldValidation(id, updateValue);
 
     // Principal: comma formatting on blur/focus, numeric-only keydown + paste

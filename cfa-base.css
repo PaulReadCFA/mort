@@ -172,9 +172,9 @@ nav[aria-label="Skip links"] {
 }
 
 /* Focus rings for all tabindex values */
-section[tabindex]:focus,
-table[tabindex]:focus,
-canvas[tabindex]:focus { 
+section[tabindex]:focus-visible,
+table[tabindex]:focus-visible,
+canvas[tabindex]:focus-visible { 
   outline: 2px solid var(--color-primary); 
   outline-offset: 4px;
   border-radius: 0.25rem;
@@ -229,7 +229,8 @@ canvas[tabindex]:focus {
   background: white; 
   padding: 1.25rem; 
   border-radius: 0.75rem; 
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1); 
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --card-padding-x: 1.25rem;
 }
 
 /* Sticky calculator card */
@@ -242,7 +243,8 @@ canvas[tabindex]:focus {
 
 @media (min-width: 640px) { 
   .card { 
-    padding: 1.5rem; 
+    padding: 1.5rem;
+    --card-padding-x: 1.5rem;
   } 
 }
 
@@ -250,18 +252,21 @@ canvas[tabindex]:focus {
 @media (max-width: 768px) {
   .card {
     padding: 1rem;
+    --card-padding-x: 1rem;
   }
 }
 
 @media (max-width: 400px) {
   .card {
     padding: 0.75rem;
+    --card-padding-x: 0.75rem;
   }
 }
 
 @media (max-width: 340px) {
   .card {
     padding: 0.5rem;
+    --card-padding-x: 0.5rem;
   }
 }
 
@@ -288,9 +293,11 @@ canvas[tabindex]:focus {
 }
 
 .result-title {
-  font-size: 0.875rem;
+  font-size: 1rem;
   font-weight: 600;
   margin-bottom: 0.25rem;
+  letter-spacing: normal;
+  text-transform: none;
 }
 
 .result-value {
@@ -321,7 +328,7 @@ canvas[tabindex]:focus {
   text-align: center;
 }
 
-.equation-container:focus { 
+.equation-container:focus-visible { 
   outline: 2px solid var(--color-primary); 
   outline-offset: 2px; 
 }
@@ -478,6 +485,11 @@ math[display="block"] {
   flex-shrink: 0;
 }
 
+/* No .button-group in markup — toggles sit in header row; stay right when title wraps */
+.card-header-with-controls .view-controls {
+  margin-left: auto;
+}
+
 @media (max-width: 640px) {
   .card-header-with-controls {
     flex-direction: column;
@@ -486,6 +498,19 @@ math[display="block"] {
   
   .view-controls {
     align-self: flex-end;
+  }
+}
+
+/* Very narrow: mortgage Chart/Table fill row for generous touch targets (WCAG 2.5.5). */
+@media (max-width: 380px) {
+  .card-header-with-controls .view-controls {
+    align-self: stretch;
+    width: 100%;
+  }
+
+  .card-header-with-controls .view-controls .toggle-btn {
+    flex: 1;
+    min-width: 0;
   }
 }
 
@@ -570,10 +595,13 @@ button[title]:hover::before {
 .chart-wrapper {
   height: 24rem;
   position: relative;
-  border-radius: 0.5rem;
+  width: 100%;
+  border-radius: 0;
+  background: transparent;
+  border: none;
 }
 
-.chart-wrapper:focus {
+.chart-wrapper:focus-visible {
   outline: 2px solid var(--color-blue-interactive);
   outline-offset: 2px;
 }
@@ -626,6 +654,20 @@ button[title]:hover::before {
   .chart-wrapper {
     height: 20rem;
   }
+}
+
+/* Full-width chart: cancel horizontal card padding (inherits --card-padding-x from .card) */
+#visualizer #chart-container.chart-wrapper,
+#visualizer #chart-container .chart-wrapper,
+#visualization-card #chart-container.chart-wrapper {
+  margin-left: calc(-1 * var(--card-padding-x, 1.25rem));
+  margin-right: calc(-1 * var(--card-padding-x, 1.25rem));
+  width: calc(100% + 2 * var(--card-padding-x, 1.25rem));
+  max-width: none;
+  box-sizing: border-box;
+  border-radius: 0;
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
 }
 
 .chart-bar-button {
@@ -691,6 +733,10 @@ button[title]:hover::before {
   text-align: center;
 }
 
+#data-table tbody td {
+  color: var(--color-gray-900);
+}
+
 #data-table th:first-child,
 #data-table td:first-child {
   text-align: left;
@@ -699,15 +745,16 @@ button[title]:hover::before {
 #data-table th {
   background: var(--color-gray-100);
   font-weight: 600;
-  color: var(--color-gray-700);
+  color: var(--color-gray-900);
 }
 
 #data-table tbody tr:hover {
   background: var(--color-gray-50);
 }
 
+/* Subtle stripe (lighter than previous #edf0f5) for stronger text/amount contrast */
 #data-table tbody tr:nth-child(even) {
-  background: #edf0f5;
+  background: #f9fafb;
 }
 
 #data-table tbody tr:nth-child(even):hover {
@@ -767,7 +814,7 @@ button[title]:hover::before {
   #data-table td[data-label="Year"],
   #data-table td.month-cell {
     padding: 0.625rem 0.875rem;
-    background: var(--color-gray-50);
+    background: #ffffff;
     font-size: 1.125rem;
     font-weight: 700;
     color: var(--color-primary-dark-blue);
@@ -805,7 +852,7 @@ button[title]:hover::before {
   #data-table td:not([data-label="Year"])::before {
     content: attr(data-label);
     font-weight: 600;
-    color: var(--color-gray-700);
+    color: var(--color-gray-800);
     font-size: 0.8125rem;
     flex: 0 0 auto;
     min-width: 0;
@@ -826,13 +873,13 @@ button[title]:hover::before {
   
   .mobile-abbr::before {
     content: " (";
-    color: var(--color-gray-700);
+    color: var(--color-gray-800);
     font-weight: 600;
   }
   
   .mobile-abbr::after {
     content: ")";
-    color: var(--color-gray-700);
+    color: var(--color-gray-800);
     font-weight: 600;
   }
 }

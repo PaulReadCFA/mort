@@ -86,14 +86,20 @@
       <!-- CARD 1 - Data Entry -->
       <section class="card" id="data-entry" tabindex="-1" role="region" aria-labelledby="inputs-title">
         <h4 class="card-title" id="inputs-title">Mortgage Cash Flow Calculator</h4>
-        <p style="color: var(--color-gray-600); margin-bottom: 1rem;">
+        <p class="equation-intro">
           Enter your mortgage details below. The calculations and visualizations will update automatically as you change the values.
         </p>
+
+        <div id="validation-summary" class="validation-summary" role="alert"
+             style="display:none;">
+          <div class="validation-title">Please correct the following:</div>
+          <ul id="validation-list"></ul>
+        </div>
 
         <div class="input-group-inline">
           <div class="input-inline">
             <label for="principal" class="input-label-inline">
-              Mortgage amount (<strong style="color:#b95b1d;">PV</strong>), USD:
+              Mortgage amount (<strong style="color:#b95b1d;">PV</strong>)
             </label>
             <div class="input-with-suffix-inline">
               <span class="input-prefix-inline" aria-hidden="true">USD</span>
@@ -107,7 +113,7 @@
 
           <div class="input-inline">
             <label for="rate" class="input-label-inline">
-              Annual interest rate (<strong style="color:#7a46ff;"><em>r</em></strong>), %:
+              Annual interest rate (<strong style="color:#7a46ff;"><em>r</em></strong>)
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="rate" class="input-field-inline"
@@ -120,7 +126,7 @@
 
           <div class="input-inline">
             <label for="years" class="input-label-inline">
-              Mortgage term, years:
+              Mortgage term
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="years" class="input-field-inline"
@@ -130,12 +136,6 @@
               <span class="input-suffix-inline" aria-hidden="true">yrs</span>
             </div>
           </div>
-        </div>
-
-        <div id="validation-summary" class="validation-summary" role="alert"
-             style="display:none;">
-          <div class="validation-title">Please correct the following:</div>
-          <ul id="validation-list"></ul>
         </div>
       </section>
 

@@ -32,17 +32,8 @@ export function renderChart({ monthlySchedule }, inputs) {
  // Get interest rate from inputs
   const annualRate = inputs?.rate || 6;
 
-  // Add or update legend
-  let legend = container.parentElement.querySelector('.chart-legend');
-  if (!legend) {
-    legend = document.createElement('div');
-    legend.className = 'chart-legend';
-    legend.setAttribute('role', 'region');
-    legend.setAttribute('aria-label', 'Chart legend');
-    container.parentElement.insertBefore(legend, container);
-  }
-  
-  legend.innerHTML = `
+  const legend = $('#chart-legend');
+  if (legend) legend.innerHTML = `
     <span class="legend-item">
       <span class="legend-color" style="background-color: #0079a6;"></span>
       Interest cash flows <span style="font-style: normal; color: inherit;">(<span style="color: #0079a6; font-weight: 700;">INT</span>)</span>
@@ -640,9 +631,8 @@ export function destroyChart() {
   barButtons.forEach(b => b.remove());
   barButtons = [];
   
-  // Clean up legend
-  const legend = document.querySelector('.chart-legend');
-  if (legend) legend.remove();
+  const legend = $('#chart-legend');
+  if (legend) legend.innerHTML = '';
   
   // Clean up educational note from visualization card
   const vizCard = document.querySelector('#visualization-card');

@@ -5,6 +5,17 @@
 
 import { $, formatCurrency } from './utils.js';
 
+
+/** Curriculum chart label convention: 13px / 600 / Lato */
+const CHART_FONT = {
+  family: "'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+  size: 13,
+  weight: '600'
+};
+const CHART_FONT_CSS = `${CHART_FONT.weight} ${CHART_FONT.size}px ${CHART_FONT.family}`;
+const CHART_FONT_ITALIC_CSS = `italic ${CHART_FONT.weight} ${CHART_FONT.size}px ${CHART_FONT.family}`;
+
+
 let chart = null;
 let barButtons = [];
 let currentIndex = 0;
@@ -149,7 +160,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             font: {
               size: 13,
               weight: '600',
-              family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif"
+              family: CHART_FONT.family
             },
             color: '#1f2937'  // Match left y-axis
           },
@@ -163,7 +174,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             font: {
               size: 13,
               weight: '600',
-              family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif"
+              family: CHART_FONT.family
             },
             color: '#1f2937'  // Match left y-axis
           }
@@ -178,7 +189,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             font: {
               size: 13,
               weight: '600',
-              family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif"
+              family: CHART_FONT.family
             },
             color: '#1f2937'  // Darker grey
           },
@@ -189,7 +200,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             font: {
               size: 13,
               weight: '600',
-              family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif"
+              family: CHART_FONT.family
             },
             color: '#1f2937'  // Darker grey
           }
@@ -204,7 +215,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             font: {
               size: 13,
               weight: '600',
-              family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif"
+              family: CHART_FONT.family
             },
             color: '#7a46ff'  // Purple to match axis
           },
@@ -215,7 +226,7 @@ export function renderChart({ monthlySchedule }, inputs) {
             font: {
               size: 13,
               weight: '600',
-              family: "-apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif"
+              family: CHART_FONT.family
             },
             color: '#7a46ff'
           },
@@ -304,7 +315,7 @@ export function renderChart({ monthlySchedule }, inputs) {
               
               // Draw PMT label
               ctx.fillStyle = '#3c6ae5';
-              ctx.font = "700 14px -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif";
+              ctx.font = CHART_FONT_CSS;
               ctx.textAlign = 'left';
               ctx.textBaseline = 'bottom';
               ctx.fillText(
@@ -332,9 +343,9 @@ export function renderChart({ monthlySchedule }, inputs) {
               const colonText = `: ${rateValue.toFixed(1)}%`;
               
               // Measure text components
-              ctx.font = "italic 700 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif";
+              ctx.font = CHART_FONT_ITALIC_CSS;
               const rWidth = ctx.measureText(rText).width;
-              ctx.font = "700 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif";
+              ctx.font = CHART_FONT_CSS;
               const colonWidth = ctx.measureText(colonText).width;
               const totalWidth = rWidth + colonWidth;
               const padding = 6;  // Increased from 4 to 6 for more breathing room
@@ -365,11 +376,11 @@ export function renderChart({ monthlySchedule }, inputs) {
               ctx.textBaseline = 'bottom';
               
               // Draw italic r
-              ctx.font = "italic 700 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif";
+              ctx.font = CHART_FONT_ITALIC_CSS;
               ctx.fillText(rText, xCenter - totalWidth / 2, yPosition - 5);
               
               // Draw non-italic rest
-              ctx.font = "700 13px -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif";
+              ctx.font = CHART_FONT_CSS;
               ctx.fillText(colonText, xCenter - totalWidth / 2 + rWidth, yPosition - 5);
             }
           }

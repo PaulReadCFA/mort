@@ -186,10 +186,13 @@
         <div class="view-controls">
           <div class="chart-legend" id="chart-legend" role="region" aria-label="Chart legend"></div>
           <div class="button-group" role="toolbar">
-            <button id="view-chart-btn" class="toggle-btn active" aria-pressed="true" title="Switch to chart view">Chart</button>
-            <button id="view-table-btn" class="toggle-btn" aria-pressed="false" title="Switch to table view">Table</button>
+            <button id="view-chart-btn" class="toggle-btn active" aria-pressed="true">Chart</button>
+            <button id="view-table-btn" class="toggle-btn" aria-pressed="false">Table</button>
           </div>
         </div>
+        <p id="chart-helper-text" class="text-xs text-gray-500" style="display: none; margin-bottom: 0.75rem;">
+          Chart view is not available at narrow screen widths. Showing table view.
+        </p>
         <p class="sr-only" id="chart-keyboard-help" hidden>Use arrow keys to navigate the chart across time periods.</p>
 
         <div id="chart-container" class="chart-wrapper">

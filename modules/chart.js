@@ -13,7 +13,17 @@ const CHART_FONT = {
   weight: '600'
 };
 const CHART_FONT_CSS = `${CHART_FONT.weight} ${CHART_FONT.size}px ${CHART_FONT.family}`;
-const CHART_FONT_ITALIC_CSS = `italic ${CHART_FONT.weight} ${CHART_FONT.size}px ${CHART_FONT.family}`;
+
+/** Variables are italicised by the Unicode math-italic glyph, not by font-style. */
+const ITALIC_r = '\u{1D45F}'; // 𝑟
+
+/** In pill labels only the variable carries colour; the operator and value stay neutral. */
+const LABEL_TEXT_COLOR = '#374151';
+
+/** Shared pill geometry so every label box has the same breathing space. */
+const LABEL_PAD_X = 8;
+const LABEL_PAD_Y = 5;
+const LABEL_BOX_HEIGHT = CHART_FONT.size + LABEL_PAD_Y * 2;
 
 
 let chart = null;
@@ -338,50 +348,38 @@ export function renderChart({ monthlySchedule }, inputs) {
               const yPosition = meta.data[0].y;
               
               // Prepare text
-              const labelText = `r: ${rateValue.toFixed(1)}%`;
-              const rText = 'r';
-              const colonText = `: ${rateValue.toFixed(1)}%`;
+              const rText = ITALIC_r;
+              const valueText = ` = ${rateValue.toFixed(1)}%`;
               
-              // Measure text components
-              ctx.font = CHART_FONT_ITALIC_CSS;
-              const rWidth = ctx.measureText(rText).width;
               ctx.font = CHART_FONT_CSS;
-              const colonWidth = ctx.measureText(colonText).width;
-              const totalWidth = rWidth + colonWidth;
-              const padding = 6;  // Increased from 4 to 6 for more breathing room
+              const rWidth = ctx.measureText(rText).width;
+              const valueWidth = ctx.measureText(valueText).width;
+              const totalWidth = rWidth + valueWidth;
               
-              // Draw white background rectangle
+              // Pill sits just above the rate line
               const xCenter = (chartArea.left + chartArea.right) / 2;
+              const boxX = xCenter - totalWidth / 2 - LABEL_PAD_X;
+              const boxY = yPosition - 2 - LABEL_BOX_HEIGHT;
+              const boxWidth = totalWidth + LABEL_PAD_X * 2;
+              
               ctx.fillStyle = 'white';
-              ctx.fillRect(
-                xCenter - totalWidth / 2 - padding,
-                yPosition - 18,  // Increased from 16
-                totalWidth + padding * 2,
-                16  // Increased from 14
-              );
+              ctx.fillRect(boxX, boxY, boxWidth, LABEL_BOX_HEIGHT);
               
               // Draw purple border around background
               ctx.strokeStyle = '#7a46ff';
               ctx.lineWidth = 2;
-              ctx.strokeRect(
-                xCenter - totalWidth / 2 - padding,
-                yPosition - 18,  // Increased from 16
-                totalWidth + padding * 2,
-                16  // Increased from 14
-              );
+              ctx.strokeRect(boxX, boxY, boxWidth, LABEL_BOX_HEIGHT);
               
-              // Draw rate label with only r italicized
+              // Draw italic r in the rate purple
+              const textY = boxY + LABEL_BOX_HEIGHT / 2;
               ctx.fillStyle = '#7a46ff';
               ctx.textAlign = 'left';
-              ctx.textBaseline = 'bottom';
+              ctx.textBaseline = 'middle';
+              ctx.fillText(rText, xCenter - totalWidth / 2, textY);
               
-              // Draw italic r
-              ctx.font = CHART_FONT_ITALIC_CSS;
-              ctx.fillText(rText, xCenter - totalWidth / 2, yPosition - 5);
-              
-              // Draw non-italic rest
-              ctx.font = CHART_FONT_CSS;
-              ctx.fillText(colonText, xCenter - totalWidth / 2 + rWidth, yPosition - 5);
+              // Draw neutral " = value"
+              ctx.fillStyle = LABEL_TEXT_COLOR;
+              ctx.fillText(valueText, xCenter - totalWidth / 2 + rWidth, textY);
             }
           }
           

@@ -7,6 +7,21 @@
    ========================================================================== */
 
 /* ==========================================================================
+   0. RESULT TEXT COLOURS
+   Darkened brand variants for text sitting on the 8%-tint result backgrounds
+   (equation results, result-box titles). These lived in mort's own cfa-base.css
+   before it moved to the shared base, which does not define them; without them
+   `color` falls back to inherited body text and the results render black.
+   Ratios below are measured against the tinted backgrounds, not plain white.
+   ========================================================================== */
+:root {
+  --color-blue-contrast: #1e40af;    /* 7.85:1 on rgba(60, 106, 229, 0.08) */
+  --color-teal-contrast: #005f7f;    /* 6.40:1 on rgba(0, 121, 166, 0.08) */
+  --color-red-contrast: #8b1f2b;     /* 7.95:1 on rgba(184, 41, 55, 0.08) */
+  --color-orange-contrast: #8b4513;  /* 7.10:1 on white card surface */
+}
+
+/* ==========================================================================
    1. STATIC EQUATIONS GRID - Two column layout
    ========================================================================== */
 /* Prevent layout jump during MathJax re-render */

@@ -4,7 +4,7 @@
  * Shows 30 annual rows (not 360 monthly - that's for the chart)
  */
 
-import { $, formatCurrency } from './utils.js';
+import { $, formatCurrency, applyTableRoles } from './utils.js';
 
 /**
  * Render annual amortization table with expandable monthly details
@@ -39,7 +39,7 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
     // The button's relationship to the rows is clear from context (same table row)
     let html = `
       <tr class="year-row" id="${yearRowId}">
-        <td data-label="Year" style="white-space: nowrap;">
+        <th scope="row" style="white-space: nowrap;">
           ${hasMonthlyData ? `
             <button class="expand-btn" 
                     aria-expanded="false" 
@@ -48,11 +48,11 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
             </button>
           ` : ''}
           <span style="display: inline-block; min-width: 3.5rem;">Year ${row.year}</span>
-        </td>
-        <td data-label="Principal amortization (PRN) (USD)"><span class="mobile-abbr" style="color: #b82937;">PRN</span><span style="color: #b82937; font-weight: 600;">${formatCurrency(row.principal)}</span></td>
-        <td data-label="Interest cash flows (INT) (USD)"><span class="mobile-abbr" style="color: #0079a6;">INT</span><span style="color: #0079a6; font-weight: 600;">${formatCurrency(row.interest)}</span></td>
-        <td data-label="Total mortgage cash flows (PMT) (USD)"><span class="mobile-abbr" style="color: #3c6ae5;">PMT</span><span style="color: #3c6ae5; font-weight: 600;">${formatCurrency(row.totalPayment)}</span></td>
-        <td data-label="Remaining balance (USD)"><span>${formatCurrency(row.remainingBalance)}</span></td>
+        </th>
+        <td data-label="Principal amortization (PRN) (USD)"><span class="cell-value table-var-red">${formatCurrency(row.principal)}</span></td>
+        <td data-label="Interest cash flows (INT) (USD)"><span class="cell-value table-var-4">${formatCurrency(row.interest)}</span></td>
+        <td data-label="Total mortgage cash flows (PMT) (USD)"><span class="cell-value table-var-2">${formatCurrency(row.totalPayment)}</span></td>
+        <td data-label="Remaining balance (USD)"><span class="cell-value table-var-1">${formatCurrency(row.remainingBalance)}</span></td>
       </tr>
     `;
     
@@ -61,11 +61,11 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
       monthsByYear[row.year].forEach(month => {
         html += `
           <tr class="month-row" id="${monthRowsId}-${month.monthInYear}" hidden>
-            <td class="month-cell">Month ${month.monthInYear}</td>
-            <td data-label="Principal amortization (PRN) (USD)"><span class="mobile-abbr" style="color: #b82937;">PRN</span><span style="color: #b82937;">${formatCurrency(month.principal)}</span></td>
-            <td data-label="Interest cash flows (INT) (USD)"><span class="mobile-abbr" style="color: #0079a6;">INT</span><span style="color: #0079a6;">${formatCurrency(month.interest)}</span></td>
-            <td data-label="Total mortgage cash flows (PMT) (USD)"><span class="mobile-abbr" style="color: #3c6ae5;">PMT</span><span style="color: #3c6ae5;">${formatCurrency(month.totalPayment)}</span></td>
-            <td data-label="Remaining balance (USD)"><span>${formatCurrency(month.remainingBalance)}</span></td>
+            <th scope="row" class="month-cell">Month ${month.monthInYear}</th>
+            <td data-label="Principal amortization (PRN) (USD)"><span class="cell-value table-var-red">${formatCurrency(month.principal)}</span></td>
+            <td data-label="Interest cash flows (INT) (USD)"><span class="cell-value table-var-4">${formatCurrency(month.interest)}</span></td>
+            <td data-label="Total mortgage cash flows (PMT) (USD)"><span class="cell-value table-var-2">${formatCurrency(month.totalPayment)}</span></td>
+            <td data-label="Remaining balance (USD)"><span class="cell-value table-var-1">${formatCurrency(month.remainingBalance)}</span></td>
           </tr>
         `;
       });
@@ -74,6 +74,8 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
     return html;
   }).join('');
   
+  applyTableRoles(document.getElementById('data-table'));
+
   // Add event listeners to expand buttons
   setupExpandButtons();
   

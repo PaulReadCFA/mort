@@ -99,7 +99,7 @@
         <div class="input-group-inline">
           <div class="input-inline">
             <label for="principal" class="input-label-inline">
-              Mortgage amount (<strong style="color:#b95b1d;">PV</strong>)
+              Mortgage amount (<span class="label-var-amount">PV</span>):
             </label>
             <div class="input-with-suffix-inline">
               <span class="input-prefix-inline" aria-hidden="true">USD</span>
@@ -113,7 +113,7 @@
 
           <div class="input-inline">
             <label for="rate" class="input-label-inline">
-              Annual interest rate (<strong style="color:#7a46ff;"><em>r</em></strong>)
+              Annual interest rate (<span class="label-var-rate">𝑟</span>):
             </label>
             <div class="input-with-suffix-inline">
               <input type="number" id="rate" class="input-field-inline"
@@ -126,14 +126,14 @@
 
           <div class="input-inline">
             <label for="years" class="input-label-inline">
-              Mortgage term
+              Mortgage term:
             </label>
-            <div class="input-with-suffix-inline">
+            <div class="input-with-suffix-inline input-with-suffix-wide">
               <input type="number" id="years" class="input-field-inline"
                      min="1" max="40" step="1" value="30"
                      autocomplete="off"
                      aria-required="true">
-              <span class="input-suffix-inline" aria-hidden="true">yrs</span>
+              <span class="input-suffix-inline" aria-hidden="true">years</span>
             </div>
           </div>
         </div>
@@ -200,17 +200,18 @@
           <div id="chart-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
         </div>
 
-        <div id="table-container">
+        <div id="table-container" class="table-wrapper table-card-layout" role="region"
+             aria-label="Annual amortization schedule" tabindex="0">
           <div id="table-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
-          <table id="data-table" tabindex="-1" aria-label="Amortization schedule data table">
+          <table id="data-table" class="data-table">
             <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance. Years with expandable buttons can be activated to reveal monthly details.</caption>
            <thead>
               <tr>
                 <th scope="col">Year</th>
-                <th scope="col">Principal amortization (<strong style="color: #b82937;">PRN</strong>) (USD)</th>
-                <th scope="col">Interest cash flows (<strong style="color: #0079a6;">INT</strong>) (USD)</th>
-                <th scope="col">Total mortgage cash flows (<strong style="color: #3c6ae5;">PMT</strong>) (USD)</th>
-                <th scope="col">Remaining balance (USD)</th>
+                <th scope="col" class="table-var-red">Principal amortization (PRN) (USD)</th>
+                <th scope="col" class="table-var-4">Interest cash flows (INT) (USD)</th>
+                <th scope="col" class="table-var-2">Total mortgage cash flows (PMT) (USD)</th>
+                <th scope="col" class="table-var-1">Remaining balance (USD)</th>
               </tr>
             </thead>
             <tbody id="table-body"></tbody>

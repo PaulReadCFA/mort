@@ -5,7 +5,7 @@
  */
 
 import { state, setState, subscribe } from './modules/state.js';
-import { calculate } from './modules/calculations.js';
+import { calculate, validateInput } from './modules/calculations.js';
 import { renderResults } from './modules/results.js';
 import { renderChart, destroyChart } from './modules/chart.js';
 import { renderTable } from './modules/table.js';
@@ -38,6 +38,7 @@ function init() {
   
   // Initial calculation
   updateAll(state);
+  runSelfTests();
 }
 
 /* ---------- SKIP LINK HANDLER ---------- */
@@ -332,6 +333,28 @@ function updateAll(currentState) {
 }
 
 /* ---------- START APPLICATION ---------- */
+function logSelfTest(name, passed, detail) {
+  if (passed) console.log(`✓ ${name}`);
+  else console.warn(`✗ ${name}${detail ? ': ' + detail : ''}`);
+}
+
+function runSelfTests() {
+  console.log('Running self-tests...');
+  const result = calculate({ principal: 800000, rate: 6, years: 30 });
+  logSelfTest('Defaults → monthly ≈ 4796.40', Math.abs(result.monthlyPayment - 4796.40) < 0.01, `got ${result.monthlyPayment}`);
+  logSelfTest(
+    'Valid outputs are finite',
+    Number.isFinite(result.monthlyPayment) && Number.isFinite(result.totalInterest)
+  );
+
+  logSelfTest('Empty mortgage amount is required', Boolean(validateInput('principal', NaN)));
+  logSelfTest('Amount below min is rejected', Boolean(validateInput('principal', 500)));
+  logSelfTest('Non-integer term is rejected', Boolean(validateInput('years', 10.5)));
+  logSelfTest('Zero rate is rejected', Boolean(validateInput('rate', 0)));
+
+  console.log('Self-tests complete');
+}
+
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', init);
 } else {

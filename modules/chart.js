@@ -4,6 +4,7 @@
  */
 
 import { $, formatCurrency } from './utils.js';
+import { setState } from './state.js';
 import { getChartTypography, scaledChartPx } from '../chart-typography.js';
 
 /** Curriculum chart label convention: 13px / 600 / Lato at the 18px design root. */
@@ -55,7 +56,7 @@ export function renderChart({ monthlySchedule }, inputs) {
   
   // Make canvas keyboard focusable
   canvas.tabIndex = 0;
-  canvas.setAttribute('role', 'application');
+  canvas.setAttribute('role', 'img');
   canvas.setAttribute('aria-label', 'Mortgage payment chart. Use arrow keys to navigate across time periods.');
 
  // Get interest rate from inputs
@@ -437,9 +438,10 @@ function setupKeyboardNavigation(canvas, monthlySchedule) {
       case 't':
       case 'T':
         e.preventDefault();
-        const table = document.getElementById('data-table');
-        if (table) {
-          table.focus();
+        setState({ view: 'table' });
+        const tableContainer = document.getElementById('table-container');
+        if (tableContainer) {
+          tableContainer.focus();
           announceBar(monthlySchedule[currentIndex], currentIndex, true);
         }
         return;
@@ -533,9 +535,10 @@ function createBarButtons(monthlySchedule, container) {
       // Help - focus the table
       else if (e.key === 't' || e.key === 'T') {
         e.preventDefault();
-        const table = document.getElementById('data-table');
-        if (table) {
-          table.focus();
+        setState({ view: 'table' });
+        const tableContainer = document.getElementById('table-container');
+        if (tableContainer) {
+          tableContainer.focus();
         }
         return;
       }

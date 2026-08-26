@@ -37,10 +37,9 @@
     // Fix ARIA issues after MathJax renders - use RegisterStartupHook to ensure it runs after rendering
     MathJax.Hub.Register.StartupHook("End", function() {
       setTimeout(function() {
-        // Remove tabindex from ALL MathJax elements
+        // Remove tabindex from ALL MathJax elements (without hiding them)
         document.querySelectorAll('.MathJax, .MathJax_Display, .MathJax_SVG, span[id^="MathJax-Element"]').forEach(el => {
           el.removeAttribute('tabindex');
-          el.setAttribute('aria-hidden', 'true');
         });
         
         // Also remove from any nested spans inside MathJax
@@ -197,10 +196,14 @@
           Chart and Table act as a single toolbar: only one button is in the tab order at a time. Use left and right arrow keys to move between them. Table lists every value in one place.
         </p>
         <div class="sr-only" aria-live="polite" aria-atomic="true" id="view-announcement"></div>
-        <p class="sr-only" id="chart-keyboard-help" hidden>Use arrow keys to navigate the chart across time periods.</p>
+        <p class="sr-only" id="chart-keyboard-help">
+          The chart is navigated month by month with the arrow keys. The table starts with annual rows; activate an expandable year to reveal its monthly detail.
+        </p>
 
         <div id="chart-container" class="chart-wrapper">
-          <canvas id="chart" aria-label="Mortgage payment chart. Use arrow keys to navigate across time periods."></canvas>
+          <canvas id="chart" role="img"
+                  aria-label="Mortgage payment chart"
+                  aria-describedby="chart-keyboard-help"></canvas>
           <div id="chart-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
         </div>
 
@@ -208,7 +211,7 @@
              aria-label="Annual amortization schedule" tabindex="0" style="display: none;" aria-hidden="true">
           <div id="table-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
           <table id="data-table" class="data-table">
-            <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance. Years with expandable buttons can be activated to reveal monthly details.</caption>
+            <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance. Unlike the month-by-month chart keyboard navigation, this table starts with annual rows. Activate an expandable year to reveal monthly details.</caption>
            <thead>
               <tr>
                 <th scope="col">Year</th>

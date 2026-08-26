@@ -15,6 +15,7 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
   
   if (!annualSchedule || annualSchedule.length === 0) {
     tbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:1rem;">No data available</td></tr>';
+    applyTableRoles(document.getElementById('data-table'));
     return;
   }
 
@@ -39,7 +40,7 @@ export function renderTable({ annualSchedule, monthlySchedule }) {
     // The button's relationship to the rows is clear from context (same table row)
     let html = `
       <tr class="year-row" id="${yearRowId}">
-        <th scope="row" style="white-space: nowrap;">
+        <th scope="row">
           ${hasMonthlyData ? `
             <button class="expand-btn" 
                     aria-expanded="false" 
@@ -130,13 +131,18 @@ function setupTableNavigation() {
     });
   });
   
-  // Also allow navigation when table itself has focus (via skip link)
-  table.addEventListener('keydown', function(e) {
-    // Only handle if table itself is focused (not a child element)
-    if (document.activeElement === table) {
-      handleTableNavigation(e, null);
-    }
-  });
+  // Also allow navigation when the region wrapper has focus (via skip link).
+  // The wrapper outlives each render, so bind it only once.
+  const region = document.getElementById('table-container') || table;
+  if (!region.dataset.navBound) {
+    region.dataset.navBound = 'true';
+    region.addEventListener('keydown', function(e) {
+      // Only handle if the region itself is focused (not a child element)
+      if (document.activeElement === region) {
+        handleTableNavigation(e, null);
+      }
+    });
+  }
 }
 
 /**

@@ -69,12 +69,13 @@ function setupSkipLink() {
       // Switch to table view
       setView('table');
       updateButtonStates();
-      // Focus the table after a short delay to ensure it's visible
+      // Focus after a short delay to ensure it's visible. The table itself is
+      // not focusable; its region wrapper carries tabindex="0".
       setTimeout(() => {
-        const table = $('#data-table');
-        if (table) {
-          table.focus();
-          table.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const tableRegion = $('#table-container');
+        if (tableRegion) {
+          tableRegion.focus();
+          tableRegion.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
       }, 100);
     });

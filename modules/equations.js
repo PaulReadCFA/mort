@@ -10,7 +10,7 @@ const COLORS = {
   PRN: '#b82937',      // Red - Principal payment
   PV: '#b95b1d',       // Orange - Principal amount
   r: '#7a46ff',        // Purple - Interest rate
-  t: '#047857'         // Green - Term
+  t: '#07514F'         // Green - Term
 };
 
 /**

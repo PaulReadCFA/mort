@@ -66,19 +66,19 @@ export function renderChart({ monthlySchedule }, inputs) {
   if (legend) legend.innerHTML = `
     <span class="legend-item">
       <span class="legend-color" style="background-color: #0079a6;"></span>
-      Interest cash flows <span class="legend-var-wrap"><span class="legend-paren">(</span><span class="legend-var" style="color: #0079a6; font-weight: 700;">INT</span><span class="legend-paren">)</span></span>
+      Interest cash flows <span class="legend-var-wrap"><span class="legend-paren">(</span><span class="legend-var" style="color: #0079a6;">INT</span><span class="legend-paren">)</span></span>
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background-color: #b82937;"></span>
-      Principal amortization <span class="legend-var-wrap"><span class="legend-paren">(</span><span class="legend-var" style="color: #b82937; font-weight: 700;">PRN</span><span class="legend-paren">)</span></span>
+      Principal amortization <span class="legend-var-wrap"><span class="legend-paren">(</span><span class="legend-var" style="color: #b82937;">PRN</span><span class="legend-paren">)</span></span>
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background-color: #60a5fa; height: 3px; width: 20px;"></span>
-      Total mortgage cash flows <span class="legend-var-wrap"><span class="legend-paren">(</span><span class="legend-var" style="color: #3c6ae5; font-weight: 700;">PMT</span><span class="legend-paren">)</span></span>
+      Total mortgage cash flows <span class="legend-var-wrap"><span class="legend-paren">(</span><span class="legend-var" style="color: #3c6ae5;">PMT</span><span class="legend-paren">)</span></span>
     </span>
     <span class="legend-item">
       <span class="legend-color" style="background: repeating-linear-gradient(90deg, #7a46ff 0px, #7a46ff 5px, transparent 5px, transparent 10px); height: 3px; width: 20px;"></span>
-      Annual interest rate <span class="legend-var-wrap"><span class="legend-paren">(</span><span class="legend-var" style="color: #7a46ff; font-weight: 700;">𝑟</span><span class="legend-paren">)</span></span> <strong style="color: #7a46ff;">${annualRate}%</strong>
+      Annual interest rate <span class="legend-var-wrap"><span class="legend-paren">(</span><span class="legend-var" style="color: #7a46ff;">𝑟</span><span class="legend-paren">)</span></span> <strong style="color: #7a46ff;">${annualRate}%</strong>
     </span>
   `;
 

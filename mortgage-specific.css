@@ -162,7 +162,6 @@
 
 .month-row {
   background-color: #ffffff;
-  font-size: 0.875rem;
 }
 
 .month-row td {
@@ -176,7 +175,6 @@
 .month-cell {
   padding-left: 2.5rem;
   color: var(--color-gray-800);
-  font-size: 0.8125rem;
 }
 
 /* Responsive - adjust for mobile */
@@ -190,17 +188,6 @@
 /* ==========================================================================
    1.5 MODEL EQUATIONS GRID - Three Formula Boxes
    ========================================================================== */
-/* Prevent layout jump during equation re-render */
-#equation-card {
-  min-height: 420px;
-}
-
-@media (max-width: 767px) {
-  #equation-card {
-    min-height: 640px;  /* Taller when stacked vertically */
-  }
-}
-
 .model-equations-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -213,35 +200,10 @@
   }
 }
 
-@media (max-width: 619px) {
-  .formula-box {
-    min-height: 290px;
-    height: auto;
-  }
-}
-
 /* ==========================================================================
-   1.5 FORMULA BOXES - Override cfa-base.css completely
+   1.5 FORMULA BOXES - Mortgage colors and equation overflow
    ========================================================================== */
-.formula-box {
-  /* Remove ALL borders first */
-  border: none !important;
-  border-top: none !important;
-  border-right: none !important;
-  border-bottom: none !important;
-  /* Only left border */
-  border-left: 4px solid var(--color-gray-400) !important;
-  /* Styling */
-  padding: 0.75rem 1rem !important;
-  background: white !important;
-  border-radius: 0 0.5rem 0.5rem 0 !important;
-  margin-top: 0 !important;
-  /* min-height prevents most MathJax layout shift without clipping content */
-  min-height: 270px;
-  height: auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+.model-equations-grid .formula-box {
   overflow-x: auto;
   overflow-y: visible;
 }
@@ -253,7 +215,7 @@
 }
 
 .formula-box.pmt {
-  border-left-color: var(--color-blue-interactive) !important;  /* Blue */
+  border-left-color: var(--color-blue-interactive);
 }
 
 .formula-box.pmt:focus {
@@ -262,7 +224,7 @@
 }
 
 .formula-box.int {
-  border-left-color: var(--color-teal-data) !important;  /* Teal to match INT color */
+  border-left-color: var(--color-teal-data);
 }
 
 .formula-box.int:focus {
@@ -271,7 +233,7 @@
 }
 
 .formula-box.prn {
-  border-left-color: var(--color-red-principal) !important;  /* Red to match PRN color */
+  border-left-color: var(--color-red-principal);
 }
 
 .formula-box.prn:focus {
@@ -279,34 +241,13 @@
   box-shadow: 0 0 0 4px rgba(184, 41, 55, 0.1);
 }
 
-.formula-box-title {
-  font-size: 1rem !important;
-  font-weight: 400 !important;
-  color: var(--color-gray-700) !important;
-  margin-top: 0 !important;
-  margin-bottom: 0.5rem !important;
-  text-align: center !important;
-  text-transform: none !important;
-  letter-spacing: normal !important;
-  padding: 0 !important;
-  white-space: normal !important;
-  word-break: break-word !important;
-}
-
 .equation-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.5rem;
-  /* Override cfa-base.css box styling */
-  border: none !important;
-  background: transparent !important;
-  box-shadow: none !important;
-  padding: 0.5rem !important;
-  margin: 0 !important;
-  /* min-height prevents most MathJax layout shift without clipping content */
-  min-height: 220px;
-  height: auto;
+  padding: 0.5rem;
+  margin: 0;
   overflow-x: auto;
   overflow-y: visible;
   -webkit-overflow-scrolling: touch;
@@ -442,9 +383,9 @@
 .result-box-principal .result-value,
 .result-box-monthly .result-value,
 .result-box-interest .result-value {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: 'Lato', sans-serif;
   font-size: 1.5rem;
-  font-weight: 800;
+  font-weight: 700;
   color: var(--color-gray-900);  /* Black for all numbers */
   line-height: 1.2;
   margin-bottom: 0.5rem;
@@ -532,39 +473,6 @@
 /* ==========================================================================
    5. CHART LEGEND - Mortgage-specific
    ========================================================================== */
-/* Prevent jump when chart regenerates from stepper arrows */
-#visualization-card {
-  min-height: 600px;
-}
-
-@media (max-width: 600px) {
-  #visualization-card {
-    min-height: 500px;
-  }
-}
-
-.chart-legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  margin-bottom: 1rem;
-  font-size: 0.875rem;
-  color: var(--color-gray-700);
-}
-
-.legend-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.legend-color {
-  width: 0.75rem;
-  height: 0.75rem;
-  border-radius: 0.125rem;
-  display: inline-block;
-}
-
 /* ==========================================================================
    6. DYNAMIC EQUATION CONTAINER
    ========================================================================== */
@@ -592,30 +500,6 @@
 #mathml-equation { display: inline-block; width: auto; }
 math[display="block"] { margin: 0.5em auto; }
 
-/* Force equation boxes to match dividend - nuclear option */
-.model-equations-grid .formula-box,
-.card .formula-box,
-#equation-card .formula-box {
-  border: 0 !important;
-  border-width: 0 !important;
-  border-style: none !important;
-  border-left: 4px solid #999 !important;
-  border-left-width: 4px !important;
-  border-left-style: solid !important;
-}
-
-#equation-card .formula-box.pmt {
-  border-left-color: var(--color-blue-interactive) !important;
-}
-
-#equation-card .formula-box.int {
-  border-left-color: var(--color-teal-data) !important;  /* Teal */
-}
-
-#equation-card .formula-box.prn {
-  border-left-color: var(--color-red-principal) !important;  /* Red */
-}
-
 /* ==========================================================================
    DYNAMIC EQUATION - AGGRESSIVE MOBILE SCALING
    ========================================================================== */
@@ -629,7 +513,6 @@ math[display="block"] { margin: 0.5em auto; }
   
   .equation-container {
     padding: 0.25rem !important;
-    overflow-x: hidden !important;  /* Hide scrollbar, rely on scaling */
   }
 }
 
@@ -644,9 +527,9 @@ math[display="block"] { margin: 0.5em auto; }
   }
 }
 
-/* Ensure formula boxes don't overflow */
+/* Keep equations contained while allowing keyboard/touch horizontal scrolling. */
 .formula-box .equation-container {
-  overflow-x: hidden !important;
+  overflow-x: auto;
   width: 100%;
 }
 
@@ -679,39 +562,6 @@ canvas{
   }
 }
 
-#view-chart-btn[disabled],
-#view-chart-btn[disabled]:hover,
-#view-chart-btn[disabled]:focus,
-#view-chart-btn[disabled]:active{
-  opacity: 0.4 !important;
-  pointer-events: none !important;
-  cursor: not-allowed !important;
-  box-shadow: none !important;
-  background-color: var(--color-gray-300) !important;
-  color: var(--color-gray-500) !important;
-  border-color: var(--color-gray-300) !important;
-}
-
-@media (max-width: 600px) {
-.force-table #view-chart-btn,
-  .force-table #view-chart-btn:hover,
-  .force-table #view-chart-btn:focus,
-  .force-table #view-chart-btn:active{
-    opacity: 0.4 !important;
-    pointer-events: none !important;
-    cursor: not-allowed !important;
-    box-shadow: none !important;
-    background-color: var(--color-gray-300) !important;
-    color: var(--color-gray-500) !important;
-    border-color: var(--color-gray-300) !important;
-  }
-
-.force-table #view-table-btn{ 
-    opacity: 1; 
-    pointer-events: auto; 
-  }
-}
-
 /* ==========================================================================
    AMORTIZATION TABLE — domain extras only.
    Presentation (striping, padding, header, narrow-width card reflow) comes
@@ -719,7 +569,6 @@ canvas{
    ========================================================================== */
 #data-table.data-table .month-row {
   background: var(--color-gray-50);
-  font-size: 0.9375rem;
 }
 
 #data-table.data-table .month-row th {

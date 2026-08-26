@@ -18,7 +18,7 @@ import {
   NUMERIC_INPUT_MAX_CHARS,
   FORMATTED_NUMERIC_INPUT_MAX_CHARS
 } from './modules/utils.js';
-import { validateAll, setupFieldValidation } from './modules/validation.js';
+import { validateAll } from './modules/validation.js';
 
 /* ---------- INITIALIZATION ---------- */
 function init() {
@@ -69,8 +69,6 @@ function setupSkipLink() {
 }
 
 /* ---------- INPUT HANDLERS ---------- */
-let lastValidValue = { principal: 800000, rate: 6, years: 30 };
-
 function setupInputs() {
   ['principal', 'rate', 'years'].forEach(id => {
     const element = $(`#${id}`);
@@ -80,13 +78,12 @@ function setupInputs() {
       const rawValue = id === 'principal'
         ? element.value.replace(/,/g, '').trim()
         : element.value.trim();
-      if (rawValue === '') return;
-      const value = Number(rawValue);
-      if (!isNaN(value) && value > 0) {
-        const newInputs = { ...state.inputs, [id]: value };
-        setState({ inputs: newInputs });
-        lastValidValue[id] = value;
-      }
+      const value = rawValue === '' ? null : Number(rawValue);
+      const newInputs = {
+        ...state.inputs,
+        [id]: Number.isFinite(value) ? value : null
+      };
+      setState({ inputs: newInputs });
     }, 300);
 
     const onInput = () => {
@@ -98,16 +95,15 @@ function setupInputs() {
     };
     listen(element, 'input', onInput);
     listen(element, 'change', onInput);
-    setupFieldValidation(id, updateValue);
 
     // Principal: comma formatting on blur/focus, numeric-only keydown + paste
     if (id === 'principal') {
       listen(element, 'blur', () => {
         setTimeout(() => {
           const raw = element.value.replace(/,/g, '').trim();
-          if (raw === '') { element.value = lastValidValue[id].toLocaleString('en-US'); return; }
+          if (raw === '') return;
           const num = Number(raw);
-          if (!isNaN(num) && num > 0) element.value = num.toLocaleString('en-US');
+          if (Number.isFinite(num) && num > 0) element.value = num.toLocaleString('en-US');
         }, 10);
       });
 
@@ -264,17 +260,26 @@ function detectNarrowScreen() {
 }
 
 /* ---------- UPDATE ALL VIEWS ---------- */
+function clearOutputsForInvalidInputs() {
+  destroyChart();
+
+  const results = $('#results-content');
+  if (results) {
+    results.innerHTML = '<p class="equation-intro">Results will update when all inputs are valid.</p>';
+  }
+
+  ['pmt-equation', 'int-equation', 'prn-equation'].forEach(id => {
+    const container = $(`#${id}`);
+    if (container) container.innerHTML = '';
+  });
+
+  renderTable({ annualSchedule: [], monthlySchedule: [] });
+}
+
 function updateAll(currentState) {
   // Validate inputs
   if (!validateAll(currentState.inputs)) {
-    // If validation fails, show empty/zero results
-    renderResults({
-      monthlyPayment: 0,
-      annualPayment: 0,
-      totalInterest: 0,
-      totalPaid: 0
-    }, currentState.inputs);
-    renderTable({ annualSchedule: [] });
+    clearOutputsForInvalidInputs();
     return;
   }
 

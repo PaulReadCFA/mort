@@ -18,7 +18,14 @@ import {
   NUMERIC_INPUT_MAX_CHARS,
   FORMATTED_NUMERIC_INPUT_MAX_CHARS
 } from './modules/utils.js';
-import { validateAll } from './modules/validation.js';
+import { validateAll, hasErrors } from './modules/validation.js';
+import { allFinite } from './validation-ui.js';
+import {
+  applyChartTableVisibility,
+  updateToggleButtonStates,
+  announceView,
+  VIEW_ANNOUNCEMENTS,
+} from './view-toggle.js';
 
 /* ---------- INITIALIZATION ---------- */
 function init() {
@@ -34,6 +41,12 @@ function init() {
 }
 
 /* ---------- SKIP LINK HANDLER ---------- */
+function setView(view) {
+  const changed = state.view !== view;
+  setState({ view });
+  if (changed) announceView(VIEW_ANNOUNCEMENTS[view]);
+}
+
 function setupSkipLink() {
   // Handle skip to data entry (first input field)
   const skipToEntry = document.querySelector('.skip-link[href="#principal"]');
@@ -54,7 +67,7 @@ function setupSkipLink() {
     skipToTable.addEventListener('click', (e) => {
       e.preventDefault();
       // Switch to table view
-      setState({ view: 'table' });
+      setView('table');
       updateButtonStates();
       // Focus the table after a short delay to ensure it's visible
       setTimeout(() => {
@@ -188,33 +201,31 @@ function setupViewToggle() {
         }
         
         // Force table view
-        setState({ view: 'table' });
+        setView('table');
         updateButtonStates();
         
         return false;
       }
       
       // Normal behavior - allow chart view
-      setState({ view: 'chart' });
+      setView('chart');
       updateButtonStates();
     }, true); // Use capture phase
   }
 
   listen(tableBtn, 'click', () => {
-    setState({ view: 'table' });
+    setView('table');
     updateButtonStates();
   });
 
   // Keyboard navigation between toggle buttons
   [chartBtn, tableBtn].forEach(btn => {
-    btn.tabIndex = 0;
-    
     btn.addEventListener('keydown', e => {
       if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
         e.preventDefault();
         const next = btn === chartBtn ? tableBtn : chartBtn;
         next.focus();
-        setState({ view: next.id === 'view-chart-btn' ? 'chart' : 'table' });
+        setView(next.id === 'view-chart-btn' ? 'chart' : 'table');
         updateButtonStates();
       }
     });
@@ -227,14 +238,12 @@ function updateButtonStates() {
   const tableBtn = $('#view-table-btn');
   const isTable = state.view === 'table' || document.body.classList.contains('force-table');
 
-  chartBtn.classList.toggle('active', !isTable);
-  tableBtn.classList.toggle('active', isTable);
-  
-  chartBtn.setAttribute('aria-pressed', !isTable);
-  tableBtn.setAttribute('aria-pressed', isTable);
-  
-  // Disable chart button on narrow screens
-  chartBtn.disabled = document.body.classList.contains('force-table');
+  updateToggleButtonStates({
+    chartBtn,
+    tableBtn,
+    showingChart: !isTable,
+    forceTable: document.body.classList.contains('force-table'),
+  });
 }
 
 /* ---------- RESPONSIVE BEHAVIOR ---------- */
@@ -246,7 +255,7 @@ function detectNarrowScreen() {
   if (narrow) {
     document.body.classList.add('force-table');
     if (state.view !== 'table') {
-      setState({ view: 'table' });
+      setView('table');
     }
     if (helper) helper.style.display = 'block';
     if (chartBtn) chartBtn.setAttribute('aria-describedby', 'chart-helper-text');
@@ -278,13 +287,23 @@ function clearOutputsForInvalidInputs() {
 
 function updateAll(currentState) {
   // Validate inputs
-  if (!validateAll(currentState.inputs)) {
+  const errors = validateAll(currentState.inputs);
+  if (hasErrors(errors)) {
     clearOutputsForInvalidInputs();
     return;
   }
 
   // Calculate mortgage
   const result = calculate(currentState.inputs);
+  if (!allFinite(
+    result.monthlyPayment,
+    result.annualPayment,
+    result.totalInterest,
+    result.totalPaid
+  )) {
+    clearOutputsForInvalidInputs();
+    return;
+  }
   
   // Update results
   renderResults(result, currentState.inputs);
@@ -297,13 +316,16 @@ function updateAll(currentState) {
   const isTableView = currentState.view === 'table' || 
                       document.body.classList.contains('force-table');
 
+  applyChartTableVisibility({
+    chartEl: $('#chart-container'),
+    tableEl: $('#table-container'),
+    canvas: $('#chart'),
+    showChart: !isTableView,
+  });
+
   if (isTableView) {
-    $('#chart-container').style.display = 'none';
-    $('#table-container').style.display = 'block';
     destroyChart();
   } else {
-    $('#chart-container').style.display = 'block';
-    $('#table-container').style.display = 'none';
     renderChart(result, currentState.inputs);
   }
 }

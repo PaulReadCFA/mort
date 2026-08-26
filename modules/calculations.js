@@ -111,9 +111,9 @@ export function calculate({ principal = 0, rate = 0, years = 0 }) {
  */
 export function validateInput(field, value) {
   const rules = {
-    principal: { min: 1000, max: 10000000, label: 'Mortgage amount', prefix: 'USD ', suffix: '' },
-    rate: { min: 0.1, max: 20, label: 'Annual interest rate', prefix: '', suffix: '%' },
-    years: { min: 1, max: 40, label: 'Mortgage term', prefix: '', suffix: ' year' }
+    principal: { min: 1000, max: 10000000, label: 'Mortgage amount', prefix: 'USD' },
+    rate: { min: 0.1, max: 20, label: 'Annual interest rate', unit: '%' },
+    years: { min: 1, max: 40, label: 'Mortgage term' }
   };
 
   const rule = rules[field];
@@ -134,21 +134,21 @@ export function validateInput(field, value) {
 
   // Check for negative or zero values
   if (numValue <= 0) {
-    return `${rule.label} must be greater than zero`;
+    return `${rule.label} must be > 0`;
   }
 
-  // Check minimum value
   if (numValue < rule.min) {
-    const suffix = rule.suffix === ' year' && rule.min !== 1 ? ' years' : rule.suffix;
-    const formattedMin = rule.prefix + rule.min.toLocaleString() + suffix;
-    return `${rule.label} must be at least ${formattedMin}`;
+    const minDisplay = rule.prefix === 'USD'
+      ? `USD${rule.min.toLocaleString('en-US')}`
+      : `${rule.min}${rule.unit || ''}`;
+    return `${rule.label} must be >= ${minDisplay}`;
   }
 
-  // Check maximum value
   if (numValue > rule.max) {
-    const suffix = rule.suffix === ' year' ? ' years' : rule.suffix;
-    const formattedMax = rule.prefix + rule.max.toLocaleString() + suffix;
-    return `${rule.label} must be no more than ${formattedMax}`;
+    const maxDisplay = rule.prefix === 'USD'
+      ? `USD${rule.max.toLocaleString('en-US')}`
+      : `${rule.max}${rule.unit || ''}`;
+    return `${rule.label} must be <= ${maxDisplay}`;
   }
 
   // Special validation for rate - check decimal precision

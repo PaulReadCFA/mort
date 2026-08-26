@@ -90,7 +90,7 @@
           Enter your mortgage details below. The calculations and visualizations will update automatically as you change the values.
         </p>
 
-        <div id="validation-summary" class="validation-summary" role="alert"
+        <div id="validation-summary" class="validation-summary"
              style="display:none;">
           <div class="validation-title">Please correct the following:</div>
           <ul id="validation-list"></ul>
@@ -185,14 +185,18 @@
         <h4 class="card-title" id="visualization-title">Mortgage Cash Flows</h4>
         <div class="view-controls">
           <div class="chart-legend" id="chart-legend" role="region" aria-label="Chart legend"></div>
-          <div class="button-group" role="toolbar">
-            <button id="view-chart-btn" class="toggle-btn active" aria-pressed="true">Chart</button>
-            <button id="view-table-btn" class="toggle-btn" aria-pressed="false">Table</button>
+          <div class="button-group" role="toolbar" aria-label="Chart or table view" aria-describedby="view-toggle-help">
+            <button id="view-chart-btn" class="toggle-btn active" aria-pressed="true" aria-controls="chart-container">Chart</button>
+            <button id="view-table-btn" class="toggle-btn" aria-pressed="false" aria-controls="table-container">Table</button>
           </div>
         </div>
         <p id="chart-helper-text" class="text-xs text-gray-500" style="display: none; margin-bottom: 0.75rem;">
           Chart view is not available at narrow screen widths. Showing table view.
         </p>
+        <p id="view-toggle-help" class="sr-only">
+          Chart and Table act as a single toolbar: only one button is in the tab order at a time. Use left and right arrow keys to move between them. Table lists every value in one place.
+        </p>
+        <div class="sr-only" aria-live="polite" aria-atomic="true" id="view-announcement"></div>
         <p class="sr-only" id="chart-keyboard-help" hidden>Use arrow keys to navigate the chart across time periods.</p>
 
         <div id="chart-container" class="chart-wrapper">
@@ -201,7 +205,7 @@
         </div>
 
         <div id="table-container" class="table-wrapper table-card-layout" role="region"
-             aria-label="Annual amortization schedule" tabindex="0">
+             aria-label="Annual amortization schedule" tabindex="0" style="display: none;" aria-hidden="true">
           <div id="table-announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
           <table id="data-table" class="data-table">
             <caption class="sr-only">Annual amortization schedule showing year, principal, interest, and remaining balance. Years with expandable buttons can be activated to reveal monthly details.</caption>

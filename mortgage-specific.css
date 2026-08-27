@@ -6,20 +6,8 @@
    NOTE: All table styles are now in cfa-base.css for consistency
    ========================================================================== */
 
-/* ==========================================================================
-   0. RESULT TEXT COLOURS
-   Darkened brand variants for text sitting on the 8%-tint result backgrounds
-   (equation results, result-box titles). These lived in mort's own cfa-base.css
-   before it moved to the shared base, which does not define them; without them
-   `color` falls back to inherited body text and the results render black.
-   Ratios below are measured against the tinted backgrounds, not plain white.
-   ========================================================================== */
-:root {
-  --color-blue-contrast: #1e40af;    /* 7.85:1 on rgba(60, 106, 229, 0.08) */
-  --color-teal-contrast: #005f7f;    /* 6.40:1 on rgba(0, 121, 166, 0.08) */
-  --color-red-contrast: #8b1f2b;     /* 7.95:1 on rgba(184, 41, 55, 0.08) */
-  --color-orange-contrast: #8b4513;  /* 7.10:1 on white card surface */
-}
+/* Text on the tinted result backgrounds uses the shared tint-safe family
+   (--color-*-contrast) from cfa-base.css. Do not redefine those tokens here. */
 
 /* ==========================================================================
    1. STATIC EQUATIONS GRID - Two column layout
@@ -79,10 +67,10 @@
    ========================================================================== */
 :root {
   /* Mortgage Calculator Specific Colors - Using brand palette */
-  --color-mortgage-payment: var(--color-blue-interactive);  /* var(--color-blue-interactive) - Monthly payment (PMT) */
-  --color-mortgage-principal: var(--color-red-principal);           /* var(--color-red-principal) - Principal (PRN) */
-  --color-mortgage-interest: var(--color-teal-data);        /* var(--color-teal-data) - Interest (INT) */
-  --color-mortgage-term: var(--color-green-data-alt);       /* var(--color-green-data-alt) - Loan term (t) */
+  --color-mortgage-payment: var(--color-blue-interactive);  /* Monthly payment (PMT) */
+  --color-mortgage-principal: var(--color-red-contrast);    /* Principal (PRN) */
+  --color-mortgage-interest: var(--color-teal-data);        /* Interest (INT) */
+  --color-mortgage-term: var(--color-green-data);           /* Loan term (t) */
   --color-mortgage-rate: var(--color-purple-bold);          /* var(--color-purple-bold) - Interest rate (r) */
   --color-mortgage-pv: var(--color-orange-deep);            /* #b95b1d - Mortgage amount (PV) */
 }
@@ -233,11 +221,11 @@
 }
 
 .formula-box.prn {
-  border-left-color: var(--color-red-principal);
+  border-left-color: var(--color-red-contrast);
 }
 
 .formula-box.prn:focus {
-  outline-color: var(--color-red-principal);
+  outline-color: var(--color-red-contrast);
   box-shadow: 0 0 0 4px rgba(184, 41, 55, 0.1);
 }
 
@@ -373,7 +361,7 @@
 .result-box-interest .result-title {
   font-size: 1rem;
   font-weight: 600;
-  color: var(--color-purple-bold);
+  color: var(--color-purple-contrast);
   margin-bottom: 0.75rem;
   letter-spacing: normal;
   text-transform: none;

@@ -10,46 +10,21 @@
   <link rel="stylesheet" href="cfa-base.css">
   <link rel="stylesheet" href="mortgage-specific.css">
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <!-- MathJax 2.7.7: native MathML source + Explorer/AssistiveMML. -->
   <script type="text/x-mathjax-config">
     MathJax.Hub.Config({
-      tex2jax: {
-        inlineMath: [['$', '$']],
-        displayMath: [['$$', '$$']],
-        processEscapes: true,
-        skipTags: ["script","noscript","style","textarea","pre","code"]
-      },
-      TeX: {
-        extensions: ["color.js"]
-      },
+      MathML: { extensions: ["content-mathml.js"] },
       "HTML-CSS": {
-        availableFonts: ["TeX"],
         scale: 100,
         linebreaks: { automatic: true }
       },
-      SVG: {
-        font: "TeX",
-        linebreaks: { automatic: true }
-      },
+      menuSettings: { explorer: true },
       showProcessingMessages: false,
-      messageStyle: "none"
-    });
-    
-    // Fix ARIA issues after MathJax renders - use RegisterStartupHook to ensure it runs after rendering
-    MathJax.Hub.Register.StartupHook("End", function() {
-      setTimeout(function() {
-        // Remove tabindex from ALL MathJax elements (without hiding them)
-        document.querySelectorAll('.MathJax, .MathJax_Display, .MathJax_SVG, span[id^="MathJax-Element"]').forEach(el => {
-          el.removeAttribute('tabindex');
-        });
-        
-        // Also remove from any nested spans inside MathJax
-        document.querySelectorAll('.MathJax span[tabindex], .MathJax_Display span[tabindex], .MathJax_SVG span[tabindex]').forEach(el => {
-          el.removeAttribute('tabindex');
-        });
-      }, 100);
+      messageStyle: "none",
+      skipStartupTypeset: false
     });
   </script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=TeX-AMS-MML_SVG"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/MathJax.js?config=MML_HTMLorMML"></script>
 </head>
 <body>
 
@@ -148,7 +123,7 @@
 
           <div class="model-equations-grid" role="group" aria-label="Mortgage payment formulas">
           <!-- Monthly Payment (PMT) -->
-          <article class="formula-box pmt" role="article" tabindex="0"
+          <article class="formula-box pmt" role="article"
                    aria-label="Monthly payment formula. PMT equals r times PV divided by 1 minus the quantity 1 plus r to the power of negative t. Current result shown below equation.">
             <div class="formula-box-title">Monthly payment (<strong style="color: var(--color-blue-interactive);">PMT</strong>)</div>
             <div class="equation-container">
@@ -159,7 +134,7 @@
           </article>
 
           <!-- Interest Payment (INT_t) -->
-          <article class="formula-box int" role="article" tabindex="0"
+          <article class="formula-box int" role="article"
                    aria-label="Interest payment formula for month t. INT equals PV times r divided by 12. Current result for month 1 shown below equation.">
             <div class="formula-box-title">Interest payment (<strong style="color: var(--color-teal-data);">INT<sub>t</sub></strong>)</div>
             <div class="equation-container">
@@ -170,7 +145,7 @@
           </article>
 
           <!-- Principal Payment (PRN_t) -->
-          <article class="formula-box prn" role="article" tabindex="0"
+          <article class="formula-box prn" role="article"
                    aria-label="Principal payment formula for month t. PRN equals PMT minus INT. Current result for month 1 shown below equation.">
             <div class="formula-box-title">Principal payment (<strong style="color: var(--color-red-contrast);">PRN<sub>t</sub></strong>)</div>
             <div class="equation-container">

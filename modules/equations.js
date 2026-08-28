@@ -3,7 +3,8 @@
  * Renders three equations: PMT, INT_t, and PRN_t with actual values
  */
 
-import { formatCurrencyUSD } from './utils.js';
+import { formatCurrencyUSD, formatCurrencySpeech } from './utils.js';
+import { renderEquationGroup } from '../equation-render.js';
 const COLORS = {
   PMT: '#3c6ae5',      // Blue - Monthly payment
   INT: '#0079a6',      // Teal - Interest payment
@@ -19,31 +20,13 @@ const COLORS = {
  * @param {Object} inputs - Input parameters
  */
 export function renderEquations(result, inputs) {
-  renderPMTEquation(result, inputs);
-  renderINTEquation(result, inputs);
-  renderPRNEquation(result, inputs);
-  
-  // Trigger MathJax to re-process the updated equations
-  if (typeof MathJax !== 'undefined' && MathJax.Hub) {
-    MathJax.Hub.Queue(["Typeset", MathJax.Hub], function() {
-      // Remove tabindex from MathJax elements for accessibility
-      setTimeout(function() {
-        document.querySelectorAll('.MathJax[tabindex]').forEach(function(el) {
-          el.removeAttribute('tabindex');
-        });
-      }, 10);
-      setTimeout(function() {
-        document.querySelectorAll('.MathJax[tabindex]').forEach(function(el) {
-          el.removeAttribute('tabindex');
-        });
-      }, 100);
-      setTimeout(function() {
-        document.querySelectorAll('.MathJax[tabindex]').forEach(function(el) {
-          el.removeAttribute('tabindex');
-        });
-      }, 500);
-    });
-  }
+  /* One shared pass so all three boxes hold their height together and MathJax
+     Explorer still owns the generated tabindex on each equation. */
+  renderEquationGroup([
+    renderPMTEquation(result, inputs),
+    renderINTEquation(result, inputs),
+    renderPRNEquation(result, inputs),
+  ]);
 }
 
 /**
@@ -98,15 +81,15 @@ function renderPMTEquation(result, inputs) {
     </div>
   `;
 
-  container.innerHTML = mathML;
-
   // Update article aria-label to include current result so SR users hear it on focus
   const article = container.closest('article');
   if (article) {
     article.setAttribute('aria-label',
-      `Monthly payment formula. PMT equals monthly rate times loan amount, divided by 1 minus 1 plus monthly rate to the power of negative total months. Result: ${formatCurrencyUSD(monthlyPayment)}`
+      `Monthly payment formula. PMT equals monthly rate times loan amount, divided by 1 minus 1 plus monthly rate to the power of negative total months. Result: ${formatCurrencySpeech(monthlyPayment)}`
     );
   }
+
+  return { mount: container, markup: mathML };
 }
 
 /**
@@ -153,14 +136,14 @@ function renderINTEquation(result, inputs) {
     </div>
   `;
 
-  container.innerHTML = mathML;
-
   const article = container.closest('article');
   if (article) {
     article.setAttribute('aria-label',
-      `Interest payment formula for month 1. INT equals loan amount times annual rate, divided by 12. Result for Month 1: ${formatCurrencyUSD(int1)}`
+      `Interest payment formula for month 1. INT equals loan amount times annual rate, divided by 12. Result for Month 1: ${formatCurrencySpeech(Number(int1))}`
     );
   }
+
+  return { mount: container, markup: mathML };
 }
 
 /**
@@ -203,14 +186,14 @@ function renderPRNEquation(result, inputs) {
     </div>
   `;
 
-  container.innerHTML = mathML;
-
   const article = container.closest('article');
   if (article) {
     article.setAttribute('aria-label',
-      `Principal payment formula for month 1. PRN equals monthly payment minus interest payment. Result for Month 1: ${formatCurrencyUSD(prn1)}`
+      `Principal payment formula for month 1. PRN equals monthly payment minus interest payment. Result for Month 1: ${formatCurrencySpeech(prn1)}`
     );
   }
+
+  return { mount: container, markup: mathML };
 }
 
 /**

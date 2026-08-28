@@ -3,7 +3,7 @@
  * Includes roving tabindex, keyboard navigation, and tooltips
  */
 
-import { $, formatCurrency } from './utils.js';
+import { $, formatCurrency, formatCurrencySpeech } from './utils.js';
 import { setState } from './state.js';
 import { getChartTypography, scaledChartPx } from '../chart-typography.js';
 
@@ -338,7 +338,7 @@ export function renderChart({ monthlySchedule }, inputs) {
               ctx.textAlign = 'left';
               ctx.textBaseline = 'bottom';
               ctx.fillText(
-                `PMT: $${pmtValue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
+                `PMT: USD${pmtValue.toLocaleString('en-US', { minimumFractionDigits: 0, maximumFractionDigits: 0 })}`,
                 chartArea.left + 10,
                 yPosition - 5
               );
@@ -476,8 +476,8 @@ function createBarButtons(monthlySchedule, container) {
     const btn = document.createElement('button');
     btn.className = 'chart-bar-button';
     btn.tabIndex = index === 0 ? 0 : -1;
-    btn.setAttribute('aria-label', 
-      `Year ${row.year}, Month ${row.monthInYear}: Interest USD ${formatCurrency(row.interest)}, Principal USD ${formatCurrency(row.principal)}, Total USD ${formatCurrency(row.totalPayment)}`
+    btn.setAttribute('aria-label',
+      `Year ${row.year}, Month ${row.monthInYear}: Interest ${formatCurrencySpeech(row.interest)}, Principal ${formatCurrencySpeech(row.principal)}, Total ${formatCurrencySpeech(row.totalPayment)}`
     );
 
     // Position button over the entire stacked bar
@@ -629,8 +629,8 @@ function announceBar(row, index, isTableFocus = false) {
   
   // Throttle announcements - only announce after user pauses
   announceTimeout = setTimeout(() => {
-    // Announce monthly data: "Year X, Month Y: Interest $XXX, Principal $XXX, Total $XXX"
-    region.textContent = `Year ${row.year}, Month ${row.monthInYear}: Interest USD ${formatCurrency(row.interest)}, Principal USD ${formatCurrency(row.principal)}, Total USD ${formatCurrency(row.totalPayment)}`;
+    // Announce monthly data using spoken currency ("US dollars", not USD).
+    region.textContent = `Year ${row.year}, Month ${row.monthInYear}: Interest ${formatCurrencySpeech(row.interest)}, Principal ${formatCurrencySpeech(row.principal)}, Total ${formatCurrencySpeech(row.totalPayment)}`;
     
     // Clear announcement after it's been read
     setTimeout(() => {

@@ -4,7 +4,8 @@
  * Shows 30 annual rows (not 360 monthly - that's for the chart)
  */
 
-import { $, formatCurrency, applyTableRoles } from './utils.js';
+import { $, formatCurrency } from './utils.js';
+import { applyTableRoles } from '../table-roles.js';
 
 /**
  * Render annual amortization table with expandable monthly details
